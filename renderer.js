@@ -541,6 +541,7 @@ var Renderer = {
       '<div class="res-title">' + result.title + '</div>' +
       '<div class="res-book">' + result.book.title + ' — ' + result.book.author + '</div>' +
       '<div class="res-message">' + (result.message || '') + '</div>' +
+      '<div class="res-world-note">' + this._buildWorldResultNote(result) + '</div>' +
       (result.recommendReason ? '<div class="res-afterword">💡 ' + result.recommendReason + '</div>' : '') +
       '<div class="res-effects">' + efx + '</div>' +
       '<button class="act-btn act-next" id="res-continue">继续</button>';
@@ -564,6 +565,21 @@ var Renderer = {
       panel.style.opacity = '1';
       panel.style.transform = 'translateY(0) scale(1)';
     }, 20);
+  },
+
+  _buildWorldResultNote: function(result) {
+    var npc = Engine.state.currentNPC;
+    var name = npc && npc.name ? npc.name : 'TA';
+    if (result.match === 'perfect') {
+      return '大断联之后，纸书不再只是商品。你把一本能被带回家、反复翻开的答案，交到了' + name + '手里。';
+    }
+    if (result.match === 'good') {
+      return '没有云端索引的时代，每一次推荐都要靠倾听。' + name + '也许还会在这本书里找到一盏小灯。';
+    }
+    if (result.match === 'neutral') {
+      return '这本书保存着珍贵的知识，但它和' + name + '此刻的困境之间，还隔着几页没有翻开的路。';
+    }
+    return '书仍然珍贵，只是这一次，它没有抵达最需要它的人。';
   },
 
   /* ============ 夜间面板 ============ */

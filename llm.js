@@ -25,11 +25,15 @@ var LLM = (function() {
    */
   function callLLM(messages, temperature) {
     temperature = temperature || TEMPERATURE;
+    var apiKey = getApiKey();
+    if (!apiKey) {
+      return Promise.reject(new Error('LLM API key not configured'));
+    }
     return fetch(API_BASE, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + API_KEY
+        'Authorization': 'Bearer ' + apiKey
       },
       body: JSON.stringify({
         model: MODEL,
@@ -59,13 +63,16 @@ var LLM = (function() {
    */
   function callLLMStream(messages, temperature, onChunk) {
     temperature = temperature || TEMPERATURE;
-    var fullContent = '';
+    var apiKey = getApiKey();
+    if (!apiKey) {
+      return Promise.reject(new Error('LLM API key not configured'));
+    }
 
     return fetch(API_BASE, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + API_KEY
+        'Authorization': 'Bearer ' + apiKey
       },
       body: JSON.stringify({
         model: MODEL,
@@ -85,6 +92,15 @@ var LLM = (function() {
     .then(function(content) {
       return content;
     });
+  }
+
+  function getApiKey() {
+    try {
+      if (window.TLB_LLM_API_KEY) return window.TLB_LLM_API_KEY;
+      return localStorage.getItem('tlb_llm_api_key') || API_KEY;
+    } catch (e) {
+      return API_KEY;
+    }
   }
 
   /**
@@ -189,11 +205,12 @@ var LLM = (function() {
     return callLLMStream(messages, TEMPERATURE, onChunk).catch(function(err) {
       console.error('[LLM NPC Chat]', err);
       // 降级回复
+      var name = npcState && npcState.name ? npcState.name : 'TA';
       var fallbacks = [
-        n.name + '看了看你，轻轻点了点头。',
-        n.name + '沉默了一会儿：\"你说得对……让我想想。\"',
-        n.name + '抬起头看着你：\"谢谢你能这么问我。\"',
-        '\"我喜欢你这家书店，\"' + n.name + '环顾四周说，\"希望它一直在。\"'
+        name + '看了看你，轻轻点了点头。',
+        name + '沉默了一会儿："你说得对……让我想想。"',
+        name + '抬起头看着你："谢谢你能这么问我。"',
+        '"我喜欢你这家书店，"' + name + '环顾四周说，"希望它一直在。"'
       ];
       var fb = fallbacks[Math.floor(Math.random() * fallbacks.length)];
       onChunk(fb, true);

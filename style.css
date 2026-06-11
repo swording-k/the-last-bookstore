@@ -233,14 +233,35 @@ html, body {
   letter-spacing: 4px;
   color: var(--color-gold-light);
   font-style: italic;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+}
+
+.title-premise {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 6px 14px;
+  border: 1px solid rgba(232, 201, 155, 0.36);
+  border-radius: 999px;
+  color: rgba(250, 243, 224, 0.88);
+  background: rgba(26, 14, 8, 0.28);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .title-line {
   width: 120px;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  margin: 0 auto 22px;
+}
+
+.title-world {
+  max-width: 520px;
   margin: 0 auto 24px;
+  color: rgba(250, 243, 224, 0.82);
+  font-size: 15px;
+  line-height: 1.9;
+  letter-spacing: 0;
 }
 
 .title-quote {
@@ -1294,11 +1315,22 @@ html, body {
   font-size: 14px;
   line-height: 1.8;
   color: var(--color-text);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   padding: 12px 16px;
   background: rgba(255, 248, 225, 0.6);
   border-left: 3px solid var(--color-gold);
   border-radius: 4px;
+  text-align: left;
+}
+.res-world-note {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #5f4a34;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: rgba(42, 31, 20, 0.06);
+  border: 1px solid rgba(184, 132, 78, 0.18);
+  border-radius: 6px;
   text-align: left;
 }
 .res-afterword {
@@ -1762,9 +1794,13 @@ html, body {
    响应式
    ============================================================ */
 @media (max-width: 768px) {
+  .title-content { padding: 28px 22px; }
   .title-h1 { font-size: 36px; letter-spacing: 4px; }
   .title-sub { font-size: 14px; }
+  .title-premise { font-size: 12px; padding: 5px 10px; }
+  .title-world { font-size: 13px; line-height: 1.75; margin-bottom: 18px; }
   .title-quote { font-size: 13px; }
+  .btn-start { padding: 12px 24px; font-size: 16px; }
   .window-box { width: 80%; height: 45%; top: 8%; }
   .shelf { width: 14%; }
   .npc-sprite, .npc-portrait { width: 130px; height: 170px; }

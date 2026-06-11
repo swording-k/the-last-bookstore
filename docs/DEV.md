@@ -244,19 +244,21 @@ cd the-last-bookstore
 python3 -m http.server 8080
 # 访问 http://localhost:8080/
 
-# 静态托管（Vercel/Netlify/腾讯云 COS）
+# 静态托管（GitHub Pages / Vercel / Netlify / 腾讯云 COS）
 # 直接上传整个目录即可。零构建。
 ```
 
 **注意**：
 - 必须用 HTTP（不能 `file://`），因为 audio 模块用 `fetch` 加载 MP3
 - 离线场景下会自动静默音频失败，游戏不阻塞
+- GitHub Pages 已满足赛事“浏览器可访问在线链接”要求；Vercel 只是建议备用镜像
+- 不要把任何 LLM API Key 提交到公开仓库，演示时用 localStorage 临时配置
 
 ---
 
 ## 10. 已知边界 / 扩展点
 
-1. **AI 接入**：当前 `AI.config.apiKey` 留空，需要参赛 demo 时填入；接入后会在 night panel 显示 LLM 生成的日记
+1. **AI 接入**：公开源码不保存 Key；需要参赛 demo 时在浏览器运行 `localStorage.setItem('tlb_llm_api_key', '临时演示 Key')`，否则 NPC/书籍 AI 聊天自动走 fallback
 2. **多存档导入/导出**：当前只支持单设备 localStorage 3 槽；可加 JSON 导入导出
 3. **全键盘导航**：当前主要鼠标；可加 1-9 选 option / Enter 推进
 4. **i18n**：当前中文 only；data.js 结构支持 i18n 字段扩展

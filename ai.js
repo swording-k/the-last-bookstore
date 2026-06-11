@@ -162,35 +162,35 @@ var AI = {
 
     // 根据情绪选择日记模板（每种情绪有多个变体）
     var warmTemplates = [
-      npcMention + ' ' + bookMention + ' TA离开时回头冲我笑了一下。我突然觉得，这家店还会开很久。',
-      '灯光暖黄，书页安静。' + npcMention + ' ' + bookMention + ' 希望值和今天的心跳一样，稳定而有力。',
-      npcMention + ' 每个人的眼神里都有光。' + bookMention + ' 我觉得自己做了一件对的事。',
-      bookMention + ' 看着TA抱着书走出门，我想，也许这就是书店存在的意义。',
-      npcMention + ' 我泡了杯茶，看窗外夕阳。' + bookMention + ' 嗯，今天是好日子。'
+      '大断联后的夜晚没有屏幕亮光，只有柜台这盏灯。' + npcMention + ' ' + bookMention + ' TA离开时回头冲我笑了一下。我突然觉得，这家店还会开很久。',
+      '灯光暖黄，书页安静。' + npcMention + ' ' + bookMention + ' 当云端不再回答，人和书之间的这一点光就格外稳定。',
+      npcMention + ' 每个人的眼神里都有光。' + bookMention + ' 我觉得自己今天守住的不只是生意，还有一点记忆。',
+      bookMention + ' 看着TA抱着书走出门，我想，也许这就是最后一间书店存在的意义。',
+      npcMention + ' 我泡了杯茶，看窗外夕阳。' + bookMention + ' 没有网络的世界很安静，但今天是好日子。'
     ];
 
     var steadyTemplates = [
-      npcMention + ' ' + bookMention + ' 店里的节奏平稳，我开始习惯这种日子。每一本书都在等待对的人。',
-      npcMention + ' 人来人往是常态。' + bookMention + ' 我做的事算不算有意义？也许吧。但至少今天我在这里。',
-      bookMention + ' ' + (metTraveler ? '那个旅人说的话还在耳边回响。' : '我收拾着书架，把翻乱的书重新排整齐。') + ' 日复一日，也不见得是坏事。',
-      npcMention + ' 每个人都带着自己的故事走进来。' + bookMention + ' 我能做的，只是静静听着。',
-      npcMention + ' 书架上的书少了几本。' + bookMention + ' 明天会有新的客人，新的故事。'
+      npcMention + ' ' + bookMention + ' 店里的节奏平稳，我开始习惯这种日子。每一本书都像一台不需要电的服务器，等待对的人来读取。',
+      npcMention + ' 人来人往是常态。' + bookMention + ' 我做的事算不算有意义？也许吧。但至少今天这盏灯还在。',
+      bookMention + ' ' + (metTraveler ? '那个旅人说的话还在耳边回响。' : '我收拾着书架，把翻乱的书重新排整齐。') + ' 日复一日，也是在修补断联后的世界。',
+      npcMention + ' 每个人都带着自己的故事走进来。' + bookMention + ' 我能做的，只是静静听着，再把纸页递过去。',
+      npcMention + ' 书架上的书少了几本。' + bookMention + ' 明天会有新的客人，新的故事，和新的问题。'
     ];
 
     var reflectiveTemplates = [
-      npcMention + ' ' + bookMention + ' 有些推荐我做对了，有些我不确定。但至少我没有让TA空手离开。',
-      npcMention + ' 窗外开始暗了。' + bookMention + ' 我在想，如果我选错了书，会怎样？',
-      bookMention + ' 希望值不太稳定，像风中的烛火。但既然推开门了，我就不能退缩。',
-      npcMention + ' 每个人都在找自己的答案。' + bookMention + ' 我能做的，只是陪着他们翻一翻。',
+      npcMention + ' ' + bookMention + ' 有些推荐我做对了，有些我不确定。但至少在没有搜索框的世界里，我没有让TA空手离开。',
+      npcMention + ' 窗外开始暗了。' + bookMention + ' 我在想，如果我选错了书，会不会让一段记忆错过它的读者？',
+      bookMention + ' 希望值不太稳定，像断电后留下的烛火。但既然推开门了，我就不能退缩。',
+      npcMention + ' 每个人都在找自己的答案。' + bookMention + ' 我能做的，只是陪着他们翻一翻，把沉默的纸页重新读出声。',
       '今天有些疲惫。' + bookMention + ' 但我仍然相信，只要还有一个人需要书，这家店就该开着。'
     ];
 
     var uncertainTemplates = [
-      npcMention + ' ' + bookMention + ' 我不知道这样做对不对，但总不能让他们空手出去。',
-      npcMention + ' 灯光比昨天暗了些。' + bookMention + ' 也许明天会好一点。',
-      bookMention + ' 希望值在下降。但关门还太早。只要还能推开这扇门——',
+      npcMention + ' ' + bookMention + ' 我不知道这样做对不对，但总不能让他们在断联后的世界里空手出去。',
+      npcMention + ' 灯光比昨天暗了些。' + bookMention + ' 也许明天会好一点，也许至少还有一本书能派上用场。',
+      bookMention + ' 希望值在下降。但关门还太早。只要还能推开这扇门，纸页就还没有彻底沉默。',
       npcMention + ' 有时候我问自己，这家店还能撑多久。' + bookMention + ' 至少今天撑住了。',
-      '日记越来越薄了。' + bookMention + ' 没关系，写一行也够了。'
+      '日记越来越薄了。' + bookMention + ' 没关系，写一行也够了。文明有时就是这样留下来的。'
     ];
 
     var templates = {
