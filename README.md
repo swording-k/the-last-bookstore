@@ -73,11 +73,17 @@ python3 -m http.server 8080
 工程文档：[docs/DEV.md](docs/DEV.md)
 原始 GDD：[docs/GDD.md](docs/GDD.md)
 
+## 📺 作品演示
+
+**评委专用演示页**（HTML 幻灯片，键盘翻页，含游戏截图）：  
+👉 <https://swording-k.github.io/the-last-bookstore/presentation.html>
+
 ## 部署
 
 | 平台 | 状态 | 链接 |
 | --- | --- | --- |
-| GitHub Pages | 主入口 | <https://swording-k.github.io/the-last-bookstore/> |
+| GitHub Pages | 游戏本体 | <https://swording-k.github.io/the-last-bookstore/> |
+| GitHub Pages | 演示文稿 | <https://swording-k.github.io/the-last-bookstore/presentation.html> |
 | Vercel | 可一键导入 | `vercel.json` 已包含 |
 
 ## 演示真实 LLM
