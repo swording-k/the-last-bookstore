@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>最后的书店 — 作品介绍</title>
+<style>
+/* ════════════════ Reset & Base ════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: #1a0f0a;
+  color: #faf3e0;
+}
+
+/* ════════════════ CSS Variables ════════════════ */
+:root {
+  --cream: #FAF3E0;
+  --tan: #D4A574;
+  --golden: #B8844E;
+  --dark: #2C1810;
+  --deep: #1a0f0a;
+  --paper: #FFF8E1;
+  --warm-gray: #8B7B6E;
+  --purple: #5D4E8A;
+  --red: #E07A5F;
+  --green: #3D9970;
+  --blue: #4169E1;
+  --slide-w: 100vw;
+  --slide-h: 100vh;
+}
+
+/* ════════════════ Slides Container ════════════════ */
+#slides {
+  position: relative;
+  width: var(--slide-w);
+  height: var(--slide-h);
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: translateY(20px);
+  pointer-events: none;
+  padding: 4vmin 6vmin;
+  overflow: hidden;
+}
+.slide.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  z-index: 1;
+}
+
+/* ════════════════ Background Layers ════════════════ */
+.bg-layer {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover;
+  background-position: center;
+}
+.bg-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(ellipse at center, rgba(28,14,8,0.3) 0%, rgba(20,10,5,0.85) 100%);
+}
+.bg-gradient {
+  position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(160deg, #1a0f0a 0%, #2c1810 40%, #1a1410 100%);
+}
+
+/* ════════════════ Slide Content Layer ════════════════ */
+.slide-content {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 1200px;
+  display: flex; flex-direction: column;
+  align-items: center;
+}
+
+/* ════════════════ Cover Slide ════════════════ */
+.cover-title {
+  font-family: "STSong", "Songti SC", "Noto Serif SC", "SimSun", serif;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 700;
+  color: var(--cream);
+  text-shadow: 0 2px 40px rgba(180,130,80,0.5);
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+}
+.cover-sub {
+  font-size: clamp(0.9rem, 1.5vw, 1.3rem);
+  color: var(--tan);
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  margin-top: 0.6em;
+}
+.cover-divider {
+  width: clamp(120px, 25vw, 300px);
+  height: 2px;
+  background: var(--tan);
+  margin: 2em 0;
+  opacity: 0.6;
+}
+.cover-desc {
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+  color: rgba(250,243,224,0.8);
+  text-align: center;
+  line-height: 1.8;
+  max-width: 600px;
+}
+.cover-tags {
+  display: flex; gap: 1.2em; flex-wrap: wrap; justify-content: center;
+  margin-top: 2em;
+  font-size: 0.8rem;
+  color: var(--golden);
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+}
+
+/* ════════════════ Section Title ════════════════ */
+.section-header {
+  width: 100%;
+  margin-bottom: 3vmin;
+}
+.section-bar {
+  width: 4px; height: 42px; background: var(--tan);
+  display: inline-block; vertical-align: middle;
+  margin-right: 16px;
+  border-radius: 2px;
+}
+.section-num {
+  display: inline-block; vertical-align: middle;
+  font-size: 0.8rem; color: var(--golden);
+  letter-spacing: 0.2em; font-weight: 300;
+}
+.section-title {
+  display: block;
+  font-family: "STSong", "Songti SC", "Noto Serif SC", serif;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  color: var(--cream);
+  font-weight: 700;
+  margin-top: 4px;
+}
+.section-sub {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--golden);
+  margin-top: 6px;
+  font-weight: 300;
+  opacity: 0.8;
+}
+
+/* ════════════════ Layout: Two-Column ════════════════ */
+.two-col {
+  display: flex; gap: 4vmin; width: 100%;
+  align-items: flex-start;
+}
+.col-text { flex: 1; min-width: 0; }
+.col-img  { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; }
+.col-img img {
+  width: 100%; max-height: 55vh;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid rgba(212,165,116,0.25);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+
+/* ════════════════ Card Grid ════════════════ */
+.card-grid {
+  display: flex; gap: 1.5vmin; width: 100%;
+  flex-wrap: wrap; justify-content: center;
+}
+.card {
+  background: rgba(255,248,225,0.05);
+  border: 1px solid rgba(212,165,116,0.15);
+  border-radius: 12px;
+  padding: 2vmin 1.8vmin;
+  text-align: center;
+  flex: 1; min-width: 140px;
+  backdrop-filter: blur(4px);
+  transition: transform 0.3s, border-color 0.3s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212,165,116,0.4);
+}
+.card-icon { font-size: 2rem; margin-bottom: 0.3em; }
+.card-title { font-size: 1rem; font-weight: 600; color: var(--cream); margin-bottom: 0.2em; }
+.card-tag  { font-size: 0.75rem; color: var(--golden); margin-bottom: 0.3em; }
+.card-desc  { font-size: 0.75rem; color: var(--warm-gray); line-height: 1.5; }
+.card-color-bar {
+  height: 4px; border-radius: 2px; margin-bottom: 0.6em;
+}
+
+/* ════════════════ Ending Cards ════════════════ */
+.ending-grid {
+  display: flex; gap: 1.5vmin; width: 100%;
+  flex-wrap: wrap; justify-content: center;
+}
+.ending-card {
+  background: rgba(255,248,225,0.04);
+  border: 1px solid rgba(212,165,116,0.12);
+  border-radius: 14px;
+  padding: 2.5vmin 2vmin;
+  flex: 1; min-width: 200px;
+  position: relative; overflow: hidden;
+}
+.ending-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+}
+.ending-tag {
+  font-size: 0.65rem; letter-spacing: 0.1em;
+  font-weight: 700; margin-bottom: 0.6em;
+  display: inline-block; padding: 2px 10px;
+  border-radius: 3px;
+}
+.ending-title {
+  font-family: "STSong", "Songti SC", "Noto Serif SC", serif;
+  font-size: 1.2rem; color: var(--cream); font-weight: 700;
+  margin-bottom: 0.5em;
+}
+.ending-cond  { font-size: 0.7rem; color: var(--golden); margin-bottom: 0.6em; line-height: 1.5; }
+.ending-desc  { font-size: 0.8rem; color: var(--warm-gray); line-height: 1.6; }
+
+/* ════════════════ Flow Steps ════════════════ */
+.flow-row {
+  display: flex; align-items: flex-start; gap: 1vmin;
+  width: 100%; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 2.5vmin;
+}
+.flow-step {
+  background: rgba(255,240,216,0.06);
+  border: 1px solid rgba(212,165,116,0.15);
+  border-radius: 12px;
+  padding: 2vmin 1.5vmin;
+  text-align: center;
+  flex: 1; min-width: 140px;
+}
+.flow-step-icon { font-size: 1.6rem; margin-bottom: 0.3em; }
+.flow-step-title { font-size: 0.95rem; color: var(--cream); font-weight: 600; margin-bottom: 0.3em; }
+.flow-step-desc { font-size: 0.72rem; color: var(--warm-gray); line-height: 1.5; white-space: pre-line; }
+.flow-arrow {
+  display: flex; align-items: center;
+  font-size: 1.4rem; color: var(--tan);
+  padding-top: 1em;
+}
+
+/* ════════════════ Table ════════════════ */
+.data-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.8rem;
+}
+.data-table th {
+  background: rgba(212,165,116,0.2);
+  color: var(--cream);
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+.data-table td {
+  padding: 9px 12px;
+  color: rgba(250,243,224,0.8);
+  border-bottom: 1px solid rgba(212,165,116,0.08);
+}
+.data-table tr:nth-child(even) td {
+  background: rgba(255,248,225,0.02);
+}
+.data-table .mood { color: var(--golden); font-weight: 600; }
+.data-table .key  { color: var(--purple); font-weight: 600; }
+
+/* ════════════════ Tech Grid ════════════════ */
+.tech-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1.5vmin; width: 100%;
+}
+.tech-item {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 1vmin 0;
+}
+.tech-bullet {
+  color: var(--tan); font-size: 1rem; flex-shrink: 0;
+}
+.tech-label {
+  font-size: 0.85rem; color: var(--cream); font-weight: 600;
+  white-space: nowrap; min-width: 110px;
+}
+.tech-desc {
+  font-size: 0.78rem; color: var(--warm-gray);
+}
+
+/* ════════════════ Architecture Blocks ════════════════ */
+.arch-row {
+  display: flex; gap: 1vmin; width: 100%;
+  justify-content: center; margin-bottom: 1.5vmin;
+  flex-wrap: wrap;
+}
+.arch-block {
+  background: rgba(212,165,116,0.15);
+  border: 1px solid rgba(212,165,116,0.25);
+  border-radius: 8px;
+  padding: 1.2vmin 1.8vmin;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--cream);
+  white-space: pre-line;
+  line-height: 1.4;
+}
+.arch-bar {
+  width: 100%; padding: 1vmin 2vmin;
+  background: rgba(255,240,216,0.06);
+  border: 1px solid rgba(212,165,116,0.12);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--cream);
+  margin-bottom: 2vmin;
+}
+
+/* ════════════════ Screenshot Caption ════════════════ */
+.ss-caption {
+  font-size: 0.75rem; color: var(--golden);
+  margin-bottom: -1vmin; font-weight: 300;
+}
+
+/* ════════════════ Navigation ════════════════ */
+#nav-dots {
+  position: fixed; bottom: 3vmin; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px; z-index: 100;
+}
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(212,165,116,0.3);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.nav-dot.active {
+  background: var(--tan);
+  box-shadow: 0 0 12px rgba(212,165,116,0.6);
+  width: 24px;
+  border-radius: 4px;
+}
+
+#nav-hint {
+  position: fixed; bottom: 6vmin; left: 50%; transform: translateX(-50%);
+  font-size: 0.7rem; color: rgba(212,165,116,0.5);
+  letter-spacing: 0.1em; z-index: 100;
+  transition: opacity 0.5s;
+}
+
+/* ════════════════ Progress Bar ════════════════ */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: var(--tan);
+  z-index: 200;
+  transition: width 0.8s ease;
+}
+
+/* ════════════════ Slide Number ════════════════ */
+.slide-num {
+  position: fixed; top: 3vmin; right: 4vmin;
+  font-size: 0.8rem; color: rgba(212,165,116,0.4);
+  z-index: 100;
+  letter-spacing: 0.1em;
+}
+
+/* ════════════════ Responsive ════════════════ */
+@media (max-width: 768px) {
+  .two-col { flex-direction: column; }
+  .card-grid { gap: 2vmin; }
+  .ending-grid { gap: 2vmin; }
+  .flow-row { gap: 2vmin; }
+  .tech-grid { grid-template-columns: 1fr; }
+  .slide { padding: 6vmin 4vmin; }
+  .section-bar { height: 28px; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div class="slide-num" id="slide-num"></div>
+
+<div id="slides">
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 0 — 封面
+  ════════════════════════════════════════════════ -->
+<div class="slide active" data-index="0">
+  <div class="bg-layer" style="background-image: url('assets/scenes/evening.png')"></div>
+  <div class="bg-overlay"></div>
+  <div class="slide-content" style="text-align:center">
+    <div class="cover-title">最后的书店</div>
+    <div class="cover-sub">The Last Bookstore</div>
+    <div class="cover-divider"></div>
+    <div class="cover-desc">
+      大断联后的第 7 年 · 云端沉默，纸页仍在发光<br>
+      腾讯云 AI 黑客松 #40 · 叙事剧情游戏赛道
+    </div>
+    <div class="cover-tags">
+      <span>纯前端 Web 游戏</span>
+      <span>·</span>
+      <span>7 天叙事</span>
+      <span>·</span>
+      <span>24 本书</span>
+      <span>·</span>
+      <span>6 个 NPC</span>
+      <span>·</span>
+      <span>4 种结局</span>
+      <span>·</span>
+      <span>AI 深度集成</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 1 — 故事背景
+  ════════════════════════════════════════════════ -->
+<div class="slide" data-index="1">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">01</span>
+      <span class="section-title">故事背景</span>
+      <span class="section-sub">当你拥有镇上最后一间书店，书成了最珍贵的记忆载体</span>
+    </div>
+    <div class="two-col">
+      <div class="col-text" style="font-size:0.9rem;line-height:2;color:rgba(250,243,224,0.85);">
+        <p style="margin-bottom:1em;"><b style="color:var(--tan)">🗺 世界观</b> — 204X 年，"大断联"降临：全球网络、服务器、电子设备同时永久失效。人类一夜之间回到 analog 时代。</p>
+        <p style="margin-bottom:1em;"><b style="color:var(--tan)">📖 纸质书</b>成为最珍贵的知识载体。橡木镇只剩一间还在营业的书店——你继承的「<b style="color:var(--tan)">墨香书店</b>」。</p>
+        <p style="margin-bottom:1em;"><b style="color:var(--tan)">👤 你扮演</b>祖父的书店继承人。他的信里写着：</p>
+        <p style="font-style:italic;color:var(--tan);padding-left:1em;border-left:2px solid var(--tan);margin-bottom:1em;">
+          "这家店的价值不在于卖了多少本书，<br>而在于对走进来的每一个人，<br>给出了正确的那一句回答。"
+        </p>
+        <p><b style="color:var(--tan)">🎯 目标：</b>7 天内，为每位来访者推荐合适的书，累积希望值（Hope），改变小镇的命运。</p>
+      </div>
+      <div class="col-img">
+        <img src="assets/截屏2026-06-11 22.12.25.png" alt="游戏画面" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:3em;\'>🖼 游戏截图</div>'">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 2 — 核心玩法
+  ════════════════════════════════════════════════ -->
+<div class="slide" data-index="2">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">02</span>
+      <span class="section-title">核心玩法机制</span>
+      <span class="section-sub">倾听 → 理解 → 推荐 → 改变</span>
+    </div>
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="flow-step-icon">🌅</div>
+        <div class="flow-step-title">每日清晨</div>
+        <div class="flow-step-desc">叙事过场<br>了解当日背景与目标</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-icon">🔔</div>
+        <div class="flow-step-title">门铃响起</div>
+        <div class="flow-step-desc">NPC 来访<br>倾听他们的故事</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-icon">💬</div>
+        <div class="flow-step-title">对话选择</div>
+        <div class="flow-step-desc">3 分支选项<br>或 AI 自由交谈</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-icon">📚</div>
+        <div class="flow-step-title">推荐书籍</div>
+        <div class="flow-step-desc">24 本书中选一本<br>匹配度即时反馈</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-icon">🌙</div>
+        <div class="flow-step-title">打烊纪录</div>
+        <div class="flow-step-desc">AI 生成店主日记<br>更新希望值</div>
+      </div>
+    </div>
+    <div class="ss-caption">游戏主画面预览</div>
+    <div class="col-img" style="max-width:850px;">
+      <img src="assets/截屏2026-06-11 22.12.31.png" alt="游戏主画面" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div style="display:none;color:var(--golden);font-size:0.9em;text-align:center;padding:2em;">🖼 游戏主画面截图</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 3 — NPC 系统
+  ════════════════════════════════════════════════ -->
+<div class="slide" data-index="3">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">03</span>
+      <span class="section-title">6 位 NPC · 7 天叙事弧线</span>
+      <span class="section-sub">每个来访者带着各自的困境，每本书都可能改变一个人的人生轨迹</span>
+    </div>
+    <div class="card-grid" style="margin-bottom:1.5vmin;">
+      <div class="card">
+        <div class="card-color-bar" style="background:var(--red)"></div>
+        <div class="card-title">林月</div>
+        <div class="card-tag">年轻母亲</div>
+        <div class="card-desc">疲惫迷茫<br>寻找生活的意义</div>
+      </div>
+      <div class="card">
+        <div class="card-color-bar" style="background:var(--golden)"></div>
+        <div class="card-title">陈伯</div>
+        <div class="card-tag">孤独老农</div>
+        <div class="card-desc">怀念过去<br>担忧传统的消逝</div>
+      </div>
+      <div class="card">
+        <div class="card-color-bar" style="background:var(--green)"></div>
+        <div class="card-title">小明</div>
+        <div class="card-tag">自卑小孩</div>
+        <div class="card-desc">好奇心旺盛<br>却缺乏自信</div>
+      </div>
+      <div class="card">
+        <div class="card-color-bar" style="background:var(--blue)"></div>
+        <div class="card-title">李医生</div>
+        <div class="card-tag">超负荷医生</div>
+        <div class="card-desc">职业倦怠<br>质疑自己的选择</div>
+      </div>
+      <div class="card">
+        <div class="card-color-bar" style="background:var(--purple)"></div>
+        <div class="card-title">方小姐</div>
+        <div class="card-tag">迷惘诗人</div>
+        <div class="card-desc">在现实与理想<br>之间挣扎</div>
+      </div>
+      <div class="card">
+        <div class="card-color-bar" style="background:#C9A227"></div>
+        <div class="card-title">旅人</div>
+        <div class="card-tag">神秘访客</div>
+        <div class="card-desc">隐藏着与祖父<br>有关的秘密</div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="col-text" style="font-size:0.8rem;line-height:1.8;">
+        <p style="color:var(--golden);margin-bottom:0.5em;">📅 7 天叙事弧线</p>
+        <p>Day 1 <span class="mood">忐忑</span> · 林月(初) + 陈伯(初)</p>
+        <p>Day 2 <span class="mood">不安</span> · 小明(初) + 李医生(初)</p>
+        <p>Day 3 <span class="mood">紧张</span> · 方小姐(初) + 林月(回)</p>
+        <p>Day 4 <span class="mood">低落</span> · 陈伯(回) + 小明(回)</p>
+        <p>Day 5 <span class="mood">疲惫</span> · 李医生(回) + 方小姐(回) <span class="key">⚡转折</span></p>
+        <p>Day 6 <span class="mood">希望</span> · 旅人(条件) + 随机回访</p>
+        <p>Day 7 <span class="mood">坚定</span> · 最深互动 NPC 最终回访 <span class="key">终章</span></p>
+      </div>
+      <div class="col-img">
+        <img src="assets/截屏2026-06-11 22.12.38.png" alt="NPC 对话" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:3em;\'>🖼 NPC 对话截图</div>'">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 4 — 书籍推荐
+  ════════════════════════════════════════════════ -->
+<div class="slide" data-index="4">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">04</span>
+      <span class="section-title">24 本书 + 智能匹配推荐</span>
+      <span class="section-sub">每本书都有最佳匹配 NPC，推荐正确与否直接影响希望值和结局</span>
+    </div>
+    <div class="two-col">
+      <div class="col-img">
+        <img src="assets/截屏2026-06-11 22.12.55.png" alt="书架" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:3em;\'>🖼 书籍推荐截图</div>'">
+      </div>
+      <div class="col-text" style="font-size:0.78rem;line-height:1.7;">
+        <p style="color:var(--golden);font-size:0.9rem;margin-bottom:0.8em;">📊 四大分类，每类 6 本</p>
+        <p><b style="color:var(--tan)">文学小说</b> — 小王子 · 挪威的森林 · 月亮与六便士 · 百年孤独 · 活着 · 局外人</p>
+        <p><b style="color:var(--tan)">哲学思辨</b> — 活出生命的意义 · 悉达多 · 苏菲的世界 · 瓦尔登湖 · 被讨厌的勇气 · 沉思录</p>
+        <p><b style="color:var(--tan)">心理成长</b> — 自卑与超越 · 非暴力沟通 · 也许你该找个人聊聊 · 心流 · 共情的力量 · 思考，快与慢</p>
+        <p><b style="color:var(--tan)">社会人文</b> — 乡土中国 · 枪炮病菌与钢铁 · 人类简史 · 乌合之众 · 娱乐至死 · 寂静的春天</p>
+        <p style="margin-top:1em;color:var(--golden);">🎯 匹配等级与影响</p>
+        <p>🌟 <b style="color:var(--tan)">完美匹配</b> → Hope <b style="color:#5f5">+8~12</b></p>
+        <p>✅ <b style="color:var(--tan)">好推荐</b> → Hope +4~7</p>
+        <p>➖ <b style="color:var(--tan)">一般</b> → Hope +1~2</p>
+        <p>❌ <b style="color:var(--tan)">不匹配</b> → Hope <b style="color:#f55">-3~-5</b></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 5 — AI 集成
+  ════════════════════════════════════════════════ -->
+<div class="slide" data-index="5">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">05</span>
+      <span class="section-title">5 大 AI 集成点</span>
+      <span class="section-sub">从对话到日记，AI 贯穿游戏全流程，增强沉浸感与可重玩性</span>
+    </div>
+    <div class="card-grid" style="margin-bottom:2vmin;">
+      <div class="card">
+        <div class="card-icon">💬</div>
+        <div class="card-title">NPC 自由交谈</div>
+        <div class="card-desc">阿里云百炼 qwen-plus<br>流式打字机效果<br>实时角色扮演对话</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">书籍 AI 导读</div>
+        <div class="card-desc">与"作者灵魂"对话<br>根据书籍主题生成回复<br>深挖书中哲理</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📝</div>
+        <div class="card-title">每日店主日记</div>
+        <div class="card-desc">根据当日希望值/事件<br>AI 生成治愈向日记<br>个性化叙事收尾</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧠</div>
+        <div class="card-title">情感识别匹配</div>
+        <div class="card-desc">NLP 情绪意图分类<br>8 类情感标签<br>动态调整推荐逻辑</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎨</div>
+        <div class="card-title">AI 素材生成</div>
+        <div class="card-desc">Matrix AI 出图/出音乐<br>6 NPC 立绘 + 24 封面<br>4 BGM + 4 SFX</div>
+      </div>
+    </div>
+    <div class="ss-caption">AI 自由交谈界面预览</div>
+    <div class="col-img" style="max-width:800px;">
+      <img src="assets/ai-chat-screenshot.png" alt="AI 对话" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:2em;\'>🖼 AI 对话截图</div>'">
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 6 — 叙事弧线
+  ════════════════════════════════════════════════ -->
+<div class="slide" data-index="6">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">06</span>
+      <span class="section-title">叙事设计与情感弧线</span>
+      <span class="section-sub">7 天从忐忑到坚定，希望值的每一次变化都在重塑小镇的命运</span>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr><th>Day</th><th>情绪基调</th><th>NPC 排期</th><th>叙事要点</th><th>剧情权重</th></tr>
+      </thead>
+      <tbody>
+        <tr><td style="color:var(--tan);font-weight:700">Day 1</td><td class="mood">忐忑</td><td>林月(初) + 陈伯(初)</td><td>首次开店，面对陌生访客</td><td style="color:var(--warm-gray)">开场</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 2</td><td class="mood">不安</td><td>小明(初) + 李医生(初)</td><td>试探人心，积累信任</td><td style="color:var(--warm-gray)">累积</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 3</td><td class="mood">紧张</td><td>方小姐(初) + 林月(回)</td><td>暗流涌动，回访 NPC 开始变化</td><td style="color:var(--golden)">转折</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 4</td><td class="mood">低落</td><td>陈伯(回) + 小明(回)</td><td>裂缝出现，考验店主耐心</td><td style="color:var(--red)">低谷</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 5</td><td class="mood">疲惫</td><td>李医生(回) + 方小姐(回)</td><td>关键转折点，旅人出现条件达成</td><td class="key">⚡ 突变</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 6</td><td class="mood">希望</td><td>旅人(条件) + 随机回访</td><td>曙光照进书店，秘密逐渐揭露</td><td style="color:var(--green)">上升</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 7</td><td class="mood">坚定</td><td>最深互动 NPC 最终回访</td><td>终章：所有选择在此揭晓</td><td class="key">结局</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 7 — 结局系统
+  ════════════════════════════════════════════════ -->
+<div class="slide" data-index="7">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">07</span>
+      <span class="section-title">4 种结局 · 多重命运</span>
+      <span class="section-sub">你的每一个选择都在书写小镇的结局，重玩可解锁不同命运线</span>
+    </div>
+    <div class="ending-grid">
+      <div class="ending-card">
+        <div class="ending-tag" style="background:rgba(93,78,138,0.3);color:#b8a8d8;">HIDDEN ENDING</div>
+        <div class="ending-title">🌙 最后的读者</div>
+        <div class="ending-cond">条件：days≥7 + metTraveler<br>totalPerfect≥5 + hope≥60</div>
+        <div class="ending-desc">旅人留下的旧书里夹着一张泛黄的纸条，字迹是你祖父的。原来你一直等待的最后一个读者，是过去的自己。</div>
+      </div>
+      <div class="ending-card">
+        <div class="ending-tag" style="background:rgba(224,122,95,0.3);color:#f0a090;">TRUE ENDING</div>
+        <div class="ending-title">🌟 点燃希望</div>
+        <div class="ending-cond">条件：days≥6 + hope≥80<br>totalPerfect≥4 + metTraveler</div>
+        <div class="ending-desc">整个小镇都变了。书店的灯光重新亮起，你的每一个选择共同点燃了一个社区对未来的希望。</div>
+      </div>
+      <div class="ending-card">
+        <div class="ending-tag" style="background:rgba(184,132,78,0.3);color:#d4b884;">GOOD ENDING</div>
+        <div class="ending-title">🏠 守望者</div>
+        <div class="ending-cond">条件：days≥5<br>hope 60–79</div>
+        <div class="ending-desc">你让几个人不再孤单。虽然前路漫长，但你决定守在这里，守到他们回来。</div>
+      </div>
+      <div class="ending-card">
+        <div class="ending-tag" style="background:rgba(139,123,110,0.3);color:#bbb;">NORMAL ENDING</div>
+        <div class="ending-title">📖 平凡日子</div>
+        <div class="ending-cond">条件：days≥3<br>hope 40–59</div>
+        <div class="ending-desc">你只是个守店的。日子波澜不惊，但书还在，书店还在，这已经足够了。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 8 — 技术架构
+  ════════════════════════════════════════════════ -->
+<div class="slide" data-index="8">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">08</span>
+      <span class="section-title">技术架构与亮点</span>
+      <span class="section-sub">零构建 · 纯前端 · 离线可玩 · AI 深度集成</span>
+    </div>
+    <div class="arch-row">
+      <div class="arch-block">Engine<br><span style="font-size:0.65rem;color:var(--warm-gray)">状态机</span></div>
+      <div class="arch-block">Renderer<br><span style="font-size:0.65rem;color:var(--warm-gray)">渲染层</span></div>
+      <div class="arch-block">Game<br><span style="font-size:0.65rem;color:var(--warm-gray)">控制器</span></div>
+      <div class="arch-block">AI<br><span style="font-size:0.65rem;color:var(--warm-gray)">LLM 层</span></div>
+      <div class="arch-block">Scene<br><span style="font-size:0.65rem;color:var(--warm-gray)">场景特效</span></div>
+      <div class="arch-block">Audio<br><span style="font-size:0.65rem;color:var(--warm-gray)">音乐音效</span></div>
+    </div>
+    <div class="arch-bar">
+      Data Layer：GameData（24 本书 + 6 NPC + 对话树 + 结局条件）&nbsp;&nbsp;|&nbsp;&nbsp;Engine.state（全局唯一状态）
+    </div>
+    <div class="tech-grid">
+      <div class="tech-item">
+        <span class="tech-bullet">▸</span>
+        <span class="tech-label">零构建工具</span>
+        <span class="tech-desc">HTML/CSS/JS 直引，浏览器即开即玩</span>
+      </div>
+      <div class="tech-item">
+        <span class="tech-bullet">▸</span>
+        <span class="tech-label">离线可玩</span>
+        <span class="tech-desc">AI 模块全面 fallback，断网也不中断体验</span>
+      </div>
+      <div class="tech-item">
+        <span class="tech-bullet">▸</span>
+        <span class="tech-label">状态机驱动</span>
+        <span class="tech-desc">Engine → Renderer → Game 三层解耦</span>
+      </div>
+      <div class="tech-item">
+        <span class="tech-bullet">▸</span>
+        <span class="tech-label">数据不可变</span>
+        <span class="tech-desc">对话推进深拷贝 NPC，保护源数据</span>
+      </div>
+      <div class="tech-item">
+        <span class="tech-bullet">▸</span>
+        <span class="tech-label">localStorage 存档</span>
+        <span class="tech-desc">3 槽存档 + 自动保存机制</span>
+      </div>
+      <div class="tech-item">
+        <span class="tech-bullet">▸</span>
+        <span class="tech-label">动态场景特效</span>
+        <span class="tech-desc">40 颗 CSS 粒子 + 4 时段渐变切换</span>
+      </div>
+      <div class="tech-item">
+        <span class="tech-bullet">▸</span>
+        <span class="tech-label">响应式音频</span>
+        <span class="tech-desc">4 BGM cross-fade + 4 SFX</span>
+      </div>
+      <div class="tech-item">
+        <span class="tech-bullet">▸</span>
+        <span class="tech-label">LLM 流式对话</span>
+        <span class="tech-desc">DashScope API + 打字机效果</span>
+      </div>
+    </div>
+    <p style="margin-top:2vmin;font-size:0.75rem;color:var(--golden);opacity:0.7;">
+      源码 &lt; 100KB（不含资源）&nbsp;|&nbsp;GitHub Pages + Vercel 双部署&nbsp;|&nbsp;完全离线可玩
+    </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+  SLIDE 9 — 感谢
+  ════════════════════════════════════════════════ -->
+<div class="slide" data-index="9">
+  <div class="bg-layer" style="background-image: url('assets/scenes/evening.png')"></div>
+  <div class="bg-overlay"></div>
+  <div class="slide-content" style="text-align:center">
+    <div class="cover-title" style="font-size:clamp(2.5rem,5vw,4rem)">感谢聆听</div>
+    <div style="font-size:1rem;color:var(--tan);margin-top:0.5em;letter-spacing:0.15em;">—— 来自《最后的书店》开发团队</div>
+    <div class="cover-divider"></div>
+    <div style="font-size:0.9rem;color:rgba(250,243,224,0.8);line-height:2.2;max-width:650px;">
+      <p>🎮 在线体验：<a href="https://swording-k.github.io/the-last-bookstore/" target="_blank" style="color:var(--tan);text-decoration:none;">swording-k.github.io/the-last-bookstore</a></p>
+      <p>📂 源码仓库：<a href="https://github.com/swording-k/the-last-bookstore" target="_blank" style="color:var(--tan);text-decoration:none;">github.com/swording-k/the-last-bookstore</a></p>
+      <p style="margin-top:1em;">🛠 HTML5 + CSS3 + JavaScript（零构建）&nbsp;|&nbsp;🤖 阿里云百炼 + Matrix AI</p>
+      <p>🎨 电影感暖色调 · 文字叙事冒险 · 治愈系独立游戏</p>
+    </div>
+    <div class="cover-divider"></div>
+    <div style="font-size:0.9rem;color:var(--tan);font-style:italic;max-width:550px;line-height:1.8;">
+      "这家店的价值不在于卖了多少本书，<br>而在于对走进来的每一个人，给出了正确的那一句回答。"
+    </div>
+  </div>
+</div>
+
+</div><!-- /#slides -->
+
+<!-- ════════════════ Navigation ════════════════ -->
+<div id="nav-dots"></div>
+<div id="nav-hint">← → 键翻页 · 点击圆点跳转</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let isTransitioning = false;
+
+  // Build nav dots
+  const dotsContainer = document.getElementById('nav-dots');
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  }
+
+  function goTo(index) {
+    if (isTransitioning || index === current || index < 0 || index >= total) return;
+    isTransitioning = true;
+
+    slides[current].classList.remove('active');
+    slides[index].classList.add('active');
+
+    // Update dots
+    dotsContainer.children[current].classList.remove('active');
+    dotsContainer.children[index].classList.add('active');
+
+    // Progress bar
+    document.getElementById('progress-bar').style.width = ((index + 1) / total * 100) + '%';
+
+    // Slide number
+    document.getElementById('slide-num').textContent = (index + 1) + ' / ' + total;
+
+    current = index;
+
+    setTimeout(() => { isTransitioning = false; }, 800);
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goTo(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goTo(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(total - 1);
+    }
+  });
+
+  // Touch swipe
+  let touchStartY = 0;
+  document.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; });
+  document.addEventListener('touchend', (e) => {
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(dy) > 50) {
+      goTo(current + (dy > 0 ? 1 : -1));
+    }
+  });
+
+  // Mouse wheel
+  let wheelTimeout;
+  document.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (wheelTimeout) return;
+    wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 1000);
+    goTo(current + (e.deltaY > 0 ? 1 : -1));
+  }, { passive: false });
+
+  // Init
+  document.getElementById('slide-num').textContent = '1 / ' + total;
+  document.getElementById('progress-bar').style.width = (1 / total * 100) + '%';
+})();
+</script>
+
+</body>
+</html>
