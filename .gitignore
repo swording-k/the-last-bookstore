@@ -1,0 +1,11 @@
+.DS_Store
+.mavis/
+.opencode/
+.workbuddy/
+node_modules/
+*.pyc
+__pycache__/
+*.mp3
+*.wav
+covers/
+screenshots/

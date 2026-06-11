@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>最后的书店 | The Last Bookstore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="tod-morning">
+
+<!-- 标题画面 -->
+<div id="title-screen" class="screen active">
+  <div class="title-bg">
+    <div class="t-particle p1"></div><div class="t-particle p2"></div>
+    <div class="t-particle p3"></div><div class="t-particle p4"></div>
+    <div class="t-particle p5"></div><div class="t-particle p6"></div>
+    <div class="t-book fb1">📖</div><div class="t-book fb2">📚</div><div class="t-book fb3">📕</div>
+  </div>
+  <div class="title-content">
+    <div class="title-logo">
+      <svg width="80" height="80" viewBox="0 0 100 100">
+        <rect x="15" y="20" width="70" height="60" rx="6" fill="#D4A574" stroke="#B8844E" stroke-width="2"/>
+        <rect x="22" y="28" width="56" height="44" rx="3" fill="#FFF8E1"/>
+        <line x1="35" y1="28" x2="35" y2="72" stroke="#E8C99B" stroke-width="1.5"/>
+        <line x1="50" y1="28" x2="50" y2="72" stroke="#E8C99B" stroke-width="1.5"/>
+        <line x1="65" y1="28" x2="65" y2="72" stroke="#E8C99B" stroke-width="1.5"/>
+        <rect x="25" y="38" width="16" height="22" fill="#E07A5F" rx="2"/>
+        <rect x="43" y="34" width="14" height="26" fill="#6B5B95" rx="2"/>
+        <rect x="60" y="42" width="12" height="18" fill="#3D9970" rx="2"/>
+      </svg>
+    </div>
+    <h1 class="title-h1">最后的书店</h1>
+    <p class="title-sub">THE LAST BOOKSTORE</p>
+    <div class="title-line"></div>
+    <p class="title-quote">"这家店的价值不在于卖了多少本书，<br>而在于对走进来的每一个人，<br>给出了正确的那一句回答。"</p>
+    <button id="btn-start" class="btn-start">推开门，点亮灯光</button>
+    <p class="title-hint">点击开始你的故事</p>
+  </div>
+</div>
+
+<!-- 游戏画面 -->
+<div id="game-screen" class="screen">
+
+  <!-- 顶栏 -->
+  <div id="top-bar">
+    <div class="top-left">
+      <span id="day-display" class="stat-label day-lbl">第 1 天</span>
+      <span id="time-display" class="stat-label time-lbl">清晨</span>
+    </div>
+    <div class="top-mid">
+      <div class="hope-wrap">
+        <span class="hope-lbl">希望值</span>
+        <div class="hope-track">
+          <div id="hope-fill" class="hope-bar" style="width:50%"></div>
+          <div class="hope-threshold hope-th-40" title="平凡结局线">|</div>
+          <div class="hope-threshold hope-th-60" title="守望者线">|</div>
+          <div class="hope-threshold hope-th-80" title="真结局线">|</div>
+        </div>
+        <span id="hope-num" class="hope-num">50</span>
+      </div>
+    </div>
+    <div class="top-right">
+      <span id="rep-display" class="stat-label rep-lbl">声誉 0</span>
+      <button id="btn-mute" class="ico-btn" title="静音">🔊</button>
+      <button id="btn-save" class="ico-btn" title="存档">💾</button>
+      <button id="btn-menu" class="ico-btn" title="菜单">☰</button>
+    </div>
+  </div>
+
+  <!-- 每日清晨叙事面板 -->
+  <div id="narrative-panel" class="narrative-panel hidden">
+    <div class="nar-scene" id="nar-scene"></div>
+    <div class="nar-content">
+      <div class="nar-day" id="nar-day"></div>
+      <h2 class="nar-title" id="nar-title"></h2>
+      <div class="nar-text" id="nar-text"></div>
+      <div class="nar-goal" id="nar-goal"></div>
+      <button class="btn-start" id="nar-continue">推开今天的门</button>
+    </div>
+  </div>
+
+  <!-- 场景区 -->
+  <div id="scene-area">
+
+    <!-- 落地窗 -->
+    <div class="window-box">
+      <div id="main-window" class="wnd-view wnd-morning"></div>
+      <div class="windowsill"></div>
+    </div>
+
+    <!-- 吊灯 -->
+    <div class="ceiling-lamp">
+      <div class="lamp-chain"></div>
+      <div class="lamp-shade"></div>
+      <div class="lamp-bulb"></div>
+      <div class="lamp-glow"></div>
+    </div>
+
+    <!-- 招牌 -->
+    <div class="store-sign">
+      <span>墨 香 书 店</span>
+    </div>
+
+    <!-- 左书架 -->
+    <div class="shelf shelf-L">
+      <div id="shelf-L1" class="shelf-row"></div>
+      <div id="shelf-L2" class="shelf-row"></div>
+      <div id="shelf-L3" class="shelf-row"></div>
+      <div id="shelf-L4" class="shelf-row"></div>
+    </div>
+
+    <!-- 右书架 -->
+    <div class="shelf shelf-R">
+      <div id="shelf-R1" class="shelf-row"></div>
+      <div id="shelf-R2" class="shelf-row"></div>
+      <div id="shelf-R3" class="shelf-row"></div>
+    </div>
+
+    <!-- 地板 -->
+    <div class="floor"></div>
+
+    <!-- 柜台 + 灯光 + NPC 区 -->
+    <div class="counter">
+      <div class="desk-lamp">
+        <div class="dl-shade"></div>
+        <div class="dl-stand"></div>
+        <div class="dl-glow"></div>
+      </div>
+      <div class="desk-objects">
+        <div class="obj-cup"></div>
+        <div class="obj-paper"></div>
+      </div>
+    </div>
+
+    <!-- NPC 立绘（独立位置，靠窗不挡柜台） -->
+    <div id="npc-wrap" class="npc-wrap hidden">
+      <div class="npc-shadow"></div>
+      <div id="npc-sprite" class="npc-sprite"></div>
+    </div>
+
+    <!-- 门铃提示 -->
+    <div id="doorbell" class="doorbell hidden" onclick="Game.onDoorbellClicked()">
+      <span class="db-icon">🔔</span>
+      <span>有人来了 — 点击接待</span>
+    </div>
+
+    <!-- 浮尘粒子 -->
+    <div id="dust-layer" class="dust-layer"></div>
+  </div>
+
+  <!-- 对话面板 -->
+  <div id="dialogue-panel" class="dlg-panel hidden">
+    <div class="dlg-head">
+      <div id="dlg-portrait" class="dlg-portrait"></div>
+      <div class="dlg-name-box">
+        <div id="dlg-name" class="dlg-name"></div>
+        <div id="dlg-tag" class="dlg-tag"></div>
+      </div>
+    </div>
+    <div class="dlg-body">
+      <div id="dlg-text" class="dlg-text"></div>
+    </div>
+    <div id="dlg-options" class="dlg-opts hidden"></div>
+    <div id="dlg-action" class="dlg-act hidden"></div>
+    <div id="dlg-ai-chat" class="dlg-ai-chat hidden">
+      <button id="btn-ai-chat" class="btn-ai-chat">💬 和 TA 自由交谈</button>
+    </div>
+  </div>
+
+  <!-- 书架选书面板 -->
+  <div id="book-panel" class="bk-panel hidden">
+    <div class="bk-header">
+      <h3>📚 书架 — 选一本书推荐给 TA</h3>
+      <button class="bk-close">×</button>
+    </div>
+    <div id="bk-hint" class="bk-hint"></div>
+    <div class="bk-toolbar">
+      <div class="bk-cat-tabs" id="bk-cat-tabs"></div>
+      <span class="bk-count" id="bk-count">24 本</span>
+    </div>
+    <div id="book-grid" class="bk-grid"></div>
+  </div>
+
+  <!-- 结果面板 -->
+  <div id="result-panel" class="res-panel hidden">
+    <div id="result-content" class="res-content"></div>
+  </div>
+
+  <!-- 夜间面板 -->
+  <div id="night-panel" class="night-panel hidden">
+    <div id="night-content" class="night-content"></div>
+  </div>
+
+  <!-- AI 聊天面板（NPC 自由对话 / 书籍导读） -->
+  <div id="ai-chat-panel" class="ai-chat-panel hidden">
+    <div class="ai-chat-header">
+      <h3 id="ai-chat-title">和店主聊聊这本书</h3>
+      <button class="ai-chat-close" id="ai-chat-close">&times;</button>
+    </div>
+    <div class="ai-chat-messages" id="ai-chat-msgs"></div>
+    <div class="ai-chat-input-area">
+      <input type="text" id="ai-chat-input" placeholder="输入你想问的…" autocomplete="off" />
+      <button id="ai-chat-send" class="ai-chat-send-btn">发送</button>
+    </div>
+  </div>
+</div>
+
+<!-- 结局画面 -->
+<div id="ending-screen" class="screen ending-screen hidden">
+  <div id="ending-content" class="ending-content"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="audio.js"></script>
+<script src="engine.js"></script>
+<script src="renderer.js"></script>
+<script src="scene.js"></script>
+<script src="llm.js"></script>
+<script src="ai.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
