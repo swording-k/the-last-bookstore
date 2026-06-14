@@ -18,6 +18,18 @@ var MyStore = {
     if (window.AudioManager) AudioManager.playBGM('morning');
   },
 
+  close: function() {
+    var screen = document.getElementById('mystore-screen');
+    if (screen) screen.classList.add('hidden');
+    // 恢复之前的屏幕
+    var phase = Engine.state && Engine.state.phase;
+    if (phase === 'dialogue' || phase === 'bookshelf' || phase === 'narrative') {
+      Renderer.showScreen('game-screen');
+    } else {
+      Renderer.showScreen('game-screen');
+    }
+  },
+
   addToMylist: function(book, npc) {
     if (!book) return false;
     if (!Array.isArray(Engine.state.mylist)) Engine.state.mylist = [];
@@ -134,6 +146,7 @@ var MyStore = {
       this._renderRecommended(recommended) +
       this._renderMylist(mylist) +
       '<div class="ms-actions">' +
+        '<button class="ms-back-btn" id="ms-back-btn">← 返回书店</button>' +
         '<button class="ms-primary" id="ms-copy-list">复制待读清单</button>' +
         '<button class="ms-secondary" id="ms-restart">重新开始</button>' +
       '</div>';
@@ -184,6 +197,9 @@ var MyStore = {
   },
 
   _bindInteractions: function() {
+    var backBtn = document.getElementById('ms-back-btn');
+    if (backBtn) backBtn.onclick = function() { MyStore.close(); };
+
     var copyBtn = document.getElementById('ms-copy-list');
     if (copyBtn) copyBtn.onclick = this.copyReadingList.bind(this);
 

@@ -1631,6 +1631,22 @@ html, body {
   flex-wrap: wrap;
   margin-top: 24px;
 }
+.ms-back-btn {
+  min-width: 120px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: 1px solid rgba(200,180,150,0.25);
+  background: transparent;
+  color: rgba(200,180,150,0.8);
+  font-family: var(--font-serif);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ms-back-btn:hover {
+  background: rgba(200,180,150,0.1);
+  color: #f7ead0;
+}
 .ms-primary,
 .ms-secondary {
   min-width: 160px;
