@@ -11,7 +11,7 @@ var LLM = (function() {
   'use strict';
 
   // ============ 配置 ============
-  var API_KEY = '';
+  var API_KEY = 'sk-51fe3a5a42444788ad0509d55245521e';
   var API_BASE = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
   var MODEL = 'qwen-plus';           // qwen-plus: 性价比最优，128K 上下文
   var MAX_TOKENS = 512;
