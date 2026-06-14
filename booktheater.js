@@ -12,6 +12,7 @@
    ============================================================ */
 
 var BookTheater = {
+  _imgVer: 'v20260614c', // 图片版本号，替换立绘时更新此值以强制浏览器刷新缓存
   // ============ 状态 ============
   _book: null,
   _world: null,
@@ -170,7 +171,7 @@ var BookTheater = {
       
       var imgHTML = '';
       if (char.image) {
-        imgHTML = '<div class="bt-select-portrait" style="background-image:url(' + self._escAttr(char.image) + ')"></div>';
+        imgHTML = '<div class="bt-select-portrait" style="background-image:url(' + self._escAttr(char.image) + '?' + self._imgVer + ')"></div>';
       } else {
         imgHTML = '<span class="bt-select-avatar">' + self._esc(char.avatar || '?') + '</span>';
       }
@@ -587,7 +588,7 @@ var BookTheater = {
   _figureHTML: function(character) {
     var id = character ? character.id : 'unknown';
     if (character && character.image) {
-      return '<div class="bt-portrait" style="--bt-character-image:url(' + this._escAttr(character.image) + ')"></div>';
+      return '<div class="bt-portrait" style="--bt-character-image:url(' + this._escAttr(character.image) + '?' + this._imgVer + ')"></div>';
     }
     return '<div class="bt-figure"><span class="bt-figure-icon">' + this._esc(character ? (character.avatar || '?') : '?') + '</span></div>';
   },
