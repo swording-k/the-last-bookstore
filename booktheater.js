@@ -223,21 +223,51 @@ var BookTheater = {
     var hintEl = document.getElementById('bt-narration-hint');
     if (!screen || !textEl) return;
 
-    screen.classList.add('active');
-    textEl.textContent = step.text || '';
-    if (hintEl) hintEl.style.opacity = '1';
+    // 重置动画
+    textEl.style.animation = 'none';
+    textEl.offsetHeight;
+    textEl.style.animation = '';
 
-    // 点击继续
+    screen.classList.add('active');
+    if (hintEl) hintEl.style.opacity = '0';
+
+    // 打字机效果
+    textEl.textContent = '';
+    var fullText = step.text || '';
+    var charIndex = 0;
+    var typingSpeed = 50;
     var self = this;
+    var done = false;
+
+    if (this._dialogueTimer) clearInterval(this._dialogueTimer);
+    this._dialogueTimer = setInterval(function() {
+      if (charIndex < fullText.length) {
+        textEl.textContent += fullText.charAt(charIndex);
+        charIndex++;
+      } else {
+        clearInterval(self._dialogueTimer);
+        done = true;
+        if (hintEl) hintEl.style.opacity = '1';
+      }
+    }, typingSpeed);
+
+    // 点击继续（或跳过打字）
     screen.onclick = function() {
       if (self._streaming) return;
+      if (!done) {
+        clearInterval(self._dialogueTimer);
+        textEl.textContent = fullText;
+        done = true;
+        if (hintEl) hintEl.style.opacity = '1';
+        return;
+      }
       self._storyIndex++;
       self._advanceStory();
     };
   },
 
   /* ==========================================================
-     \u5bf9\u8bdd\u754c\u9762\u663e\u793a
+     \u5bf9\u8bdd\u754c\u9762\u663e\u793a — \u5207\u6362\u8bf4\u8bdd\u8005\u7acb\u7ed8
      ========================================================== */
   _showDialogue: function(step) {
     this._state = 'dialogue';
@@ -251,17 +281,24 @@ var BookTheater = {
 
     screen.classList.add('active');
 
-    // 显示说话者名字
+    // \u663e\u793a\u8bf4\u8bdd\u8005\u540d\u5b57 + \u5207\u6362\u7acb\u7ed8
     if (nameEl) {
       var speakerName = '';
+      var speakerChar = null;
       if (step.speaker === this._character.id) {
         speakerName = this._character.name;
+        speakerChar = this._character;
       } else {
-        // 查找其他角色
-        var speaker = this._findCharacterById(step.speaker);
-        speakerName = speaker ? speaker.name : step.speaker;
+        speakerChar = this._findCharacterById(step.speaker);
+        speakerName = speakerChar ? speakerChar.name : step.speaker;
       }
       nameEl.textContent = speakerName;
+      // \u5982\u679c\u8bf4\u8bdd\u8005\u4e0d\u662f\u5f53\u524d\u89d2\u8272\uff0c\u5207\u6362\u7acb\u7ed3\u5230\u8bf4\u8bdd\u8005
+      if (speakerChar && speakerChar.id !== this._character.id) {
+        this._updateCharacterModelFor(speakerChar);
+      } else if (speakerChar) {
+        this._updateCharacterModel();
+      }
     }
 
     // 打字机效果显示文字
@@ -421,6 +458,20 @@ var BookTheater = {
     var model = document.getElementById('bt-character-model');
     if (!model) return;
     model.innerHTML = this._figureHTML(this._character);
+  },
+
+  /* ==========================================================
+     \u66f4\u65b0\u7acb\u7ed3\u4e3a\u6307\u5b9a\u89d2\u8272\uff08\u5bf9\u8bdd\u65f6\u5207\u6362\u8bf4\u8bdd\u8005\uff09
+     ========================================================== */
+  _updateCharacterModelFor: function(character) {
+    var model = document.getElementById('bt-character-model');
+    if (!model) return;
+    model.style.opacity = '0';
+    var self = this;
+    setTimeout(function() {
+      model.innerHTML = self._figureHTML(character);
+      model.style.opacity = '1';
+    }, 200);
   },
 
   /* ==========================================================
