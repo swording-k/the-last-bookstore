@@ -103,7 +103,7 @@ body {
   width: clamp(120px, 25vw, 300px);
   height: 2px;
   background: var(--tan);
-  margin: 2em 0;
+  margin: 2em auto;
   opacity: 0.6;
 }
 .cover-desc {
@@ -116,9 +116,9 @@ body {
 .cover-tags {
   display: flex; gap: 1.2em; flex-wrap: wrap; justify-content: center;
   margin-top: 2em;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--golden);
-  opacity: 0.7;
+  opacity: 0.75;
   letter-spacing: 0.05em;
 }
 
@@ -163,7 +163,7 @@ body {
 .col-text { flex: 1; min-width: 0; }
 .col-img  { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; }
 .col-img img {
-  width: 100%; max-height: 55vh;
+  width: 100%; max-height: 52vh;
   object-fit: contain;
   border-radius: 8px;
   border: 1px solid rgba(212,165,116,0.25);
@@ -210,6 +210,11 @@ body {
   flex: 1; min-width: 200px;
   position: relative; overflow: hidden;
 }
+.ending-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+}
 .ending-tag {
   font-size: 0.65rem; letter-spacing: 0.1em;
   font-weight: 700; margin-bottom: 0.6em;
@@ -236,7 +241,7 @@ body {
   border-radius: 12px;
   padding: 2vmin 1.5vmin;
   text-align: center;
-  flex: 1; min-width: 140px;
+  flex: 1; min-width: 120px;
 }
 .flow-step-icon { font-size: 1.6rem; margin-bottom: 0.3em; }
 .flow-step-title { font-size: 0.95rem; color: var(--cream); font-weight: 600; margin-bottom: 0.3em; }
@@ -315,7 +320,7 @@ body {
   border: 1px solid rgba(212,165,116,0.12);
   border-radius: 8px;
   text-align: center;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--cream);
   margin-bottom: 2vmin;
 }
@@ -326,116 +331,19 @@ body {
   margin-bottom: -1vmin; font-weight: 300;
 }
 
-/* ════════════════ VN Layout Demo ════════════════ */
-.vn-demo {
-  display: flex;
-  width: 100%;
-  max-width: 900px;
-  height: 400px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(212,165,116,0.3);
-  position: relative;
-}
-.vn-left {
-  width: 45%;
-  background: linear-gradient(135deg, #1a1008 0%, #2a1f10 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.vn-left-inner {
-  text-align: center;
-}
-.vn-portrait-placeholder {
-  width: 120px;
-  height: 160px;
-  background: linear-gradient(180deg, #3a2a1a 0%, #2a1a0a 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  border: 1px solid rgba(212,165,116,0.3);
-  box-shadow: 0 0 30px rgba(184,132,78,0.3);
-  animation: breathe 3s ease-in-out infinite;
-}
-@keyframes breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-}
-.vn-left-label {
-  font-size: 0.7rem;
-  color: var(--golden);
-  margin-top: 0.8em;
-  letter-spacing: 0.1em;
-}
-.vn-right {
-  width: 55%;
-  background: linear-gradient(135deg, #2a1f10 0%, #1a1008 100%);
-  padding: 2vmin;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-.vn-nameplate {
-  font-size: 0.8rem;
-  color: var(--tan);
-  font-weight: 600;
-  margin-bottom: 0.5em;
-  padding-bottom: 0.5em;
-  border-bottom: 1px solid rgba(212,165,116,0.2);
-}
-.vn-text {
-  font-size: 0.85rem;
-  color: var(--cream);
-  line-height: 1.8;
-  min-height: 80px;
-}
-.vn-hint {
-  font-size: 0.65rem;
-  color: var(--golden);
-  opacity: 0.5;
-  margin-top: 1em;
-  text-align: right;
-}
-.vn-divider {
-  position: absolute;
-  top: 10%;
-  bottom: 10%;
-  left: 45%;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(212,165,116,0.3), transparent);
-}
-
-/* ════════════════ Book Theater Features ════════════════ */
-.bt-feature-grid {
-  display: flex; gap: 1.5vmin; width: 100%;
-  flex-wrap: wrap;
-}
-.bt-feature {
-  flex: 1;
-  min-width: 200px;
+/* ════════════════ Highlight Box ════════════════ */
+.highlight-box {
   background: rgba(255,248,225,0.04);
-  border: 1px solid rgba(212,165,116,0.12);
-  border-radius: 10px;
-  padding: 1.5vmin;
+  border: 1px solid rgba(212,165,116,0.18);
+  border-radius: 12px;
+  padding: 2vmin;
+  font-size: 0.82rem;
+  color: rgba(250,243,224,0.85);
+  line-height: 1.85;
 }
-.bt-feature-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.5em;
-}
-.bt-feature-title {
-  font-size: 0.9rem;
-  color: var(--cream);
-  font-weight: 600;
-  margin-bottom: 0.3em;
-}
-.bt-feature-desc {
-  font-size: 0.75rem;
-  color: var(--warm-gray);
-  line-height: 1.6;
+.highlight-box.accent {
+  border-color: rgba(184,132,78,0.45);
+  background: rgba(184,132,78,0.06);
 }
 
 /* ════════════════ Navigation ════════════════ */
@@ -488,9 +396,6 @@ body {
   .tech-grid { grid-template-columns: 1fr; }
   .slide { padding: 6vmin 4vmin; }
   .section-bar { height: 28px; }
-  .vn-demo { height: 300px; flex-direction: column; }
-  .vn-left, .vn-right { width: 100%; }
-  .vn-divider { display: none; }
 }
 </style>
 </head>
@@ -516,17 +421,14 @@ body {
       腾讯云 AI 黑客松 #40 · 叙事剧情游戏赛道
     </div>
     <div class="cover-tags">
-      <span>纯前端 Web 游戏</span>
-      <span>·</span>
-      <span>7 天叙事</span>
-      <span>·</span>
-      <span>24 本书</span>
-      <span>·</span>
-      <span>6 个 NPC</span>
-      <span>·</span>
-      <span>4 种结局</span>
-      <span>·</span>
-      <span>AI 深度集成</span>
+      <span>纯前端 Web 游戏</span> <span>·</span>
+      <span>双模式架构</span> <span>·</span>
+      <span>7 天叙事</span> <span>·</span>
+      <span>24 本书</span> <span>·</span>
+      <span>6 个 NPC</span> <span>·</span>
+      <span>4 种结局</span> <span>·</span>
+      <span>AI 深度集成</span> <span>·</span>
+      <span>书中世界探索</span>
     </div>
   </div>
 </div>
@@ -544,7 +446,7 @@ body {
       <span class="section-sub">当你拥有镇上最后一间书店，书成了最珍贵的记忆载体</span>
     </div>
     <div class="two-col">
-      <div class="col-text" style="font-size:0.9rem;line-height:2;color:rgba(250,243,224,0.85);">
+      <div class="col-text" style="font-size:0.88rem;line-height:2;color:rgba(250,243,224,0.86);">
         <p style="margin-bottom:1em;"><b style="color:var(--tan)">🗺 世界观</b> — 204X 年，"大断联"降临：全球网络、服务器、电子设备同时永久失效。人类一夜之间回到 analog 时代。</p>
         <p style="margin-bottom:1em;"><b style="color:var(--tan)">📖 纸质书</b>成为最珍贵的知识载体。橡木镇只剩一间还在营业的书店——你继承的「<b style="color:var(--tan)">墨香书店</b>」。</p>
         <p style="margin-bottom:1em;"><b style="color:var(--tan)">👤 你扮演</b>祖父的书店继承人。他的信里写着：</p>
@@ -553,8 +455,9 @@ body {
         </p>
         <p><b style="color:var(--tan)">🎯 目标：</b>7 天内，为每位来访者推荐合适的书，累积希望值（Hope），改变小镇的命运。</p>
       </div>
-      <div class="col-img">
-        <img src="assets/screenshots-new/01-title.png" alt="标题画面">
+      <div class="col-img" style="flex-direction:column;gap:1.2vmin;">
+        <img src="assets/screenshots-new/01-title.png" alt="标题画面" style="max-height:26vh;">
+        <img src="assets/game-screenshot-2.png" alt="游戏场景" style="max-height:26vh;" onerror="this.style.display='none'">
       </div>
     </div>
   </div>
@@ -573,35 +476,15 @@ body {
       <span class="section-sub">倾听 → 理解 → 推荐 → 改变</span>
     </div>
     <div class="flow-row">
-      <div class="flow-step">
-        <div class="flow-step-icon">🌅</div>
-        <div class="flow-step-title">每日清晨</div>
-        <div class="flow-step-desc">叙事过场<br>了解当日背景与目标</div>
-      </div>
+      <div class="flow-step"><div class="flow-step-icon">🌅</div><div class="flow-step-title">每日清晨</div><div class="flow-step-desc">叙事过场<br>了解当日背景与目标</div></div>
       <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-icon">🔔</div>
-        <div class="flow-step-title">门铃响起</div>
-        <div class="flow-step-desc">NPC 来访<br>倾听他们的故事</div>
-      </div>
+      <div class="flow-step"><div class="flow-step-icon">🔔</div><div class="flow-step-title">门铃响起</div><div class="flow-step-desc">NPC 来访<br>倾听他们的故事</div></div>
       <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-icon">💬</div>
-        <div class="flow-step-title">对话选择</div>
-        <div class="flow-step-desc">3 分支选项<br>或 AI 自由交谈</div>
-      </div>
+      <div class="flow-step"><div class="flow-step-icon">💬</div><div class="flow-step-title">对话选择</div><div class="flow-step-desc">3 分支选项<br>或 AI 自由交谈</div></div>
       <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-icon">📚</div>
-        <div class="flow-step-title">推荐书籍</div>
-        <div class="flow-step-desc">24 本书中选一本<br>匹配度即时反馈</div>
-      </div>
+      <div class="flow-step"><div class="flow-step-icon">📚</div><div class="flow-step-title">推荐书籍</div><div class="flow-step-desc">24 本书中选一本<br>匹配度即时反馈</div></div>
       <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-icon">🌙</div>
-        <div class="flow-step-title">打烊纪录</div>
-        <div class="flow-step-desc">AI 生成店主日记<br>更新希望值</div>
-      </div>
+      <div class="flow-step"><div class="flow-step-icon">🌙</div><div class="flow-step-title">打烊纪录</div><div class="flow-step-desc">AI 生成店主日记<br>更新希望值</div></div>
     </div>
     <div class="ss-caption">游戏对话界面预览</div>
     <div class="col-img" style="max-width:850px;">
@@ -623,56 +506,26 @@ body {
       <span class="section-sub">每个来访者带着各自的困境，每本书都可能改变一个人的人生轨迹</span>
     </div>
     <div class="card-grid" style="margin-bottom:1.5vmin;">
-      <div class="card">
-        <div class="card-color-bar" style="background:var(--red)"></div>
-        <div class="card-title">林月</div>
-        <div class="card-tag">年轻母亲</div>
-        <div class="card-desc">疲惫迷茫<br>寻找生活的意义</div>
-      </div>
-      <div class="card">
-        <div class="card-color-bar" style="background:var(--golden)"></div>
-        <div class="card-title">陈伯</div>
-        <div class="card-tag">孤独老农</div>
-        <div class="card-desc">怀念过去<br>担忧传统的消逝</div>
-      </div>
-      <div class="card">
-        <div class="card-color-bar" style="background:var(--green)"></div>
-        <div class="card-title">小明</div>
-        <div class="card-tag">自卑小孩</div>
-        <div class="card-desc">好奇心旺盛<br>却缺乏自信</div>
-      </div>
-      <div class="card">
-        <div class="card-color-bar" style="background:var(--blue)"></div>
-        <div class="card-title">李医生</div>
-        <div class="card-tag">超负荷医生</div>
-        <div class="card-desc">职业倦怠<br>质疑自己的选择</div>
-      </div>
-      <div class="card">
-        <div class="card-color-bar" style="background:var(--purple)"></div>
-        <div class="card-title">方小姐</div>
-        <div class="card-tag">迷惘诗人</div>
-        <div class="card-desc">在现实与理想<br>之间挣扎</div>
-      </div>
-      <div class="card">
-        <div class="card-color-bar" style="background:#C9A227"></div>
-        <div class="card-title">旅人</div>
-        <div class="card-tag">神秘访客</div>
-        <div class="card-desc">隐藏着与祖父<br>有关的秘密</div>
-      </div>
+      <div class="card"><div class="card-color-bar" style="background:var(--red)"></div><div class="card-title">林月</div><div class="card-tag">年轻母亲</div><div class="card-desc">疲惫迷茫<br>寻找生活的意义</div></div>
+      <div class="card"><div class="card-color-bar" style="background:var(--golden)"></div><div class="card-title">陈伯</div><div class="card-tag">孤独老农</div><div class="card-desc">怀念过去<br>担忧传统的消逝</div></div>
+      <div class="card"><div class="card-color-bar" style="background:var(--green)"></div><div class="card-title">小明</div><div class="card-tag">自卑小孩</div><div class="card-desc">好奇心旺盛<br>却缺乏自信</div></div>
+      <div class="card"><div class="card-color-bar" style="background:var(--blue)"></div><div class="card-title">李医生</div><div class="card-tag">超负荷医生</div><div class="card-desc">职业倦怠<br>质疑自己的选择</div></div>
+      <div class="card"><div class="card-color-bar" style="background:var(--purple)"></div><div class="card-title">方小姐</div><div class="card-tag">迷惘诗人</div><div class="card-desc">在现实与理想<br>之间挣扎</div></div>
+      <div class="card"><div class="card-color-bar" style="background:#C9A227"></div><div class="card-title">旅人</div><div class="card-tag">神秘访客</div><div class="card-desc">隐藏着与祖父<br>有关的秘密</div></div>
     </div>
     <div class="two-col">
       <div class="col-text" style="font-size:0.8rem;line-height:1.8;">
         <p style="color:var(--golden);margin-bottom:0.5em;">📅 7 天叙事弧线</p>
         <p>Day 1 <span class="mood">忐忑</span> · 林月(初) + 陈伯(初)</p>
         <p>Day 2 <span class="mood">不安</span> · 小明(初) + 李医生(初)</p>
-        <p>Day 3 <span class="mood">紧张</span> · 方小姐(初) + 林月(回)</p>
-        <p>Day 4 <span class="mood">低落</span> · 陈伯(回) + 小明(回)</p>
-        <p>Day 5 <span class="mood">疲惫</span> · 李医生(回) + 方小姐(回) <span class="key">⚡转折</span></p>
-        <p>Day 6 <span class="mood">希望</span> · 旅人(条件) + 随机回访</p>
-        <p>Day 7 <span class="mood">坚定</span> · 最深互动 NPC 最终回访 <span class="key">终章</span></p>
+        <p>Day 3 <span class="mood">紧张</span>（转折）· 方小姐(初) + 林月(回)</p>
+        <p>Day 4 <span class="mood">低落</span>（低谷）· 陈伯(回) + 小明(回)</p>
+        <p>Day 5 <span class="mood">疲惫</span> <span class="key">⚡ 突变</span> · 李医生(回) + 方小姐(回)</p>
+        <p>Day 6 <span class="mood">希望</span>（上升）· 旅人(条件) + 随机回访</p>
+        <p>Day 7 <span class="mood">坚定</span> <span class="key">终章</span> · 最深互动 NPC 最终回访</p>
       </div>
       <div class="col-img">
-        <img src="assets/screenshots-new/12-npc-portrait.png" alt="NPC 对话立绘" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:3em;\'>🖼 NPC 对话立绘截图</div>'">
+        <img src="assets/screenshots-new/12-npc-portrait.png" alt="NPC 对话立绘">
       </div>
     </div>
   </div>
@@ -695,7 +548,7 @@ body {
         <img src="assets/screenshots-new/05-bookshelf.png" alt="书架界面">
       </div>
       <div class="col-text" style="font-size:0.78rem;line-height:1.7;">
-        <p style="color:var(--golden);font-size:0.9rem;margin-bottom:0.8em;">📚 四大分类，每类 6 本</p>
+        <p style="color:var(--golden);font-size:0.9rem;margin-bottom:0.8em;">📊 四大分类，每类 6 本</p>
         <p><b style="color:var(--tan)">文学小说</b> — 小王子 · 挪威的森林 · 月亮与六便士 · 百年孤独 · 活着 · 局外人</p>
         <p><b style="color:var(--tan)">哲学思辨</b> — 活出生命的意义 · 悉达多 · 苏菲的世界 · 瓦尔登湖 · 被讨厌的勇气 · 沉思录</p>
         <p><b style="color:var(--tan)">心理成长</b> — 自卑与超越 · 非暴力沟通 · 也许你该找个人聊聊 · 心流 · 共情的力量 · 思考，快与慢</p>
@@ -703,7 +556,6 @@ body {
         <p style="margin-top:1em;color:var(--golden);">🎯 匹配等级与影响</p>
         <p>🌟 <b style="color:var(--tan)">完美匹配</b> → Hope <b style="color:#5f5">+8~12</b></p>
         <p>✅ <b style="color:var(--tan)">好推荐</b> → Hope +4~7</p>
-        <p>➖ <b style="color:var(--tan)">一般</b> → Hope +1~2</p>
         <p>❌ <b style="color:var(--tan)">不匹配</b> → Hope <b style="color:#f55">-3~-5</b></p>
       </div>
     </div>
@@ -711,7 +563,7 @@ body {
 </div>
 
 <!-- ═══════════════════════════════════════════════
-  SLIDE 5 — 书中剧场 v4.0（新增）
+  SLIDE 5 — 书中剧场：进入书中世界
   ═══════════════════════════════════════════════ -->
 <div class="slide" data-index="5">
   <div class="bg-gradient"></div>
@@ -719,46 +571,34 @@ body {
     <div class="section-header">
       <span class="section-bar"></span>
       <span class="section-num">05</span>
-      <span class="section-title">书中剧场 v4.0 — 视觉小说体验</span>
-      <span class="section-sub">左立绘 + 右对话框，沉浸式进入书中世界与角色对话</span>
+      <span class="section-title">书中剧场 — 自由探索书籍世界</span>
+      <span class="section-sub">左立绘 + 右对话框，沉浸式进入书中世界与角色 AI 对话</span>
     </div>
-
-    <!-- VN Layout Demo -->
-    <div class="vn-demo" style="margin-bottom: 2vmin;">
-      <div class="vn-left">
-        <div class="vn-left-inner">
-          <div class="vn-portrait-placeholder">🧑</div>
-          <div class="vn-left-label">角色立绘 · 呼吸动画</div>
-        </div>
-      </div>
-      <div class="vn-divider"></div>
-      <div class="vn-right">
-        <div class="vn-nameplate">🔊 福尔摩斯</div>
-        <div class="vn-text">"亲爱的华生，你都知道我的方法——观察，推理，再观察。这桩案子的关键在于..."</div>
-        <div class="vn-hint">▸ 点击继续...</div>
-      </div>
+    <!-- 书中剧场实机截图（用户提供的福尔摩斯截图） -->
+    <div class="col-img" style="max-width:900px;margin-bottom:1.5vmin;">
+      <img src="assets/book-theater-holmes.jpg" alt="书中剧场实机截图 — 福尔摩斯探案集" style="border-radius:10px;border:1px solid rgba(212,165,116,0.35);box-shadow:0 12px 60px rgba(0,0,0,0.65);">
     </div>
-
-    <div class="bt-feature-grid">
-      <div class="bt-feature">
-        <div class="bt-feature-icon">🎭</div>
-        <div class="bt-feature-title">写实角色立绘</div>
-        <div class="bt-feature-desc">19世纪侦探素描风格（福尔摩斯）<br>写实肖像风格（小王子角色）<br>PIL 去白底 + 呼吸/淡入动画</div>
+    <div class="ss-caption" style="text-align:center;margin-bottom:2vmin;">📸 书中剧场实机截图 —— 《福尔摩斯探案集》：左立绘（写实风格）+ 右对话面板 + 场景背景</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">🎭</div>
+        <div class="card-title">写实角色立绘</div>
+        <div class="card-desc">19世纪侦探素描风格<br>PIL 去白底处理<br>呼吸动画 + 淡入效果</div>
       </div>
-      <div class="bt-feature">
-        <div class="bt-feature-icon">🏞</div>
-        <div class="bt-feature-title">场景背景</div>
-        <div class="bt-feature-desc">每本书有专属场景图<br>贝克街221B / B612星球<br>增强沉浸感</div>
+      <div class="card">
+        <div class="card-icon">🏞</div>
+        <div class="card-title">沉浸式场景背景</div>
+        <div class="card-desc">贝克街 221B / B612 星球<br>每本书专属氛围<br>CSS 渐变 / 图片背景</div>
       </div>
-      <div class="bt-feature">
-        <div class="bt-feature-icon">💬</div>
-        <div class="bt-feature-title">多角色对话</div>
-        <div class="bt-feature-desc">同一剧场可与多个角色对话<br>立绘平滑过渡<br>自由提问或卡片式快捷对话</div>
+      <div class="card">
+        <div class="card-icon">💬</div>
+        <div class="card-title">多角色自由对话</div>
+        <div class="card-desc">福尔摩斯 / 华生 / 雷斯垂德<br>卡片快捷对话 + AI 自由提问<br>防剧透 LLM 设计</div>
       </div>
-      <div class="bt-feature">
-        <div class="bt-feature-icon">🤖</div>
-        <div class="bt-feature-title">AI 自由对话</div>
-        <div class="bt-feature-desc">不止预设剧情<br>和书中角色实时 AI 对话<br>有 Key 走 LLM，无 Key 有 fallback</div>
+      <div class="card">
+        <div class="card-icon">📖</div>
+        <div class="card-title">首批剧场书目</div>
+        <div class="card-desc">《福尔摩斯探案集》— 密室谋杀案<br>《小王子》— 孤独与爱的哲学<br>持续扩展中...</div>
       </div>
     </div>
   </div>
@@ -777,30 +617,17 @@ body {
       <span class="section-sub">从对话到日记，AI 贯穿游戏全流程，增强沉浸感与可重玩性</span>
     </div>
     <div class="card-grid" style="margin-bottom:2vmin;">
-      <div class="card">
-        <div class="card-icon">💬</div>
-        <div class="card-title">NPC 自由交谈</div>
-        <div class="card-desc">阿里云百炼 qwen-plus<br>流式打字机效果<br>实时角色扮演对话</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🤖</div>
-        <div class="card-title">书籍 AI 导读</div>
-        <div class="card-desc">与"作者灵魂"对话<br>根据书籍主题生成回复<br>深挖书中哲理</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">📝</div>
-        <div class="card-title">每日店主日记</div>
-        <div class="card-desc">根据当日希望值/事件<br>AI 生成治愈向日记<br>个性化叙事收尾</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🎨</div>
-        <div class="card-title">AI 素材生成</div>
-        <div class="card-desc">Matrix AI 出图/出音乐<br>6 NPC 写实立绘 + 24 封面<br>4 BGM + 4 SFX<br>3 书中剧场角色立绘</div>
-      </div>
+      <div class="card"><div class="card-icon">💬</div><div class="card-title">NPC 自由交谈</div><div class="card-desc">阿里云百炼 qwen-plus<br>流式打字机效果<br>实时角色扮演对话</div></div>
+      <div class="card"><div class="card-icon">🤖</div><div class="card-title">书籍 AI 导读</div><div class="card-desc">与"作者灵魂"对话<br>根据书籍主题生成回复<br>深挖书中哲理</div></div>
+      <div class="card"><div class="card-icon">📝</div><div class="card-title">每日店主日记</div><div class="card-desc">根据当日希望值/事件<br>AI 生成治愈向日记<br>个性化叙事收尾</div></div>
+      <div class="card"><div class="card-icon">🧠</div><div class="card-title">情感识别匹配</div><div class="card-desc">NLP 情绪意图分类<br>8 类情感标签<br>动态调整推荐逻辑</div></div>
+      <div class="card"><div class="card-icon">🎨</div><div class="card-title">AI 素材生成</div><div class="card-desc">Matrix AI 出图/出音乐<br>6 NPC 写实立绘 + 24 封面<br>3 书中剧场立绘 + 4 BGM</div></div>
     </div>
-    <div class="ss-caption">书中剧场 AI 对话界面</div>
-    <div class="col-img" style="max-width:800px;">
-      <img src="assets/screenshots-new/07-book-theater.png" alt="书中剧场截图" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:2em;\'>🖼 书中剧场截图</div>'">
+    <div style="display:flex;justify-content:center;gap:2em;font-size:0.72rem;color:var(--warm-gray);margin-top:1vmin;flex-wrap:wrap;">
+      <span>🔑 API：<b style="color:var(--tan)">阿里云 DashScope</b></span>
+      <span>🧠 模型：<b style="color:var(--tan)">qwen-plus</b>（128K 上下文）</span>
+      <span>🌊 全流式 SSE 调用</span>
+      <span>🛡 全面降级 fallback</span>
     </div>
   </div>
 </div>
@@ -818,19 +645,20 @@ body {
       <span class="section-sub">7 天从忐忑到坚定，希望值的每一次变化都在重塑小镇的命运</span>
     </div>
     <table class="data-table">
-      <thead>
-        <tr><th>Day</th><th>情绪基调</th><th>NPC 排期</th><th>叙事要点</th><th>剧情权重</th></tr>
-      </thead>
+      <thead><tr><th>Day</th><th>情绪基调</th><th>NPC 排期</th><th>叙事要点</th><th>剧情权重</th></tr></thead>
       <tbody>
         <tr><td style="color:var(--tan);font-weight:700">Day 1</td><td class="mood">忐忑</td><td>林月(初) + 陈伯(初)</td><td>首次开店，面对陌生访客</td><td style="color:var(--warm-gray)">开场</td></tr>
         <tr><td style="color:var(--tan);font-weight:700">Day 2</td><td class="mood">不安</td><td>小明(初) + 李医生(初)</td><td>试探人心，积累信任</td><td style="color:var(--warm-gray)">累积</td></tr>
-        <tr><td style="color:var(--tan);font-weight:700">Day 3</td><td class="mood">紧张</td><td>方小姐(初) + 林月(回)</td><td>暗流涌动，回访 NPC 开始变化</td><td style="color:var(--golden)">转折</td></tr>
-        <tr><td style="color:var(--tan);font-weight:700">Day 4</td><td class="mood">低落</td><td>陈伯(回) + 小明(回)</td><td>裂缝出现，考验店主耐心</td><td style="color:var(--red)">低谷</td></tr>
-        <tr><td style="color:var(--tan);font-weight:700">Day 5</td><td class="mood">疲惫</td><td>李医生(回) + 方小姐(回)</td><td>关键转折点，旅人出现条件达成</td><td class="key">⚡ 突变</td></tr>
-        <tr><td style="color:var(--tan);font-weight:700">Day 6</td><td class="mood">希望</td><td>旅人(条件) + 随机回访</td><td>曙光照进书店，秘密逐渐揭露</td><td style="color:var(--green)">上升</td></tr>
-        <tr><td style="color:var(--tan);font-weight:700">Day 7</td><td class="mood">坚定</td><td>最深互动 NPC 最终回访</td><td>终章：所有选择在此揭晓</td><td class="key">结局</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 3</td><td class="mood">紧张</td><td>方小姐(初) + 林月(回)</td><td>暗流涌动，回访开始变化</td><td style="color:var(--golden)">转折</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 4</td><td class="mood">低落</td><td>陈伯(回) + 小明(回)</td><td>裂缝出现，考验耐心</td><td style="color:var(--red)">低谷</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 5</td><td class="mood">疲惫</td><td>李医生(回) + 方小姐(回)</td><td>关键转折点，旅人条件达成</td><td class="key">⚡ 突变</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 6</td><td class="mood">希望</td><td>旅人(条件) + 随机回访</td><td>曙光照进书店，秘密揭露</td><td style="color:var(--green)">上升</td></tr>
+        <tr><td style="color:var(--tan);font-weight:700">Day 7</td><td class="mood">坚定</td><td>最深互动 NPC 最终回访</td><td>终章：所有选择揭晓</td><td class="key">结局</td></tr>
       </tbody>
     </table>
+    <div class="col-img" style="max-width:800px;margin-top:1.5vmin;">
+      <img src="assets/narrative-arc.png" alt="叙事弧线示意图" onerror="this.style.display='none'">
+    </div>
   </div>
 </div>
 
@@ -850,25 +678,25 @@ body {
       <div class="ending-card">
         <div class="ending-tag" style="background:rgba(93,78,138,0.3);color:#b8a8d8;">HIDDEN ENDING</div>
         <div class="ending-title">🌙 最后的读者</div>
-        <div class="ending-cond">条件：days≥7 + metTraveler<br>totalPerfect≥5 + hope≥60</div>
+        <div class="ending-cond">days≥7 + metTraveler<br>totalPerfect≥5 + hope≥60</div>
         <div class="ending-desc">旅人留下的旧书里夹着一张泛黄的纸条，字迹是你祖父的。原来你一直等待的最后一个读者，是过去的自己。</div>
       </div>
       <div class="ending-card">
         <div class="ending-tag" style="background:rgba(224,122,95,0.3);color:#f0a090;">TRUE ENDING</div>
         <div class="ending-title">🌟 点燃希望</div>
-        <div class="ending-cond">条件：days≥6 + hope≥80<br>totalPerfect≥4 + metTraveler</div>
+        <div class="ending-cond">days≥6 + hope≥80<br>totalPerfect≥4 + metTraveler</div>
         <div class="ending-desc">整个小镇都变了。书店的灯光重新亮起，你的每一个选择共同点燃了一个社区对未来的希望。</div>
       </div>
       <div class="ending-card">
         <div class="ending-tag" style="background:rgba(184,132,78,0.3);color:#d4b884;">GOOD ENDING</div>
         <div class="ending-title">🏠 守望者</div>
-        <div class="ending-cond">条件：days≥5<br>hope 60–79</div>
+        <div class="ending-cond">days≥5 · hope 60–79</div>
         <div class="ending-desc">你让几个人不再孤单。虽然前路漫长，但你决定守在这里，守到他们回来。</div>
       </div>
       <div class="ending-card">
         <div class="ending-tag" style="background:rgba(139,123,110,0.3);color:#bbb;">NORMAL ENDING</div>
         <div class="ending-title">📖 平凡日子</div>
-        <div class="ending-cond">条件：days≥3<br>hope 40–59</div>
+        <div class="ending-cond">days≥3 · hope 40–59</div>
         <div class="ending-desc">你只是个守店的。日子波澜不惊，但书还在，书店还在，这已经足够了。</div>
       </div>
     </div>
@@ -876,7 +704,7 @@ body {
 </div>
 
 <!-- ═══════════════════════════════════════════════
-  SLIDE 9 — 技术架构
+  SLIDE 9 — 双模式架构（队友新增）
   ═══════════════════════════════════════════════ -->
 <div class="slide" data-index="9">
   <div class="bg-gradient"></div>
@@ -884,62 +712,130 @@ body {
     <div class="section-header">
       <span class="section-bar"></span>
       <span class="section-num">09</span>
+      <span class="section-title">双模式：书店经营 × 书中世界探索</span>
+      <span class="section-sub">保持原有 UI 设计不变，零破坏性升级——书架上的书不再只是装饰</span>
+    </div>
+    <div class="two-col" style="margin-bottom:2vmin;">
+      <div class="col-text" style="display:flex;flex-direction:column;gap:1.5vmin;">
+        <div class="highlight-box">
+          <b>📖 经典模式（保留不变）</b><br>
+          书店经营模拟 · 7天循环 · 6 NPC · 24本书 · 4结局<br>
+          AI 对话 · 店主日记 · 场景特效 · BGM
+        </div>
+        <div class="highlight-box accent">
+          <b>🔍 探索模式（v7.0 全新）</b><br>
+          点击书架书脊 → 选角色代入 → 进入书中世界<br>
+          LLM 驱动自由对话 · 写实风格立绘 · 专属场景背景<br>
+          防剧透设计 · 前情提要 · 线索追踪
+        </div>
+      </div>
+      <div class="col-text">
+        <div class="flow-row" style="margin-top:0;">
+          <div class="flow-step"><div class="flow-step-icon">📚</div><div class="flow-step-title">书架选书</div><div class="flow-step-desc">点击红色书脊<br>"福尔摩斯的血渍"</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🎭</div><div class="flow-step-title">选择角色</div><div class="flow-step-desc">福尔摩斯 / 华生<br>点击"代入这个角色"</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">📋</div><div class="flow-step-title">角色设定卡</div><div class="flow-step-desc">身份 · 专长 · 性格<br>人际关系 · 开局信息</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🚪</div><div class="flow-step-title">进入世界</div><div class="flow-step-desc">场景背景切换<br>BGM + 立绘登场</div></div>
+        </div>
+        <div class="flow-row" style="margin-top:1vmin;">
+          <div class="flow-step"><div class="flow-step-icon">💬</div><div class="flow-step-title">自由探索</div><div class="flow-step-desc">LLM 角色对话<br>卡片快捷 + 自由提问</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🔄</div><div class="flow-step-title">切换场景</div><div class="flow-step-desc">4 个独立场景<br>各有独特氛围背景</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🚪</div><div class="flow-step-title">返回书店</div><div class="flow-step-desc">随时离开世界<br>可重新进入</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+  SLIDE 10 — 技术架构（增强版）
+  ═══════════════════════════════════════════════ -->
+<div class="slide" data-index="10">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">10</span>
       <span class="section-title">技术架构与亮点</span>
-      <span class="section-sub">零构建 · 纯前端 · 离线可玩 · AI 深度集成</span>
+      <span class="section-sub">零构建 · 双模式 · 纯前端 · AI 深度集成 · 离线可玩</span>
     </div>
     <div class="arch-row">
-      <div class="arch-block">Engine<br><span style="font-size:0.65rem;color:var(--warm-gray)">状态机</span></div>
-      <div class="arch-block">Renderer<br><span style="font-size:0.65rem;color:var(--warm-gray)">渲染层</span></div>
-      <div class="arch-block">Game<br><span style="font-size:0.65rem;color:var(--warm-gray)">控制器</span></div>
-      <div class="arch-block">AI<br><span style="font-size:0.65rem;color:var(--warm-gray)">LLM 层</span></div>
-      <div class="arch-block">BookTheater<br><span style="font-size:0.65rem;color:var(--warm-gray)">VN 引擎</span></div>
-      <div class="arch-block">Audio<br><span style="font-size:0.65rem;color:var(--warm-gray)">音乐音效</span></div>
+      <div class="arch-block">Engine<br><span style="font-size:0.62rem;color:var(--warm-gray)">经典状态机</span></div>
+      <div class="arch-block" style="border-color:var(--golden);box-shadow:0 0 12px rgba(184,132,78,0.25)">BookTheater<br><span style="font-size:0.62rem;color:var(--golden)">VN 探索状态机</span></div>
+      <div class="arch-block">Renderer<br><span style="font-size:0.62rem;color:var(--warm-gray)">渲染层</span></div>
+      <div class="arch-block" style="border-color:var(--golden);box-shadow:0 0 12px rgba(184,132,78,0.25)">Portrait<br><span style="font-size:0.62rem;color:var(--golden)">立绘引擎</span></div>
+      <div class="arch-block">Game<br><span style="font-size:0.62rem;color:var(--warm-gray)">控制器</span></div>
+      <div class="arch-block">LLM<br><span style="font-size:0.62rem;color:var(--warm-gray)">AI 对话层</span></div>
+      <div class="arch-block">Scene<br><span style="font-size:0.62rem;color:var(--warm-gray)">场景特效</span></div>
+      <div class="arch-block">Audio<br><span style="font-size:0.62rem;color:var(--warm-gray)">音乐音效</span></div>
     </div>
     <div class="arch-bar">
-      Data Layer：GameData（24 本书 + 6 NPC + 对话树 + 结局条件）&nbsp;&nbsp;|&nbsp;&nbsp;Engine.state（全局唯一状态）
+      Data Layer：GameData（24 本书 + 6 NPC + 对话树 + 结局条件）&nbsp;|&nbsp;WorldData（角色设定卡 + 场景 + 无剧透信息）&nbsp;|&nbsp;Engine.state / BookTheater.state（双状态机）
     </div>
     <div class="tech-grid">
-      <div class="tech-item">
-        <span class="tech-bullet">▸</span>
-        <span class="tech-label">零构建工具</span>
-        <span class="tech-desc">HTML/CSS/JS 直引，浏览器即开即玩</span>
-      </div>
-      <div class="tech-item">
-        <span class="tech-bullet">▸</span>
-        <span class="tech-label">离线可玩</span>
-        <span class="tech-desc">AI 模块全面 fallback，断网也不中断体验</span>
-      </div>
-      <div class="tech-item">
-        <span class="tech-bullet">▸</span>
-        <span class="tech-label">VN 状态机</span>
-        <span class="tech-desc">booktheater.js 驱动左立绘+右对话布局</span>
-      </div>
-      <div class="tech-item">
-        <span class="tech-bullet">▸</span>
-        <span class="tech-label">立绘动态效果</span>
-        <span class="tech-desc">CSS 呼吸动画 + 淡入效果 + 双层阴影</span>
-      </div>
-      <div class="tech-item">
-        <span class="tech-bullet">▸</span>
-        <span class="tech-label">localStorage 存档</span>
-        <span class="tech-desc">3 槽存档 + 自动保存机制</span>
-      </div>
-      <div class="tech-item">
-        <span class="tech-bullet">▸</span>
-        <span class="tech-label">LLM 流式对话</span>
-        <span class="tech-desc">DashScope API + 打字机效果</span>
-      </div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">零构建工具</span><span class="tech-desc">HTML/CSS/JS 直引，浏览器即开即玩</span></div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">双模式架构</span><span class="tech-desc">经典书店经营 + 书中世界探索，无缝切换</span></div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">离线可玩</span><span class="tech-desc">AI 模块全面 fallback，断网也不中断体验</span></div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">CSS 动态立绘</span><span class="tech-desc">呼吸/淡入动画 + 双层阴影，零外部 SDK</span></div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">防剧透 LLM</span><span class="tech-desc">System Prompt 不含真相，线索渐进式发现</span></div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">数据不可变</span><span class="tech-desc">对话推进深拷贝 NPC，保护源数据</span></div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">localStorage</span><span class="tech-desc">经典 3 槽存档 + 探索独立存档，互相隔离</span></div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">LLM 流式对话</span><span class="tech-desc">DashScope API + 打字机效果 + 降级 fallback</span></div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">动态场景特效</span><span class="tech-desc">40 颗 CSS 粒子 + 4 时段渐变切换</span></div>
+      <div class="tech-item"><span class="tech-bullet">▸</span><span class="tech-label">响应式音频</span><span class="tech-desc">4 BGM cross-fade + 4 SFX</span></div>
     </div>
-    <p style="margin-top:2vmin;font-size:0.75rem;color:var(--golden);opacity:0.7;">
-      源码 &lt; 100KB（不含资源）&nbsp;|&nbsp;GitHub Pages + Vercel 双部署&nbsp;|&nbsp;完全离线可玩
+    <p style="margin-top:2vmin;font-size:0.73rem;color:var(--golden);opacity:0.7;text-align:center;">
+      源码 ~120KB（不含资源）&nbsp;|&nbsp;10 个 JS 模块 &nbsp;|&nbsp;GitHub Pages + Vercel 双部署 &nbsp;|&nbsp;完全离线可玩
     </p>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════
-  SLIDE 10 — 感谢
+  SLIDE 11 — 未来展望（队友新增）
   ═══════════════════════════════════════════════ -->
-<div class="slide" data-index="10">
+<div class="slide" data-index="11">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">11</span>
+      <span class="section-title">未来展望</span>
+      <span class="section-sub">从文字冒险到沉浸式体验 —— 下一步的进化方向</span>
+    </div>
+    <div class="two-col">
+      <div class="col-text" style="display:flex;flex-direction:column;gap:2vmin;">
+        <div class="highlight-box" style="padding:2.5vmin;">
+          <div style="font-size:1.8rem;margin-bottom:0.5em;">🌍</div>
+          <div style="font-size:1.1rem;color:var(--cream);font-weight:700;margin-bottom:0.5em;">沉浸式 3D 场景探索</div>
+          <div style="font-size:0.8rem;color:var(--warm-gray);line-height:1.8;">
+            将当前 CSS 渐变场景升级为 <b style="color:var(--tan)">Three.js 3D 渲染</b>，实现真正的空间漫游。<br>
+            贝克街 221B 的壁炉火光、伦敦雾街的煤气灯、化验室的试剂瓶——一切在三维空间中交互。
+          </div>
+        </div>
+        <div class="highlight-box" style="padding:2.5vmin;">
+          <div style="font-size:1.8rem;margin-bottom:0.5em;">🎭</div>
+          <div style="font-size:1.1rem;color:var(--cream);font-weight:700;margin-bottom:0.5em;">Live2D 角色动作 & 表情</div>
+          <div style="font-size:0.8rem;color:var(--warm-gray);line-height:1.8;">
+            从 CSS 动画升级为 <b style="color:var(--tan)">Live2D Cubism SDK</b>，实现全身骨骼动画。<br>
+            角色可以有丰富的表情切换、肢体动作、口型同步——如同专业视觉小说的品质。
+          </div>
+        </div>
+      </div>
+      <div class="col-img">
+        <img src="assets/future-vision.png" alt="未来展望示意图" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:3em;\'>🖼 未来展望示意图</div>'">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+  SLIDE 12 — 感谢
+  ═══════════════════════════════════════════════ -->
+<div class="slide" data-index="12">
   <div class="bg-layer" style="background-image: url('assets/scenes/evening.png')"></div>
   <div class="bg-overlay"></div>
   <div class="slide-content" style="text-align:center">
@@ -949,8 +845,8 @@ body {
     <div style="font-size:0.9rem;color:rgba(250,243,224,0.8);line-height:2.2;max-width:650px;">
       <p>🎮 在线体验：<a href="https://swording-k.github.io/the-last-bookstore/" target="_blank" style="color:var(--tan);text-decoration:none;">swording-k.github.io/the-last-bookstore</a></p>
       <p>📂 源码仓库：<a href="https://github.com/swording-k/the-last-bookstore" target="_blank" style="color:var(--tan);text-decoration:none;">github.com/swording-k/the-last-bookstore</a></p>
-      <p style="margin-top:1em;">🛠 HTML5 + CSS3 + JavaScript（零构建）&nbsp;|&nbsp;🤖 阿里云百炼 + Matrix AI</p>
-      <p>🎨 电影感暖色调 · 文字叙事冒险 · 治愈系独立游戏</p>
+      <p style="margin-top:1em;">🛠 HTML5 + CSS3 + JavaScript（零构建 · 双模式）&nbsp;|&nbsp;🤖 阿里云百炼 qwen-plus + Matrix AI</p>
+      <p>🎨 电影感暖色调 · 文字叙事冒险 · 写实立绘 · 防剧透 LLM 对话</p>
     </div>
     <div class="cover-divider"></div>
     <div style="font-size:0.9rem;color:var(--tan);font-style:italic;max-width:550px;line-height:1.8;">
@@ -988,14 +884,10 @@ body {
     slides[current].classList.remove('active');
     slides[index].classList.add('active');
 
-    // Update dots
     dotsContainer.children[current].classList.remove('active');
     dotsContainer.children[index].classList.add('active');
 
-    // Progress bar
     document.getElementById('progress-bar').style.width = ((index + 1) / total * 100) + '%';
-
-    // Slide number
     document.getElementById('slide-num').textContent = (index + 1) + ' / ' + total;
 
     current = index;
