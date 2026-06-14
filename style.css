@@ -1813,7 +1813,7 @@ html, body {
   bottom: 0;
   width: 100%;
   height: 94%;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease;
   pointer-events: none;
   display: flex;
   align-items: flex-end;
@@ -1826,8 +1826,27 @@ html, body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center bottom;
-  clip-path: inset(0 3% 6% 0);
-  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.6));
+  /* 呼吸动画 — 轻微上下浮动，模拟人物呼吸感 */
+  animation: portrait-breathe 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.6))
+          drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+}
+/* 立绘切换时淡入 + 微微上浮 */
+.bt-character-model.fade-in .bt-portrait {
+  animation: portrait-enter 0.5s ease-out forwards, 
+             portrait-breathe 3.5s ease-in-out 0.5s infinite;
+}
+
+/* 呼吸动画：轻微缩放+位移 */
+@keyframes portrait-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-6px) scale(1.005); }
+}
+
+/* 立绘入场动画 */
+@keyframes portrait-enter {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 .bt-figure {
   width: 100%;

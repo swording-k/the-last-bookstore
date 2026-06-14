@@ -12,7 +12,7 @@
    ============================================================ */
 
 var BookTheater = {
-  _imgVer: 'v20260614c', // 图片版本号，替换立绘时更新此值以强制浏览器刷新缓存
+  _imgVer: 'v20260614d', // 图片版本号，替换立绘时更新此值以强制浏览器刷新缓存
   // ============ 状态 ============
   _book: null,
   _world: null,
@@ -560,9 +560,11 @@ var BookTheater = {
     var el = document.getElementById('bt-character-model');
     if (!el) return;
     var self = this;
+    el.classList.remove('fade-in');
     el.style.opacity = '0';
     setTimeout(function() {
       el.innerHTML = self._figureHTML(character);
+      el.classList.add('fade-in');
       el.style.opacity = '1';
     }, 220);
   },
