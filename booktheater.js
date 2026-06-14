@@ -1,10 +1,14 @@
 /* ============================================================
-   booktheater.js - 书中剧场 (VN 视觉小说版 v3.0)
-   
-   真正的 Galgame/VN 体验：
-   - 全屏场景背景 + 超大人物立绘
-   - 底部 VN 对话框（名字标签 + 打字机文字 + 点击继续）
-   - 剧情推进：角色选择 → 旁白 → 对话 → 探索 → 自由对话
+   booktheater.js - 书中剧场 v4.0 (左立绘 + 右对话 布局)
+
+   布局设计：
+   - 左侧：超大人物全身立绘 + 场景背景（45%宽度）
+   - 右侧：对话/旁白面板（55%宽度）
+   - 像游戏里跟NPC对话一样：左边看到人物，右边看对话
+
+   功能保留：
+   - 角色选择 → 旁白 → 对话 → 探索 → 自由对话
+   - 打字机效果、剧情推进、AI自由对话
    ============================================================ */
 
 var BookTheater = {
@@ -12,7 +16,7 @@ var BookTheater = {
   _book: null,
   _world: null,
   _character: null,       // 当前扮演的角色
-  _speaker: null,         // 当前正在说话的角色（可能不同于扮演者）
+  _speaker: null,         // 当前正在说话的角色
   _state: 'select',       // select | story | free_chat
   _storyline: null,
   _storyIndex: -1,
@@ -71,38 +75,65 @@ var BookTheater = {
   },
 
   /* ==========================================================
-     HTML 结构 — VN 全屏布局
+     HTML 结构 — 左右分栏布局 (v4.0)
      ========================================================== */
   _buildHTML: function(book, world) {
     return '' +
       '<div class="bt-backdrop"></div>' +
       '<section class="bt-stage" id="bt-stage"' + this._sceneStyle(world) + '>' +
 
-        /* === 场景层（背景图 + 暗角）=== */
-        '<div class="bt-scene" id="bt-scene">' +
-          '<div class="bt-hotspots" id="bt-hotspots"></div>' +
-          /* 人物立绘容器 — 始终显示在场景中央 */
+        /* ======== 关闭按钮 ======== */
+        '<button class="bt-close" id="bt-close" title="\u5173\u95ed">\u00d7</button>' +
+
+        /* ======== 左侧：场景 + 立绘区域 ======== */
+        '<div class="bt-left-panel" id="bt-left-panel">' +
+          /* 场景背景 */
+          '<div class="bt-scene" id="bt-scene">' +
+            '<div class="bt-hotspots" id="bt-hotspots"></div>' +
+          '</div>' +
+          /* 人物立绘 — 超大，始终可见 */
           '<div class="bt-character-model" id="bt-character-model"></div>' +
         '</div>' +
 
-        /* === 关闭按钮 === */
-        '<button class="bt-close" id="bt-close" title="\u5173\u95ed">\u00d7</button>' +
+        /* ======== 右侧：对话/旁白面板 ======== */
+        '<div class="bt-right-panel" id="bt-right-panel">' +
 
-        /* === VN 对话框（底部，始终存在但内容变化）=== */
-        '<div class="vn-box" id="vn-box">' +
-          /* 名字标签 */
-          '<div class="vn-nameplate" id="vn-nameplate">' +
-            '<span class="vn-speaker-name" id="vn-speaker-name"></span>' +
+          /* VN 对话框 */
+          '<div class="vn-box" id="vn-box">' +
+            /* 名字标签 */
+            '<div class="vn-nameplate" id="vn-nameplate">' +
+              '<span class="vn-speaker-name" id="vn-speaker-name"></span>' +
+            '</div>' +
+            /* 文字区域 */
+            '<div class="vn-text-area" id="vn-text-area">' +
+              '<p class="vn-text" id="vn-text"></p>' +
+            '</div>' +
+            /* 继续提示 */
+            '<span class="vn-continue-hint" id="vn-continue-hint">&#9664; &#9664; \u70b9\u51fb\u7ee7\u7eed</span>' +
           '</div>' +
-          /* 文字区域 */
-          '<div class="vn-text-area" id="vn-text-area">' +
-            '<p class="vn-text" id="vn-text"></p>' +
+
+          /* 探索模式提示 */
+          '<div class="vn-explore-hint" id="vn-explore-hint">' +
+            '<span id="vn-explore-text"></span>' +
           '</div>' +
-          /* 继续提示 */
-          '<span class="vn-continue-hint" id="vn-continue-hint">&#9664; &#9664; \u70b9\u51fb\u7ee7\u7eed</span>' +
+
+          /* 自由对话界面 */
+          '<div class="bt-chat-panel" id="bt-chat-panel">' +
+            '<div class="bt-chat-header">' +
+              '<div class="bt-chat-title" id="bt-chat-title"></div>' +
+              '<div class="bt-chat-characters" id="bt-chat-characters"></div>' +
+            '</div>' +
+            '<div class="bt-chat-messages" id="bt-chat-messages"></div>' +
+            '<div class="bt-chat-prompts" id="bt-chat-prompts"></div>' +
+            '<div class="bt-chat-input-row">' +
+              '<input id="bt-input" type="text" autocomplete="off" placeholder="\u95ee\u4e00\u53e5\u8bdd..." />' +
+              '<button id="bt-send">\u53d1\u9001</button>' +
+            '</div>' +
+          '</div>' +
+
         '</div>' +
 
-        /* === 角色选择界面（覆盖层）=== */
+        /* ======== 角色选择界面（覆盖层）===== */
         '<div class="bt-select-overlay" id="bt-select-overlay">' +
           '<div class="bt-select-inner">' +
             '<p class="bt-select-kicker">BOOK THEATER &middot; ' + this._esc(book.title) + '</p>' +
@@ -112,30 +143,11 @@ var BookTheater = {
           '</div>' +
         '</div>' +
 
-        /* === 探索模式热点提示 === */
-        '<div class="vn-explore-hint" id="vn-explore-hint">' +
-          '<span id="vn-explore-text"></span>' +
-        '</div>' +
-
-        /* === 自由对话界面（聊天面板）=== */
-        '<div class="bt-chat-panel" id="bt-chat-panel">' +
-          '<div class="bt-chat-header">' +
-            '<div class="bt-chat-title" id="bt-chat-title"></div>' +
-            '<div class="bt-chat-characters" id="bt-chat-characters"></div>' +
-          '</div>' +
-          '<div class="bt-chat-messages" id="bt-chat-messages"></div>' +
-          '<div class="bt-chat-prompts" id="bt-chat-prompts"></div>' +
-          '<div class="bt-chat-input-row">' +
-            '<input id="bt-input" type="text" autocomplete="off" placeholder="\u95ee\u4e00\u53e5\u8bdd..." />' +
-            '<button id="bt-send">\u53d1\u9001</button>' +
-          '</div>' +
-        '</div>' +
-
       '</section>';
   },
 
   /* ==========================================================
-
+     
      阶段1：角色选择
      ========================================================== */
   _showSelect: function() {
@@ -147,7 +159,6 @@ var BookTheater = {
     var vnBox = document.getElementById('vn-box');
     if (!overlay || !cards) return;
 
-    // 显示选择界面，隐藏其他
     overlay.classList.add('active');
     if (vnBox) vnBox.classList.remove('active');
 
@@ -178,7 +189,7 @@ var BookTheater = {
 
   /* ==========================================================
      
-     阶段2：开始剧情 — 加载 storyline 并推进
+     阶段2：开始剧情
      ========================================================== */
   _startStory: function(character) {
     this._character = character;
@@ -197,17 +208,15 @@ var BookTheater = {
       this._storyIndex = 0;
       this._state = 'story';
 
-      // 短暂延迟让立绘先出现
       var self = this;
       setTimeout(function() { self._advanceStep(); }, 400);
     } else {
-      // 无剧情线直接进自由对话
       this._enterFreeChat(character.opening);
     }
   },
 
   /* ==========================================================
-     剧情推进引擎 — 根据 step.type 分发
+     剧情推进引擎
      ========================================================== */
   _advanceStep: function() {
     if (!this._storyline || this._storyIndex < 0 || this._storyIndex >= this._storyline.length) {
@@ -228,28 +237,24 @@ var BookTheater = {
   },
 
   /* ==========================================================
-     VN 核心渲染 — 旁白（无名字标签）
+     旁白模式 — 无名字标签，斜体文字
      ========================================================== */
   _showNarration: function(step) {
     this._clearTimer();
     var vnBox = document.getElementById('vn-box');
-    var nameEl = document.getElementById('vn-nameplate');
     var textEl = document.getElementById('vn-text');
     var hintEl = document.getElementById('vn-continue-hint');
     if (!vnBox || !textEl) return;
 
-    // VN 对话框激活
     vnBox.classList.add('active');
-    vnBox.classList.add('vn-narration-mode');   // 旁白模式：隐藏名字标签
+    vnBox.classList.add('vn-narration-mode');
     
-    // 清空文字
     textEl.textContent = '';
     if (hintEl) hintEl.style.opacity = '0';
 
-    // 打字机效果
     var fullText = step.text || '';
     var idx = 0;
-    var speed = 40;  // ms/字
+    var speed = 40;
     var self = this;
     this._typingDone = false;
 
@@ -264,7 +269,6 @@ var BookTheater = {
       }
     }, speed);
 
-    // 点击处理：未完成→跳过打字；已完成→下一步
     vnBox.onclick = function(e) {
       e.stopPropagation();
       if (self._streaming) return;
@@ -281,7 +285,7 @@ var BookTheater = {
   },
 
   /* ==========================================================
-     VN 核心渲染 — 对话（有名字标签 + 切换立绘）
+     对话模式 — 有名字标签 + 切换说话者立绘
      ========================================================== */
   _showDialogue: function(step) {
     this._clearTimer();
@@ -292,11 +296,10 @@ var BookTheater = {
     var hintEl = document.getElementById('vn-continue-hint');
     if (!vnBox || !textEl) return;
 
-    // VN 对话框激活（非旁白模式）
     vnBox.classList.add('active');
     vnBox.classList.remove('vn-narration-mode');
 
-    // 设置说话者名字 + 切换立绘
+    // 找到说话者
     var speakerChar = null;
     if (step.speaker === this._character.id) {
       speakerChar = this._character;
@@ -308,16 +311,14 @@ var BookTheater = {
       nameEl.textContent = speakerChar ? speakerChar.name : (step.speaker || '');
     }
 
-    // 切换到说话者的立绘
+    // 切换到说话者的立绘（左侧！）
     if (speakerChar) {
       this._switchPortrait(speakerChar);
     }
 
-    // 清空文字
     textEl.textContent = '';
     if (hintEl) hintEl.style.opacity = '0';
 
-    // 打字机效果
     var fullText = step.text || '';
     var idx = 0;
     var speed = 38;
@@ -335,7 +336,6 @@ var BookTheater = {
       }
     }, speed);
 
-    // 点击处理
     vnBox.onclick = function(e) {
       e.stopPropagation();
       if (self._streaming) return;
@@ -352,12 +352,11 @@ var BookTheater = {
   },
 
   /* ==========================================================
-     探索阶段 — 显示场景热点
+     探索阶段
      ========================================================== */
   _showExplore: function(step) {
     this._clearTimer();
     
-    // 隐藏 VN 对话框
     var vnBox = document.getElementById('vn-box');
     if (vnBox) {
       vnBox.classList.remove('active');
@@ -367,7 +366,6 @@ var BookTheater = {
     // 切换回当前角色的立绘
     this._switchPortrait(this._character);
 
-    // 显示探索提示
     var exploreHint = document.getElementById('vn-explore-hint');
     var exploreText = document.getElementById('vn-explore-text');
     if (exploreHint && exploreText) {
@@ -375,7 +373,6 @@ var BookTheater = {
       exploreHint.classList.add('active');
     }
 
-    // 渲染热点按钮
     var hotspotsEl = document.getElementById('bt-hotspots');
     if (hotspotsEl) {
       hotspotsEl.innerHTML = '';
@@ -390,7 +387,6 @@ var BookTheater = {
         btn.onclick = function(e) {
           e.stopPropagation();
           if (self._streaming) return;
-          // 清除探索UI，推进剧情
           if (exploreHint) exploreHint.classList.remove('active');
           hotspotsEl.innerHTML = '';
           self._storyIndex++;
@@ -400,7 +396,6 @@ var BookTheater = {
       });
     }
 
-    // 如果没有热点，点击任意位置也可以跳过
     var stage = document.getElementById('bt-stage');
     if (stage && spots.length === 0) {
       var self = this;
@@ -412,7 +407,6 @@ var BookTheater = {
         self._advanceStep();
       };
     } else if (stage) {
-      // 有热点时，点击舞台空白处也算探索完成
       var self = this;
       stage.onclick = function(e) {
         if (e.target.closest('.bt-hotspot') || e.target.closest('.bt-close') || e.target.closest('.vn-box')) return;
@@ -426,20 +420,17 @@ var BookTheater = {
   },
 
   /* ==========================================================
-     解锁自由对话提示
+     解锁自由对话
      ========================================================== */
   _showChatUnlock: function(step) {
     this._clearTimer();
 
-    // 用旁白方式显示提示文字
     var fakeNarration = { text: step.text || '\u73b0\u5728\uff0c\u4f60\u53ef\u4ee5\u81ea\u7531\u5730\u4e0e' + this._character.name + '\u4ea4\u6d41\u4e86...' };
     var self = this;
     
     this._showNarration(fakeNarration);
-    // 覆盖点击行为：旁白结束后进入自由对话
     var vnBox = document.getElementById('vn-box');
     if (vnBox) {
-      var origOnclick = vnBox.onclick;
       vnBox.onclick = function(e) {
         e.stopPropagation();
         if (self._streaming) return;
@@ -453,7 +444,7 @@ var BookTheater = {
           return;
         }
         vnBox.onclick = null;
-        self._storyIndex++;  // 跳过 chat 步骤
+        self._storyIndex++;
         self._enterFreeChat('');
       };
     }
@@ -466,7 +457,6 @@ var BookTheater = {
     this._state = 'free_chat';
     this._clearTimer();
 
-    // 隐藏 VN 对话框和探索提示
     var vnBox = document.getElementById('vn-box');
     if (vnBox) {
       vnBox.classList.remove('active');
@@ -475,17 +465,13 @@ var BookTheater = {
     var exploreHint = document.getElementById('vn-explore-hint');
     if (exploreHint) exploreHint.classList.remove('active');
 
-    // 切换回当前角色立绘
     this._switchPortrait(this._character);
 
-    // 显示聊天面板
     var chatPanel = document.getElementById('bt-chat-panel');
     if (chatPanel) chatPanel.classList.add('active');
 
-    // 渲染角色切换栏和标题
     this._renderChatHeader();
 
-    // 如果消息为空，显示开场白
     var msgs = document.getElementById('bt-chat-messages');
     if (msgs && msgs.children.length === 0) {
       if (openingMsg && openingMsg.length > 0) {
@@ -495,12 +481,11 @@ var BookTheater = {
       }
     }
 
-    // 渲染快捷提问卡片
     this._renderPromptCards();
   },
 
   /* ==========================================================
-     自由对话：渲染头部（标题 + 角色切换）
+     自由对话：渲染头部
      ========================================================== */
   _renderChatHeader: function() {
     var titleEl = document.getElementById('bt-chat-title');
@@ -522,7 +507,6 @@ var BookTheater = {
         self._switchPortrait(c);
         self._history = [];
         self._renderChatHeader();
-        // 切换后显示新角色的开场白
         var msgs = document.getElementById('bt-chat-messages');
         if (msgs) msgs.innerHTML = '';
         if (c.opening) self._addChatMsg(c.opening, 'character');
@@ -533,7 +517,7 @@ var BookTheater = {
   },
 
   /* ==========================================================
-     自由对话：渲染快捷问题卡片
+     快捷问题卡片
      ========================================================== */
   _renderPromptCards: function() {
     var container = document.getElementById('bt-chat-prompts');
@@ -555,7 +539,7 @@ var BookTheater = {
   },
 
   /* ==========================================================
-     立绘控制
+     立绘控制 — 显示在左侧！
      ========================================================== */
   _showCharacterModel: function(character) {
     var el = document.getElementById('bt-character-model');
@@ -570,7 +554,7 @@ var BookTheater = {
   },
 
   _switchPortrait: function(character) {
-    if (this._speaker === character) return;  // 同一角色不切换
+    if (this._speaker === character) return;
     this._speaker = character;
     var el = document.getElementById('bt-character-model');
     if (!el) return;
@@ -703,16 +687,16 @@ var BookTheater = {
 
   /* ==========================================================
      本地降级回复
-     ========================================================== */
+     ============================================================ */
   fallbackReply: function(msg) {
     var c = this._character || {};
     if (c.id === 'holmes') {
-      if (/\u89c2\u5bdf|\u7ebf\u7d22/.test(msg)) return '\u5148\u4ece\u6700\u5c0f\u7684\u4e8b\u5b9e\u5f00\u59cb\uff1a\u978b\u5e95\u3001\u8896\u53e3\u3001\u505c\u987f\u3001\u89c6\u7ebf\u3002\u4fa6\u63a2\u5148\u628a\u4e8b\u5b9e\u6446\u684c\u4e0a\uff0c\u518d\u8c08\u76cd8\u5b50\u3002';
-      return '\u522b\u6025\u7740\u95ee\u7b54\u6848\u3002\u628a\u4f60\u770b\u89c1\u7684\u4e09\u4ef6\u5c0f\u4e8b\u5199\u4e0b\u6765\uff0c\u518d\u95ee\uff1a\u54ea\u4e00ef\u65e0\u6cd5\u7528\u5e38\u8bc6\u89e3\u91ca\uff1f';
+      if (/\u89c2\u5bdf|\u7ebf\u7d22/.test(msg)) return '\u5148\u4ece\u6700\u5c0f\u7684\u4e8b\u5b9e\u5f00\u59cb\uff1a\u978b\u5e95\u3001\u8896\u53e3\u3001\u505c\u987f\u3001\u89c6\u7ebf\u3002\u4fa6\u63a2\u5148\u628a\u4e8b\u5b9e\u6440\u684c\u4e0a\uff0c\u518d\u8c08\u76d8\u5b50\u3002';
+      return '\u522b\u6025\u7740\u95ee\u7b54\u6848\u3002\u628a\u4f60\u770b\u89c1\u7684\u4e09\uef4\u5c0f\u4e8b\u5199\u4e0b\u6765\uff0c\u518d\u95ee\uff1a\u54ea\u4e00ef\u65e0\u6cd5\u7528\u5e38\u8bc6\u89e3\u91ca\uff1f';
     }
     if (c.id === 'prince') {
-      if (/\u5b64\u72ec/.test(msg)) return '\u5b64\u72ec\u7684\u65f6\u5019\uff0c\u5c31\u6162\u6162\u8bfb\u3002\u4f60\u4f1a\u53d1\u73b0\u6709\u4e9b\u661f\u661f\u4e0d\u662f\u4e3a\u4e86\u7167\u4eae\u8def\uff0c\u800c\u662f\u4e3a\u4e86\u8ba9\u4f60\u77e5\u9053\u81ea\u5df1\u5e76\u4e0d\u662f\u4e00\u4e2a\u4eba\u3002';
-      return '\u5982\u679c\u4f60\u613f\u610f\u4e3a\u4e00\u6735\u82b1\u6d47\u6c34\u3001\u6321\u98ce\u3001\u542c\u5979\u8bf4\u8bdd\uff0c\u5979\u5c31\u4e0d\u518d\u53ea\u662f\u5343\u4e07\u6735\u82b1\u4e2d\u7684\u4e00\u6735\u3002';
+      if (/\u5b64\u72ec/.test(msg)) return '\u5b64\u72ec\u7684\u65f6\u5019\uff0c\u5c31\u6162\u6162\u8bfb\u3002\u4f1a\u53d1\u73b0\u6709\u4e9b\u661f\u661f\u4e0d\u662f\u4e3a\u4e86\u7167\u4eae\u8def\uff0c\u800c\u662f\u4e3a\u4e86\u8ba9\u4f60\u77e5\u9053\u81ea\u5df1\u5e76\u4e0d\u662f\u4e00\u4e2a\u4eba\u3002';
+      return '\u5982\u679c\u4f60\u613f\u610f\u4e3e\u4e00\u6735\u82b1\u6d47\u6c34\u3001\u6321\u98ce\u3001\u542c\u5979\u8bf4\u8bdd\uff0c\u5979\u5c31\u4e0d\u518d\u53ea\u662f\u5343\u4e07\u6735\u82b1\u4e2d\u7684\u4e00\u6735\u3002';
     }
     if (c.id === 'fox') return '\u771f\u6b63\u91cd\u8981\u7684\u4e1c\u897f\u5e38\u5e38\u5f88\u5b89\u9759\u3002\u5b83\u4e0d\u4f1a\u558a\u4f60\uff0c\u53ea\u4f1a\u5728\u4f60\u6bcf\u5929\u51c6\u65f6\u5230\u8fbe\u65f6\u6084\u6084\u53d8\u5f97\u4e0d\u53ef\u66ff\u4ee3\u3002';
     if (c.id === 'rose') return '\u7231\u4e00\u6735\u82b1\u4e0d\u662f\u8bc1\u660e\u5979\u5b8c\u7f8e\uff0c\u800c\u662f\u5728\u5979\u4efb\u6027\u3001\u654f\u611f\u3001\u5e26\u523a\u7684\u65f6\u5019\uff0c\u4ecd\u7136\u613f\u610f\u66ff\u5979\u7f69\u4e0a\u73bb\u7483\u7f69\u3002';
@@ -723,7 +707,7 @@ var BookTheater = {
 
   /* ==========================================================
      HTML 安全
-     ========================================================== */
+     ============================================================ */
   _esc: function(t) {
     return String(t == null ? '' : t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   },
@@ -741,7 +725,7 @@ var BookTheater = {
 
   /* ==========================================================
      事件绑定
-     ========================================================== */
+     ============================================================ */
   _bind: function() {
     var closeBtn = document.getElementById('bt-close');
     var backdrop = document.querySelector('#book-theater .bt-backdrop');
@@ -762,7 +746,7 @@ var BookTheater = {
 
 /* ==========================================================
    示范按钮绑定
-   ========================================================== */
+   ============================================================ */
 function bindBookTheaterDemoButton() {
   var btn = document.getElementById('demo-open-theater');
   if (!btn) return;
