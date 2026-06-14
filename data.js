@@ -1,6 +1,6 @@
 /* ============================================================
    最后的书店 - 数据层 v3.0
-   24本完整书籍(含ISBN/简介/封面URL) + NPC + 对话树
+   25本完整书籍(含ISBN/简介/封面URL) + NPC + 对话树
    ============================================================ */
 
 const GameData = {
@@ -12,7 +12,57 @@ const GameData = {
       coverUrl:'https://covers.openlibrary.org/b/isbn/9787020042494-L.jpg',
       blurb:'飞行员迫降在撒哈拉沙漠遇到了来自B612星球的小王子。小王子离开自己的星球游历宇宙见过国王爱虚荣的人酒鬼商人点灯人和地理学家。他谈起他的玫瑰——那是他星球上独一无一的花他用玻璃罩保护她为她浇水因为她而懂得了"驯养"的含义。\n\n这是一部写给大人的童话用孩子的眼睛看成人世界的荒诞。"真正重要的东西是用眼睛看不见的只有用心才能看清。"',
       bestMatch:['xiaoMing','linYue'],
-      recommendReason:'对感到不被理解的孩子或成年人这本书提供了一个温柔的视角每个人都是独一无二的星星。' },
+      recommendReason:'对感到不被理解的孩子或成年人这本书提供了一个温柔的视角每个人都是独一无二的星星。',
+      coreMessage:'爱不是占有，而是因为你为某个存在付出时间，它才在宇宙里变得独一无二。',
+      bookWorld:{
+        sceneTitle:'B612 星球',
+        sceneSubtitle:'一颗小小的星球，一朵有刺的玫瑰，一只等待被驯养的狐狸。',
+        sceneImage:'assets/theater/b612-generated.png',
+        sceneMood:'星球微光',
+        spoilerPolicy:'不复述长篇原文，不直接代替阅读，只聊孤独、爱、责任和“看见”的方式。',
+        entryNarration:'你翻开书页，星星像细小的灯一样亮起来。小王子站在火山旁，认真地看着你。',
+        sceneHotspots:[
+          { id:'rose-dome', label:'玫瑰罩', x:22, y:52, prompt:'这朵玫瑰为什么会让小王子舍不得？' },
+          { id:'volcano', label:'火山口', x:48, y:76, prompt:'每天清理火山，和照顾关系有什么关系？' },
+          { id:'stars', label:'远处星群', x:76, y:28, prompt:'为什么星星会让孤独的人觉得被陪伴？' }
+        ],
+        globalPromptCards:['什么是真正重要的东西？','怎么读这本写给大人的童话？','这本书为什么会让人想哭？'],
+        characters:[
+          {
+            id:'prince',
+            name:'小王子',
+            role:'来自 B612 的旅人',
+            avatar:'⭐',
+            image:'assets/theater/prince-character.png',
+            tone:'天真、认真、直接，用孩子的问题刺穿成人世界',
+            goal:'让玩家重新理解孤独、爱和责任',
+            opening:'你也有一朵需要每天照看的花吗？如果有，你就会明白为什么星星会发光。',
+            promptCards:['你为什么离开自己的星球？','你觉得大人最奇怪的地方是什么？','如果我很孤独，该怎么读这本书？']
+          },
+          {
+            id:'fox',
+            name:'狐狸',
+            role:'等待被驯养的朋友',
+            avatar:'🦊',
+            image:'assets/theater/fox-character.png',
+            tone:'温柔、聪明、像低声提醒朋友',
+            goal:'解释关系、陪伴和时间的意义',
+            opening:'如果你每天四点来，那么从三点起，我就开始感到幸福。',
+            promptCards:['什么叫驯养？','为什么花时间会让一个人变特别？','我该怎样珍惜一段关系？']
+          },
+          {
+            id:'rose',
+            name:'玫瑰',
+            role:'骄傲又脆弱的花',
+            avatar:'🌹',
+            image:'assets/theater/rose-character.png',
+            tone:'骄傲、敏感、带一点任性，但内心柔软',
+            goal:'呈现爱里的脆弱、表达和误解',
+            opening:'我当然有刺。可刺有时只是为了让自己看起来不那么害怕。',
+            promptCards:['你为什么总是说反话？','爱一个人为什么会害怕？','小王子真的懂你吗？']
+          }
+        ]
+      } },
     { id:'b02', title:'挪威的森林', author:'[日] 村上春树', isbn:'9787532744897',
       category:'literature', categoryName:'文学小说',
       tags:['迷茫','青春','丧失','孤独'], coverColor:'#2E6B8A',
@@ -173,7 +223,65 @@ const GameData = {
       coverUrl:'https://covers.openlibrary.org/b/isbn/9787544766520-L.jpg',
       blurb:'从古希腊音乐理论到披头士摇滚革命每位作曲家故事与其时代背景紧密相连不需要懂乐谱也能感受音乐的力量。',
       bestMatch:['chenBo','traveler'],
-      recommendReason:'展示另一种工匠精神——音乐同样需要毕生打磨。' }
+      recommendReason:'展示另一种工匠精神——音乐同样需要毕生打磨。' },
+    { id:'b25', title:'福尔摩斯探案集', author:'[英] 柯南·道尔', isbn:'9787020000000',
+      category:'detective', categoryName:'侦探推理',
+      tags:['推理','观察','证据','逻辑','案件'], coverColor:'#2F3136',
+      coverUrl:'',
+      blurb:'伦敦贝克街 221B，侦探夏洛克·福尔摩斯与医生华生一起调查离奇案件。故事的魅力不只在谜底，而在观察细节、建立假设、排除错误路径的过程。读者会跟随福尔摩斯学习如何从一枚泥点、一顶帽子、一段沉默中看到事实。',
+      bestMatch:['xiaoMing','traveler'],
+      recommendReason:'适合想训练观察力、逻辑感和独立判断的人。',
+      coreMessage:'真正的推理不是猜谜，而是尊重证据、观察细节、排除看似诱人的错误答案。',
+      bookWorld:{
+        sceneTitle:'圣巴塞洛缪医院实验室',
+        sceneSubtitle:'窗外伦敦雾气翻涌，试管里有微光，一桩案子正从化学反应中显影。',
+        sceneImage:'assets/theater/holmes-lab-generated.png',
+        sceneMood:'伦敦案发现场',
+        spoilerPolicy:'不直接揭示原作谜底，只讨论观察方法、人物动机和阅读线索。',
+        entryNarration:'你翻开书页，纸面上的伦敦雾气慢慢涌出。实验台前，福尔摩斯举起试管，像在等待一个能证明真相的颜色。',
+        sceneHotspots:[
+          { id:'window', label:'雾窗', x:18, y:24, prompt:'窗边的光和雾能告诉侦探什么？' },
+          { id:'reagent', label:'试管', x:54, y:38, prompt:'这支试管里的颜色变化可能是什么线索？' },
+          { id:'case-file', label:'案卷', x:34, y:78, prompt:'如果案卷只留下三条线索，你会先看哪一条？' },
+          { id:'shelf', label:'药剂架', x:78, y:56, prompt:'为什么福尔摩斯会把科学实验带进破案？' }
+        ],
+        globalPromptCards:['给我一个不剧透的案件开场','训练我像侦探一样观察','这本书为什么到今天还好看？'],
+        characters:[
+          {
+            id:'holmes',
+            name:'夏洛克·福尔摩斯',
+            role:'咨询侦探',
+            avatar:'🕵',
+            image:'assets/theater/holmes-character.png',
+            tone:'冷静、敏锐、略带锋芒，喜欢从细节推理',
+            goal:'引导玩家理解观察与证据的重要性',
+            opening:'你进门时鞋底有一点湿泥。伦敦今晚下过雨，还是你刚从河边来？',
+            promptCards:['你从我身上观察到了什么？','一个好侦探和普通人最大的区别是什么？','如果我想读这本书，应该注意哪些线索？']
+          },
+          {
+            id:'watson',
+            name:'华生医生',
+            role:'记录者',
+            avatar:'📓',
+            image:'assets/theater/watson-character.png',
+            tone:'温和、可靠、带一点惊叹，像朋友一样解释福尔摩斯',
+            goal:'帮助玩家降低阅读门槛，理解故事情绪',
+            opening:'别被他的语气吓到。福尔摩斯只是习惯先看见别人忽略的东西。',
+            promptCards:['你为什么愿意跟随福尔摩斯？','这本书最适合什么样的读者？','推理故事除了谜底，还有什么值得读？']
+          },
+          {
+            id:'lestrade',
+            name:'雷斯垂德探长',
+            role:'苏格兰场探长',
+            avatar:'🚓',
+            image:'assets/theater/lestrade-character.png',
+            tone:'务实、急切、重视证据但常被表象困住',
+            goal:'制造案件张力，推动玩家提问',
+            opening:'我们需要的是能站得住脚的证据，不是烟斗旁边的漂亮猜想。',
+            promptCards:['你现在掌握了哪些证据？','为什么警方会误判？','我该怎么避免被表象骗住？']
+          }
+        ]
+      } }
   ],
 
   // ========================
@@ -618,6 +726,7 @@ const GameData = {
     psychology: { name:'心理成长', color:'#3D9970', icon:'💚' },
     humanities: { name:'人文社科', color:'#BC6C25', icon:'🏛️' },
     science: { name:'科学探索', color:'#0077BB', icon:'🔭' },
-    art: { name:'艺术美学', color:'#A23B72', icon:'🎨' }
+    art: { name:'艺术美学', color:'#A23B72', icon:'🎨' },
+    detective: { name:'侦探推理', color:'#4B5563', icon:'🕵' }
   }
 };

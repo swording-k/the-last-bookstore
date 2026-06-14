@@ -327,19 +327,29 @@ var Renderer = {
   },
 
   /* ============ 书架选书 ============ */
-  showBookshelf: function(onSelectBook) {
+  showBookshelf: function(onSelectBook, options) {
+    options = options || {};
+    var freeBrowse = !!options.freeBrowse;
     var panel = document.getElementById('book-panel');
     if (!panel) return;
     panel.classList.remove('hidden');
 
     var grid = document.getElementById('book-grid');
     var hintEl = document.getElementById('bk-hint');
+    var titleEl = panel.querySelector('.bk-header h3');
     if (!grid) return;
     grid.innerHTML = '';
 
     var npc = Engine.state.currentNPC;
-    if (hintEl && npc) {
+    if (titleEl) {
+      titleEl.textContent = freeBrowse ? '📖 自由书库 — 随便翻一本书' : '📚 书架 — 选一本书推荐给 TA';
+    }
+    if (hintEl && freeBrowse) {
+      hintEl.textContent = '不用等待 NPC。你可以直接查看书籍简介、进入书中剧场，或和店主聊这本书。';
+    } else if (hintEl && npc) {
       hintEl.textContent = npc.name + ' 此刻最需要的是……';
+    } else if (hintEl) {
+      hintEl.textContent = '';
     }
 
     var books = GameData.books;
@@ -350,18 +360,66 @@ var Renderer = {
 
     // 渲染分类 tab 和书籍网格的函数
     var self = this;
+    renderFeaturedTheaterBooks();
+
+    function orderedBooks() {
+      if (freeBrowse) {
+        var theaterBooks = books.filter(function(book) { return !!book.bookWorld; });
+        var ordinaryBooks = books.filter(function(book) { return !book.bookWorld; });
+        return theaterBooks.concat(ordinaryBooks);
+      }
+      return books.slice();
+    }
+
+    function renderFeaturedTheaterBooks() {
+      var old = document.getElementById('bk-featured-theaters');
+      if (old) old.remove();
+      if (!freeBrowse || !hintEl || !hintEl.parentNode) return;
+
+      var theaterBooks = books.filter(function(book) { return !!book.bookWorld; });
+      if (theaterBooks.length === 0) return;
+
+      var box = document.createElement('div');
+      box.id = 'bk-featured-theaters';
+      box.className = 'bk-featured-theaters';
+      box.innerHTML = '<div class="bk-featured-head"><strong>沉浸式剧场推荐</strong><span>这些书可以直接进入角色对谈</span></div>';
+
+      var row = document.createElement('div');
+      row.className = 'bk-featured-row';
+      theaterBooks.forEach(function(book) {
+        var btn = document.createElement('button');
+        btn.className = 'bk-featured-card';
+        btn.innerHTML =
+          '<span>进入剧场</span>' +
+          '<strong>' + book.title + '</strong>' +
+          '<em>' + ((book.bookWorld && book.bookWorld.sceneTitle) || '书中世界') + '</em>';
+        btn.onclick = function() {
+          if (window.BookTheater) {
+            BookTheater.open(book);
+          } else {
+            self.showBookDetail(book, onSelectBook, options);
+          }
+        };
+        row.appendChild(btn);
+      });
+      box.appendChild(row);
+      hintEl.parentNode.insertBefore(box, hintEl.nextSibling);
+    }
+
     function renderBooks(filter) {
       grid.innerHTML = '';
-      for (var i = 0; i < books.length; i++) {
-        if (filter && books[i].category !== filter) continue;
+      var list = orderedBooks();
+      for (var i = 0; i < list.length; i++) {
+        if (filter && list[i].category !== filter) continue;
         (function(book) {
           var card = document.createElement('div');
-          card.className = 'bk-card';
+          card.className = 'bk-card' + (book.bookWorld ? ' has-theater' : '');
           card.tabIndex = 0;
 
           var catInfo = cats[book.category] || { name: '其他', color: '#888' };
           var darkColor = self._darken(book.coverColor, 30);
           var localCover = 'assets/covers/' + book.id + '.png';
+          var theaterMark = book.bookWorld ? '<div class="bk-theater-mark">沉浸式剧场</div>' : '';
 
           card.innerHTML =
             '<div class="bk-cover" style="background:linear-gradient(135deg,' + book.coverColor + ',' + darkColor + ')">' +
@@ -371,16 +429,23 @@ var Renderer = {
               '<span class="bk-cover-icon">📖</span>' +
               '<span class="bk-cover-title">' + book.title + '</span>' +
               '<span class="bk-cat-tag">' + catInfo.name + '</span>' +
+              theaterMark +
             '</div>' +
             '<div class="bk-title">' + book.title + '</div>' +
             '<div class="bk-cat" style="background:' + catInfo.color + '22;color:' + catInfo.color + '">' + catInfo.name + '</div>';
 
           card.onclick = function(ev) {
             ev.stopPropagation();
-            self.showBookDetail(book, onSelectBook);
+            self.showBookDetail(book, onSelectBook, options);
           };
           grid.appendChild(card);
-        })(books[i]);
+        })(list[i]);
+      }
+      if (freeBrowse && !filter) {
+        var theaterCards = Array.prototype.slice.call(grid.querySelectorAll('.bk-card.has-theater'));
+        theaterCards.reverse().forEach(function(card) {
+          grid.insertBefore(card, grid.firstChild);
+        });
       }
       // 更新计数
       var countEl = document.getElementById('bk-count');
@@ -442,7 +507,8 @@ var Renderer = {
   },
 
   /* ============ 书籍详情弹窗 ============ */
-  showBookDetail: function(book, onConfirm) {
+  showBookDetail: function(book, onConfirm, options) {
+    options = options || {};
     var old = document.getElementById('book-detail-modal');
     if (old) old.remove();
 
@@ -458,6 +524,13 @@ var Renderer = {
       isBestMatch = book.bestMatch.indexOf(Engine.state.currentNPC.id) >= 0;
     }
     var matchBadge = isBestMatch ? '<div class="match-badge">✦ 可能是 TA 最需要的那一本</div>' : '';
+
+    var theaterBtn = book.bookWorld
+      ? '<button class="dtl-theater" id="dtl-theater">进入书中剧场</button>'
+      : '';
+    var confirmHtml = onConfirm && !options.freeBrowse
+      ? '<button class="dtl-confirm" id="dtl-confirm">推荐这本书</button>'
+      : '';
 
     modal.innerHTML =
       '<div class="dtl-overlay" id="dtl-overlay"></div>' +
@@ -476,7 +549,8 @@ var Renderer = {
           '<div class="dtl-blurb"><p>' + blurbHtml + '</p></div>' +
         '</div>' +
         '<div class="dtl-actions">' +
-          '<button class="dtl-confirm" id="dtl-confirm">推荐这本书</button>' +
+          confirmHtml +
+          theaterBtn +
           '<button class="dtl-ai-ask" id="dtl-ai-ask">🤖 AI 导读 — 和店主聊聊这本书</button>' +
           '<button class="dtl-back" id="dtl-back">← 返回书架</button>' +
         '</div>' +
@@ -487,10 +561,20 @@ var Renderer = {
     document.getElementById('dtl-close').onclick = function() { modal.remove(); };
     document.getElementById('dtl-overlay').onclick = function() { modal.remove(); };
     document.getElementById('dtl-back').onclick = function() { modal.remove(); };
-    document.getElementById('dtl-confirm').onclick = function() {
-      modal.remove();
-      if (onConfirm) onConfirm(book.id);
-    };
+    var confirm = document.getElementById('dtl-confirm');
+    if (confirm) {
+      confirm.onclick = function() {
+        modal.remove();
+        if (onConfirm) onConfirm(book.id);
+      };
+    }
+    var theater = document.getElementById('dtl-theater');
+    if (theater) {
+      theater.onclick = function() {
+        modal.remove();
+        if (window.BookTheater) BookTheater.open(book);
+      };
+    }
     document.getElementById('dtl-ai-ask').onclick = function() {
       // 先关闭当前书籍详情弹窗，再打开 AI 聊天面板
       modal.remove();
@@ -544,9 +628,27 @@ var Renderer = {
       '<div class="res-world-note">' + this._buildWorldResultNote(result) + '</div>' +
       (result.recommendReason ? '<div class="res-afterword">💡 ' + result.recommendReason + '</div>' : '') +
       '<div class="res-effects">' + efx + '</div>' +
+      '<button class="act-btn act-mylist" id="res-mylist">📖 我也想读这本书</button>' +
       '<button class="act-btn act-next" id="res-continue">继续</button>';
 
     var self = this;
+    var mylistBtn = document.getElementById('res-mylist');
+    if (mylistBtn) {
+      var alreadyAdded = window.MyStore && MyStore.isInMylist(result.book.id);
+      if (alreadyAdded) {
+        mylistBtn.textContent = '✓ 已加入我的待读清单';
+        mylistBtn.classList.add('added');
+      }
+      mylistBtn.onclick = function(ev) {
+        ev.stopPropagation();
+        if (!window.MyStore) return;
+        if (MyStore.isInMylist(result.book.id)) return;
+        MyStore.addToMylist(result.book, Engine.state.currentNPC);
+        this.textContent = '✓ 已加入我的待读清单';
+        this.classList.add('added');
+      };
+    }
+
     document.getElementById('res-continue').onclick = function() {
       panel.classList.add('hidden');
       Renderer.updateTopBar();
@@ -644,7 +746,7 @@ var Renderer = {
   },
 
   /* ============ 结局画面 ============ */
-  showEnding: function(ending, onRestart) {
+  showEnding: function(ending, onRestart, onMyStore) {
     var screen = document.getElementById('ending-screen');
     if (!screen) return;
     screen.classList.remove('hidden');
@@ -665,6 +767,7 @@ var Renderer = {
         '<div>完美推荐: ' + Engine.state.totalPerfect + ' 次</div>' +
         '<div>服务过的客人: ' + Engine.state.servedNPCs.length + ' 位</div>' +
       '</div>' +
+      '<button class="btn-start end-mystore" id="end-mystore">打开我的书店</button>' +
       '<button class="btn-start" id="end-restart">📖 重新开始</button>';
 
     // 打字机逐行显示
@@ -687,6 +790,13 @@ var Renderer = {
     document.getElementById('end-restart').onclick = function() {
       if (onRestart) onRestart();
     };
+    var myStoreBtn = document.getElementById('end-mystore');
+    if (myStoreBtn) {
+      myStoreBtn.onclick = function() {
+        if (onMyStore) onMyStore();
+        else if (window.MyStore) MyStore.open();
+      };
+    }
   },
 
   _makeStars: function() {

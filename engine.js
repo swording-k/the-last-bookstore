@@ -24,6 +24,7 @@ var Engine = {
     servedNPCs: [],
     npcVisitCount: {},      // 记录每个 NPC 的访问次数
     bookLog: [],
+    mylist: [],             // 玩家标记“我也想读”的书
     flags: {},
     diary: ''              // AI 店主日记（备用，预留接口）
   },
@@ -44,6 +45,7 @@ var Engine = {
         for (var k in s) {
           if (s.hasOwnProperty(k) && s[k] !== undefined) this.state[k] = s[k];
         }
+        if (!Array.isArray(this.state.mylist)) this.state.mylist = [];
       } catch (e) { console.warn('存档损坏，已重置', e); }
     }
     return this.state;
@@ -267,6 +269,7 @@ var Engine = {
 
     this.state.bookLog.push({
       day: this.state.day,
+      npcId: npc.id,
       npcName: npc.name,
       bookId: book.id,
       bookTitle: book.title,

@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=generated-theater2">
 </head>
 <body class="tod-morning">
 
@@ -66,6 +66,8 @@
     </div>
     <div class="top-right">
       <span id="rep-display" class="stat-label rep-lbl">声誉 0</span>
+      <button id="btn-library" class="ico-btn library-top-btn" title="打开书库">📖</button>
+      <button id="btn-mystore" class="ico-btn mystore-top-btn" title="打开我的书店">📚</button>
       <button id="btn-mute" class="ico-btn" title="静音">🔊</button>
       <button id="btn-save" class="ico-btn" title="存档">💾</button>
       <button id="btn-menu" class="ico-btn" title="菜单">☰</button>
@@ -181,7 +183,7 @@
     <div id="bk-hint" class="bk-hint"></div>
     <div class="bk-toolbar">
       <div class="bk-cat-tabs" id="bk-cat-tabs"></div>
-      <span class="bk-count" id="bk-count">24 本</span>
+      <span class="bk-count" id="bk-count">25 本</span>
     </div>
     <div id="book-grid" class="bk-grid"></div>
   </div>
@@ -215,13 +217,33 @@
   <div id="ending-content" class="ending-content"></div>
 </div>
 
-<script src="data.js"></script>
-<script src="audio.js"></script>
-<script src="engine.js"></script>
-<script src="renderer.js"></script>
-<script src="scene.js"></script>
-<script src="llm.js"></script>
-<script src="ai.js"></script>
-<script src="game.js"></script>
+<!-- 我的书店 / 纸页方舟 -->
+<div id="mystore-screen" class="screen mystore-screen hidden">
+  <div class="mystore-content" id="mystore-content"></div>
+</div>
+
+<!-- 现场演示工具条：仅在 ?demo=1 或 localStorage.tlb_demo_mode=1 时显示 -->
+<div id="demo-toolbar" class="demo-toolbar hidden collapsed">
+  <button id="demo-toggle" class="demo-toggle">演示</button>
+  <button id="demo-start-flow">前面流程</button>
+  <button id="demo-show-ending">跳到结局</button>
+  <button id="demo-open-mystore">我的书店</button>
+  <button id="demo-open-theater">书中剧场</button>
+  <button id="demo-set-key">设置 AI Key</button>
+  <button id="demo-clear-key">清 Key</button>
+  <span id="demo-ai-status">AI: fallback</span>
+</div>
+
+<script src="data.js?v=generated-theater2"></script>
+<script src="audio.js?v=generated-theater2"></script>
+<script src="engine.js?v=generated-theater2"></script>
+<script src="renderer.js?v=generated-theater2"></script>
+<script src="scene.js?v=generated-theater2"></script>
+<script src="llm.js?v=generated-theater2"></script>
+<script src="mystore.js?v=generated-theater2"></script>
+<script src="booktheater.js?v=generated-theater2"></script>
+<script src="demo-key.local.js"></script>
+<script src="ai.js?v=generated-theater2"></script>
+<script src="game.js?v=generated-theater2"></script>
 </body>
 </html>

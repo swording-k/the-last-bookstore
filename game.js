@@ -16,15 +16,22 @@ var Game = {
     if (startBtn) startBtn.onclick = function() { Game.startGame(); };
 
     this._bindTopButtons();
+    this._initDemoMode();
   },
 
   _bindTopButtons: function() {
     var saveBtn = document.getElementById('btn-save');
     var menuBtn = document.getElementById('btn-menu');
     var muteBtn = document.getElementById('btn-mute');
+    var libraryBtn = document.getElementById('btn-library');
+    var myStoreBtn = document.getElementById('btn-mystore');
     if (saveBtn) saveBtn.onclick = function() { Game.showSaveMenu(); };
     if (menuBtn) menuBtn.onclick = function() { Game.showMenu(); };
     if (muteBtn) muteBtn.onclick = function() { AudioManager.toggleMute(); Renderer.updateMuteBtn(); };
+    if (libraryBtn) libraryBtn.onclick = function() { Game.openLibrary(); };
+    if (myStoreBtn) myStoreBtn.onclick = function() {
+      if (window.MyStore) MyStore.open();
+    };
 
     // AI 自由交谈按钮
     var aiChatBtn = document.getElementById('btn-ai-chat');
@@ -168,6 +175,121 @@ var Game = {
     });
   },
 
+  openLibrary: function() {
+    Renderer.showBookshelf(null, { freeBrowse: true });
+  },
+
+  /* ============ 现场演示模式 ============ */
+  _initDemoMode: function() {
+    var demoOn = false;
+    try {
+      demoOn = new URLSearchParams(location.search).has('demo') ||
+        localStorage.getItem('tlb_demo_mode') === '1';
+    } catch (e) {}
+    if (!demoOn) return;
+
+    var bar = document.getElementById('demo-toolbar');
+    if (!bar) return;
+    bar.classList.remove('hidden');
+    this._bindDemoToolbar();
+    this._updateDemoAIStatus();
+  },
+
+  _bindDemoToolbar: function() {
+    var start = document.getElementById('demo-start-flow');
+    var toggle = document.getElementById('demo-toggle');
+    var ending = document.getElementById('demo-show-ending');
+    var mystore = document.getElementById('demo-open-mystore');
+    var theater = document.getElementById('demo-open-theater');
+    var setKey = document.getElementById('demo-set-key');
+    var clearKey = document.getElementById('demo-clear-key');
+
+    if (toggle) toggle.onclick = function() {
+      var bar = document.getElementById('demo-toolbar');
+      if (bar) bar.classList.toggle('collapsed');
+    };
+    if (start) start.onclick = function() { Game.startGame(); };
+    if (ending) ending.onclick = function() {
+      Game._seedDemoJourney();
+      Renderer.showEnding(GameData.endings.trueEnding, function() { location.reload(); }, function() {
+        if (window.MyStore) MyStore.open();
+      });
+    };
+    if (mystore) mystore.onclick = function() {
+      Game._seedDemoJourney();
+      if (window.MyStore) MyStore.open();
+    };
+    if (theater) theater.onclick = function() { Game.openDemoTheater(); };
+    if (setKey) setKey.onclick = function() {
+      var key = prompt('粘贴临时演示 API Key。它只存在这个浏览器的 localStorage，不会写进代码。');
+      if (key && key.trim()) localStorage.setItem('tlb_llm_api_key', key.trim());
+      Game._updateDemoAIStatus();
+    };
+    if (clearKey) clearKey.onclick = function() {
+      localStorage.removeItem('tlb_llm_api_key');
+      Game._updateDemoAIStatus();
+    };
+  },
+
+  _updateDemoAIStatus: function() {
+    var status = document.getElementById('demo-ai-status');
+    if (!status) return;
+    var hasKey = this._hasDemoAIKey();
+    status.textContent = hasKey ? 'AI: live key' : 'AI: fallback';
+    status.classList.toggle('live', hasKey);
+  },
+
+  _hasDemoAIKey: function() {
+    if (window.LLM && LLM.hasConfiguredKey) return LLM.hasConfiguredKey();
+    function clean(key) {
+      if (!key) return '';
+      key = String(key).trim();
+      if (!key) return '';
+      if (key === 'paste-your-temporary-demo-key-here') return '';
+      if (key === '你的临时演示 Key') return '';
+      return key;
+    }
+    try {
+      return !!(clean(window.TLB_LLM_API_KEY) || clean(localStorage.getItem('tlb_llm_api_key')));
+    } catch (e) {
+      return false;
+    }
+  },
+
+  _seedDemoJourney: function() {
+    Engine.state.day = 7;
+    Engine.state.daysCompleted = 7;
+    Engine.state.hope = 86;
+    Engine.state.reputation = 28;
+    Engine.state.timeOfDay = 'night';
+    Engine.state.totalPerfect = 5;
+    Engine.state.totalGood = 3;
+    Engine.state.metTraveler = true;
+    Engine.state.servedNPCs = ['linYue', 'chenBo', 'xiaoMing', 'liDoctor', 'fangMiss', 'traveler'];
+    Engine.state.bookLog = [
+      { day: 1, npcId: 'linYue', npcName: '林月', bookId: 'b05', bookTitle: '活出生命的意义', match: 'perfect' },
+      { day: 1, npcId: 'chenBo', npcName: '陈伯', bookId: 'b13', bookTitle: '匠人', match: 'perfect' },
+      { day: 2, npcId: 'xiaoMing', npcName: '小明', bookId: 'b01', bookTitle: '小王子', match: 'perfect' },
+      { day: 3, npcId: 'liDoctor', npcName: '李医生', bookId: 'b09', bookTitle: '当呼吸化为空气', match: 'perfect' }
+    ];
+    Engine.state.mylist = [
+      { bookId: 'b05', bookTitle: '活出生命的意义', author: '[奥] 弗兰克尔', day: 1, npcId: 'linYue', npcName: '林月', addedAt: Date.now() },
+      { bookId: 'b01', bookTitle: '小王子', author: '[法] 圣埃克苏佩里', day: 2, npcId: 'xiaoMing', npcName: '小明', addedAt: Date.now() }
+    ];
+    Renderer.updateTopBar();
+  },
+
+  openDemoTheater: function() {
+    var book = null;
+    for (var i = 0; i < GameData.books.length; i++) {
+      if (GameData.books[i].id === 'b25') {
+        book = GameData.books[i];
+        break;
+      }
+    }
+    if (book && window.BookTheater) BookTheater.open(book);
+  },
+
   _openBookshelf: function() {
     Renderer.showDialoguePanel(false);
     Renderer.showBookshelf(function(bookId) {
@@ -208,7 +330,9 @@ var Game = {
 
     var ending = Engine.checkEnding();
     if (ending) {
-      Renderer.showEnding(ending, function() { location.reload(); });
+      Renderer.showEnding(ending, function() { location.reload(); }, function() {
+        if (window.MyStore) MyStore.open();
+      });
       return;
     }
 
@@ -237,7 +361,9 @@ var Game = {
     // 检查结局
     var ending = Engine.checkEnding();
     if (ending) {
-      Renderer.showEnding(ending, function() { location.reload(); });
+      Renderer.showEnding(ending, function() { location.reload(); }, function() {
+        if (window.MyStore) MyStore.open();
+      });
       return;
     }
 

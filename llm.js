@@ -11,7 +11,7 @@ var LLM = (function() {
   'use strict';
 
   // ============ 配置 ============
-  var API_KEY = 'sk-51fe3a5a42444788ad0509d55245521e';
+  var API_KEY = '';
   var API_BASE = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
   var MODEL = 'qwen-plus';           // qwen-plus: 性价比最优，128K 上下文
   var MAX_TOKENS = 512;
@@ -94,12 +94,22 @@ var LLM = (function() {
     });
   }
 
+  function normalizeApiKey(key) {
+    if (!key) return '';
+    key = String(key).trim();
+    if (!key) return '';
+    if (key === 'paste-your-temporary-demo-key-here') return '';
+    if (key === '你的临时演示 Key') return '';
+    return key;
+  }
+
   function getApiKey() {
     try {
-      if (window.TLB_LLM_API_KEY) return window.TLB_LLM_API_KEY;
-      return localStorage.getItem('tlb_llm_api_key') || API_KEY;
+      return normalizeApiKey(window.TLB_LLM_API_KEY) ||
+        normalizeApiKey(localStorage.getItem('tlb_llm_api_key')) ||
+        normalizeApiKey(API_KEY);
     } catch (e) {
-      return API_KEY;
+      return normalizeApiKey(API_KEY);
     }
   }
 
@@ -292,11 +302,93 @@ var LLM = (function() {
     });
   }
 
+  // ============ 一个月后回信 ============
+
+  function generateReply(book, npc, onChunk) {
+    var readerName = npc && npc.name ? npc.name : '一位读者';
+    var messages = [
+      {
+        role: 'system',
+        content: '你是《最后的书店》里曾经被店主帮助过的读者。请写一封一个月后的回信，温暖、具体、克制，不超过180字。'
+      },
+      {
+        role: 'user',
+        content: '读者：' + readerName + '\n书：《' + book.title + '》\n作者：' + book.author + '\n推荐理由：' + (book.recommendReason || '') + '\n请写回信。'
+      }
+    ];
+
+    return callLLMStream(messages, 0.7, onChunk).catch(function(err) {
+      console.error('[LLM Reply]', err);
+      var fb = fallbackReply(book, readerName);
+      if (onChunk) onChunk(fb, true);
+      return fb;
+    });
+  }
+
+  function fallbackReply(book, readerName) {
+    var openings = [
+      readerName + '在信里写道：',
+      '一个月后，' + readerName + '寄来一张折得很整齐的纸：',
+      readerName + '把信放在门缝里，字迹比上次见面时稳了些：'
+    ];
+    var body = '那天带走《' + book.title + '》以后，我不是马上变好了。只是有几个夜里，我会想起你说书可以先替人把灯举着。后来我慢慢读完了它，也慢慢敢把自己的事说出口。谢谢你没有急着给答案。';
+    return openings[Math.floor(Math.random() * openings.length)] + '\n\n' + body;
+  }
+
+  // ============ 书中角色对谈 ============
+
+  function buildBookCharacterPrompt(book, character) {
+    var world = book.bookWorld || {};
+    var prompt = '你正在《最后的书店》的“书中剧场”中扮演一本书里的角色。\n\n';
+    prompt += '## 书籍\n';
+    prompt += '- 书名：《' + book.title + '》\n';
+    prompt += '- 作者：' + book.author + '\n';
+    prompt += '- 简介：' + (book.blurb || '') + '\n\n';
+    prompt += '## 场景\n';
+    prompt += '- 地点：' + (world.sceneTitle || '书中世界') + '\n';
+    prompt += '- 氛围：' + (world.sceneSubtitle || '') + '\n';
+    prompt += '- 剧透规则：' + (world.spoilerPolicy || '不剧透关键结局') + '\n\n';
+    prompt += '## 你扮演的角色\n';
+    prompt += '- 名字：' + character.name + '\n';
+    prompt += '- 身份：' + character.role + '\n';
+    prompt += '- 语气：' + (character.tone || '') + '\n';
+    prompt += '- 目标：' + (character.goal || '') + '\n\n';
+    prompt += '## 对话规则\n';
+    prompt += '- 用该角色的口吻回答，不要说自己是 AI。\n';
+    prompt += '- 回答 1 到 4 句话，现场演示要短、准、有戏剧感。\n';
+    prompt += '- 不要复述原著长段文字，不直接揭示案件谜底。\n';
+    prompt += '- 如果用户问阅读建议，把答案落到观察、证据、人物动机或阅读兴趣上。\n';
+    return prompt;
+  }
+
+  function chatWithBookCharacter(book, character, playerMsg, history, onChunk) {
+    var messages = [
+      { role: 'system', content: buildBookCharacterPrompt(book, character) }
+    ];
+    if (history && history.length > 0) {
+      for (var i = 0; i < history.length; i++) messages.push(history[i]);
+    }
+    messages.push({ role: 'user', content: playerMsg });
+
+    return callLLMStream(messages, 0.78, onChunk).catch(function(err) {
+      console.error('[LLM Book Character]', err);
+      var name = character && character.name ? character.name : '书中人物';
+      var fb = name + '把目光从书页上移开：“先别急着寻找答案。你真正想知道的，是这本书会怎样改变你看世界的方式。”';
+      if (onChunk) onChunk(fb, true);
+      return fb;
+    });
+  }
+
   // ============ 公开 API ============
   return {
     call: callLLM,              // 非流式调用（备用）
     chatWithNPC: chatWithNPC,   // NPC 自由对话（流式）
-    askAboutBook: askAboutBook  // 书籍 AI 导读（流式）
+    askAboutBook: askAboutBook, // 书籍 AI 导读（流式）
+    generateReply: generateReply,
+    chatWithBookCharacter: chatWithBookCharacter,
+    hasConfiguredKey: function() {
+      return !!getApiKey();
+    }
   };
 
 })();
