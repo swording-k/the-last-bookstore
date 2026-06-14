@@ -572,7 +572,21 @@ var Renderer = {
     if (theater) {
       theater.onclick = function() {
         modal.remove();
-        if (window.BookTheater) BookTheater.open(book);
+        if (!window.BookTheater) return;
+        
+        // 检查是否有多个角色
+        var characters = book.bookWorld && book.bookWorld.characters ? book.bookWorld.characters : [];
+        
+        if (characters.length > 1) {
+          // 多个角色：显示角色选择对话框
+          self._showTheaterCharacterSelect(book, characters);
+        } else if (characters.length === 1) {
+          // 只有一个角色：直接进入剧场
+          BookTheater.open(book, characters[0]);
+        } else {
+          // 没有角色：直接进入剧场（会使用默认逻辑）
+          BookTheater.open(book);
+        }
       };
     }
     document.getElementById('dtl-ai-ask').onclick = function() {
@@ -601,6 +615,61 @@ var Renderer = {
       // 如果图片已完成加载（缓存命中），手动触发
       if (img.complete && img.naturalWidth > 0) { img.classList.add('loaded'); }
     }
+  },
+
+  /* ============ 书中剧场角色选择对话框 ============ */
+  _showTheaterCharacterSelect: function(book, characters) {
+    var self = this;
+    
+    // 创建对话框
+    var overlay = document.createElement('div');
+    overlay.className = 'theater-char-select-overlay';
+    overlay.innerHTML =
+      '<div class="theater-char-select-box">' +
+        '<h3>选择你的角色视角</h3>' +
+        '<p class="theater-char-subtitle">你将根据该角色的第一人称称体验故事</p>' +
+        '<div class="theater-char-cards" id="theater-char-cards"></div>' +
+        '<button class="theater-char-cancel" id="theater-char-cancel">取消</button>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+
+    // 渲染角色卡片
+    var cards = document.getElementById('theater-char-cards');
+    characters.forEach(function(char) {
+      var card = document.createElement('div');
+      card.className = 'theater-char-card';
+      
+      var imgHTML = '';
+      if (char.image) {
+        imgHTML = '<div class="theater-char-portrait" style="background-image:url(' + char.image + ')"></div>';
+      } else {
+        imgHTML = '<span class="theater-char-avatar">' + (char.avatar || '?') + '</span>';
+      }
+
+      card.innerHTML =
+        '<div class="theater-char-card-img">' + imgHTML + '</div>' +
+        '<h4>' + char.name + '</h4>' +
+        '<p class="theater-char-role">' + (char.role || '') + '</p>' +
+        '<p class="theater-char-goal">' + (char.goal || '') + '</p>';
+
+      card.onclick = function() {
+        overlay.remove();
+        BookTheater.open(book, char);
+      };
+
+      cards.appendChild(card);
+    });
+
+    // 取消按钮
+    document.getElementById('theater-char-cancel').onclick = function() {
+      overlay.remove();
+    };
+
+    // 点击覆盖层关闭
+    overlay.onclick = function(e) {
+      if (e.target === overlay) overlay.remove();
+    };
   },
 
   /* ============ 结果面板 ============ */

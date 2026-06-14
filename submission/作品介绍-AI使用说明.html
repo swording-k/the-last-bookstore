@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>《最后的书店》作品介绍 + AI 使用说明 · 腾讯云黑客松 40</title>
+<style>
+  :root {
+    --ink: #1a1410;
+    --ink-soft: #3d2f24;
+    --paper: #f5ede0;
+    --paper-2: #ead9bf;
+    --warm: #c89a5b;
+    --warm-deep: #8b5a2b;
+    --warm-glow: #f4c97a;
+    --rule: rgba(26,20,16,0.15);
+    --shadow: 0 20px 60px -20px rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #1a1410; color: var(--ink); font-family: "PingFang SC", "Songti SC", "Hiragino Sans GB", "Source Han Serif", serif; }
+  body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+
+  .deck { width: 100%; max-width: 1280px; }
+  .slide {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--paper);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    margin: 28px 0;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    display: none;
+  }
+  .slide.active { display: block; }
+
+  /* page chrome */
+  .page-num { position: absolute; bottom: 22px; right: 32px; font-size: 12px; color: var(--ink-soft); letter-spacing: 0.15em; font-family: "SF Mono", "Menlo", monospace; }
+  .page-tag { position: absolute; top: 22px; left: 32px; font-size: 11px; color: var(--ink-soft); letter-spacing: 0.3em; text-transform: uppercase; }
+  .page-rule { position: absolute; left: 32px; right: 32px; top: 56px; height: 1px; background: var(--rule); }
+
+  /* cover */
+  .slide.cover { background: linear-gradient(135deg, #2b1e14 0%, #4a3322 60%, #6b4a2e 100%); color: var(--paper); }
+  .slide.cover .poster { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.55; }
+  .slide.cover .overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(26,20,16,0.2) 0%, rgba(26,20,16,0.6) 70%, rgba(26,20,16,0.85) 100%); }
+  .slide.cover .content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 64px 72px; }
+  .slide.cover .eyebrow { font-size: 13px; letter-spacing: 0.4em; color: var(--warm-glow); font-family: "SF Mono", "Menlo", monospace; }
+  .slide.cover h1 { font-size: 96px; font-weight: 700; line-height: 1; letter-spacing: 0.04em; margin-top: 8px; text-shadow: 0 2px 30px rgba(0,0,0,0.6); }
+  .slide.cover .en { font-size: 22px; color: var(--paper-2); letter-spacing: 0.3em; font-style: italic; margin-top: 14px; }
+  .slide.cover .tag { font-size: 18px; color: var(--paper-2); margin-top: auto; line-height: 1.6; }
+  .slide.cover .tag .accent { color: var(--warm-glow); }
+
+  /* generic slide */
+  .slide .body { padding: 88px 72px 60px 72px; height: 100%; display: flex; flex-direction: column; }
+  .slide h2 { font-size: 42px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.15; color: var(--ink); }
+  .slide h2 .small { display: block; font-size: 16px; font-weight: 400; color: var(--ink-soft); letter-spacing: 0.25em; margin-bottom: 10px; text-transform: uppercase; }
+  .slide .lede { font-size: 18px; color: var(--ink-soft); margin-top: 14px; line-height: 1.6; max-width: 900px; }
+  .slide .content-block { flex: 1; margin-top: 36px; }
+
+  /* section divider */
+  .slide.divider { background: var(--ink); color: var(--paper); }
+  .slide.divider .body { justify-content: center; }
+  .slide.divider .num { font-size: 180px; font-weight: 700; color: var(--warm); opacity: 0.25; line-height: 1; font-family: "SF Mono", "Menlo", monospace; }
+  .slide.divider h2 { color: var(--paper); font-size: 64px; margin-top: 16px; }
+  .slide.divider .small { color: var(--warm-glow); }
+
+  /* grids */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  /* card */
+  .card { background: white; border-radius: 10px; padding: 22px 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 3px solid var(--warm); }
+  .card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--ink); }
+  .card .kicker { font-size: 11px; color: var(--warm-deep); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px; font-family: "SF Mono", "Menlo", monospace; }
+  .card p { font-size: 14px; line-height: 1.65; color: var(--ink-soft); }
+
+  /* list */
+  .checklist { list-style: none; }
+  .checklist li { font-size: 16px; line-height: 1.7; padding-left: 28px; position: relative; color: var(--ink); margin-bottom: 6px; }
+  .checklist li::before { content: ""; position: absolute; left: 0; top: 11px; width: 14px; height: 14px; border: 2px solid var(--warm-deep); border-radius: 3px; background: var(--warm-glow); }
+  .checklist li strong { color: var(--ink); }
+
+  /* quote */
+  .quote { background: var(--ink); color: var(--paper); padding: 28px 32px; border-radius: 10px; font-size: 18px; line-height: 1.7; font-style: italic; position: relative; }
+  .quote::before { content: """; position: absolute; top: -10px; left: 20px; font-size: 64px; color: var(--warm); font-family: Georgia, serif; line-height: 1; }
+  .quote .attr { display: block; margin-top: 12px; font-size: 13px; color: var(--warm-glow); font-style: normal; letter-spacing: 0.2em; }
+
+  /* table */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--rule); }
+  th { background: var(--paper-2); font-weight: 700; color: var(--ink); letter-spacing: 0.05em; }
+  td { color: var(--ink-soft); }
+  td:first-child { color: var(--ink); font-weight: 600; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-family: "SF Mono", "Menlo", monospace; background: var(--warm-glow); color: var(--ink); letter-spacing: 0.1em; }
+
+  /* code block */
+  pre { background: var(--ink); color: #d9c8a8; padding: 18px 22px; border-radius: 8px; font-size: 13px; line-height: 1.7; font-family: "SF Mono", "Menlo", "Consolas", monospace; overflow-x: auto; white-space: pre-wrap; }
+  pre .key { color: var(--warm-glow); }
+  pre .val { color: #b8e0c8; }
+  pre .cmt { color: #6f6452; font-style: italic; }
+
+  /* metrics */
+  .metric { text-align: center; padding: 16px 8px; }
+  .metric .num { font-size: 56px; font-weight: 700; color: var(--warm-deep); line-height: 1; font-family: "SF Mono", "Menlo", monospace; }
+  .metric .lbl { font-size: 12px; color: var(--ink-soft); margin-top: 6px; letter-spacing: 0.1em; }
+
+  /* nav */
+  .nav { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(26,20,16,0.92); color: var(--paper); padding: 10px 18px; border-radius: 999px; display: flex; gap: 14px; align-items: center; z-index: 100; font-size: 13px; backdrop-filter: blur(8px); }
+  .nav button { background: transparent; border: 1px solid var(--paper-2); color: var(--paper); padding: 5px 14px; border-radius: 999px; cursor: pointer; font-family: inherit; font-size: 12px; }
+  .nav button:hover { background: var(--warm); border-color: var(--warm); }
+  .nav .counter { font-family: "SF Mono", "Menlo", monospace; color: var(--warm-glow); min-width: 56px; text-align: center; }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .nav { display: none; }
+    .slide { display: block !important; margin: 0; box-shadow: none; border-radius: 0; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ============== 1. COVER ============== -->
+  <section class="slide cover active" data-num="01">
+    <div class="poster" style="background-image: url('poster-16x9.png');"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <div>
+        <div class="eyebrow">腾讯云黑客松 40 · 叙事剧情游戏 · AI CAN DO IT</div>
+        <h1>最后的书店</h1>
+        <div class="en">The Last Bookstore</div>
+      </div>
+      <div class="tag">
+        <span class="accent">在熄灭的时代，</span>为你留一盏灯<br>
+        <span style="opacity:0.6; font-size:14px; margin-top:14px; display:block; letter-spacing:0.15em;">作品介绍 + AI 使用说明 · 2026.06</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 2. 作品背景 ============== -->
+  <section class="slide" data-num="02">
+    <div class="page-tag">01 · BACKGROUND</div>
+    <div class="page-rule"></div>
+    <div class="body">
+      <h2><span class="small">作品背景</span>大断联之后，<br>旧书店成为最后的精神灯塔</h2>
+      <div class="lede">在「断联」灾变后第 17 年，互联网络全面崩溃，物理纸张成为稀缺品。<br>中国北方一座小镇上，65 岁的守书店人守着最后一家旧书店，<br>用每一本旧书、每一次对话，为前来敲门的人重燃对生活的希望。</div>
+      <div class="content-block grid-2" style="grid-template-columns: 1.4fr 1fr;">
+        <div class="quote">
+          昨天夜里，断联第 17 年的第一场雪落下来了。我把店里的灯又拧亮了一档 ——<br>门铃坏了十几年，没修；可灯一直亮着，亮着，亮着，就是为了让那些在雪里走累了的人，知道还有一处地方，可以停下来。
+          <span class="attr">— 守书店人 · 第 1 天</span>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:14px;">
+            <div class="kicker">GENRE</div>
+            <h3>叙事剧情 · 治愈向</h3>
+            <p>不是 RPG，不是 AVG —— 是「为别人点亮一盏灯」的角色扮演。每天接待不同的来客，理解他们，推荐一本书。</p>
+          </div>
+          <div class="card">
+            <div class="kicker">PLATFORM</div>
+            <h3>纯 Web · 零安装</h3>
+            <p>单页 HTML + CSS + JS，无构建，GitHub Pages 即可玩。键盘 + 鼠标，单局 20-30 分钟。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">02 / 09</div>
+  </section>
+
+  <!-- ============== 3. 玩法 ============== -->
+  <section class="slide" data-num="03">
+    <div class="page-tag">02 · GAMEPLAY</div>
+    <div class="page-rule"></div>
+    <div class="body">
+      <h2><span class="small">核心玩法</span>听 · 选 · 荐 · 续<br>四步一轮，七天闭环</h2>
+      <div class="lede">玩家每天接待一位来客：门铃响起、走进书店、说出自己的故事；<br>玩家倾听后从 24 本书中选一本推荐，NPC 给出真实反应；夜间结算希望值，第七天迎来结局。</div>
+      <div class="content-block">
+        <div class="grid-4">
+          <div class="card" style="border-left-color: #8b5a2b;">
+            <div class="kicker">STEP 1 · 听</div>
+            <h3>门铃</h3>
+            <p>来客推门进来。玩家既可点预设选项，也可自由输入文本 —— AI 解析情绪。</p>
+          </div>
+          <div class="card" style="border-left-color: #c89a5b;">
+            <div class="kicker">STEP 2 · 选</div>
+            <h3>选书</h3>
+            <p>24 本书按文学/哲学/心理/社科分类陈列。AI 给每本书生成「为什么是这本书」的理由。</p>
+          </div>
+          <div class="card" style="border-left-color: #d4a574;">
+            <div class="kicker">STEP 3 · 荐</div>
+            <h3>推荐</h3>
+            <p>AI 模拟 NPC 真实反应：惊喜 / 犹豫 / 释然 / 拒绝。每一次推荐都会改写希望值与声誉。</p>
+          </div>
+          <div class="card" style="border-left-color: #f4c97a;">
+            <div class="kicker">STEP 4 · 续</div>
+            <h3>夜读</h3>
+            <p>店主在炉火旁写日记。AI 根据当日所有变量生成一段独白，开启下一天。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">03 / 09</div>
+  </section>
+
+  <!-- ============== 4. 4 结局 ============== -->
+  <section class="slide" data-num="04">
+    <div class="page-tag">03 · ENDINGS</div>
+    <div class="page-rule"></div>
+    <div class="body">
+      <h2><span class="small">多结局设计</span>四种结局<br>取决于你点亮了几盏灯</h2>
+      <div class="lede">不是非黑即白。第七天到来时，根据 7 天的希望值、声誉、完美推荐次数、是否接待过「旅人」，触发不同结局。</div>
+      <div class="content-block">
+        <table>
+          <thead>
+            <tr><th>结局</th><th>名称</th><th>触发条件</th><th>含义</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pill">NORMAL</span></td>
+              <td>平凡日子</td>
+              <td>hope 40-60</td>
+              <td>书店仍是小镇里一个普通的存在 —— 可这就是生活原本的样子</td>
+            </tr>
+            <tr>
+              <td><span class="pill">GOOD</span></td>
+              <td>守望者</td>
+              <td>hope 60-80</td>
+              <td>有些来客变成了常客，每周三会来借同一本书。书店成了他们的客厅</td>
+            </tr>
+            <tr>
+              <td><span class="pill">TRUE</span></td>
+              <td>点燃希望</td>
+              <td>days ≥ 6 + hope ≥ 80 + 完美推荐 ≥ 4 + 旅人来过</td>
+              <td>镇上的孩子们开始组读书会。书店从「最后」变成了「第一间」</td>
+            </tr>
+            <tr>
+              <td><span class="pill" style="background:#8b5a2b; color:#f4c97a;">HIDDEN</span></td>
+              <td>最后的读者</td>
+              <td>days ≥ 7 + hope ≥ 60 + 完美推荐 ≥ 5 + 旅人来过</td>
+              <td>「旅人」留下了。你在书店的第七夜，读完了他带来的那本未完的书</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="page-num">04 / 09</div>
+  </section>
+
+  <!-- ============== 5. AI 集成总览 ============== -->
+  <section class="slide" data-num="05">
+    <div class="page-tag">04 · AI INTEGRATION</div>
+    <div class="page-rule"></div>
+    <div class="body">
+      <h2><span class="small">AI 使用说明 · 总览</span>5 大 AI 集成点<br>让 NPC 真正「听懂」玩家</h2>
+      <div class="lede">本作品在 <strong>5 个独立环节</strong> 用到生成式 AI，覆盖「游戏内」与「创作期」两条线。<br>每条都 wrap 8s timeout + 关键词 fallback —— 离线也能玩，AI 关掉就是完整预设游戏。</div>
+      <div class="content-block">
+        <div class="grid-2" style="grid-template-columns: 1fr 1fr;">
+          <div class="card">
+            <div class="kicker">01 · 游戏中 · NPC 对话</div>
+            <h3>NPC 自由对话 + 情绪识别</h3>
+            <p>玩家不限于点选项，可自由输入。LLM（qwen-plus）解析为 8 类情绪标签 → 触发不同分支。80 词关键词词典 cover 80% 输入。</p>
+          </div>
+          <div class="card">
+            <div class="kicker">02 · 游戏中 · 作者灵魂</div>
+            <h3>与「书的作者」对话</h3>
+            <p>玩家可在书详情页与「作者」对话。基于书籍主题、时代背景模拟口吻（圣埃克苏佩里/卡夫卡/鲁迅等）。每本书 8 条典型台词 fallback。</p>
+          </div>
+          <div class="card">
+            <div class="kicker">03 · 游戏中 · 店主日记</div>
+            <h3>每日店主日记生成</h3>
+            <p>夜间结算时，AI 根据当日 hope/声誉/服务对象/推荐结果生成 80-120 字治愈向日记。12 段模板 fallback。</p>
+          </div>
+          <div class="card">
+            <div class="kicker">04 · 游戏中 · 匹配理由</div>
+            <h3>「为什么是这本书」</h3>
+            <p>推荐瞬间 AI 生成情感化理由，分类（文学/哲学/心理/社科）× NPC 标签查表法 fallback。</p>
+          </div>
+          <div class="card" style="grid-column: 1 / 3; border-left-color: var(--warm-deep); background: var(--paper-2);">
+            <div class="kicker">05 · 创作期 · 资产管线</div>
+            <h3>AI 出图 + AI 出音乐</h3>
+            <p>matrix MCP 统一风格指令（"电影感暖色 / 北方小镇 / 1990s 怀旧 / 治愈向"），3 轮 prompt 迭代出 6 张 NPC 立绘、24 张书封面、4 张场景图、4 段 BGM、4 段 SFX。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">05 / 09</div>
+  </section>
+
+  <!-- ============== 6. Prompt 工程样本 ============== -->
+  <section class="slide" data-num="06">
+    <div class="page-tag">05 · PROMPT</div>
+    <div class="page-rule"></div>
+    <div class="body">
+      <h2><span class="small">Prompt 工程样本</span>统一风格指令<br>3 轮迭代收敛</h2>
+      <div class="lede">所有 AI 生成遵循同一套风格锚点。下表是创作期实际使用过的 prompt 样本（节选自 <code>ai.js</code> 与 <code>docs/AI-CREATION.md</code>）。</div>
+      <div class="content-block grid-2" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <div style="font-size:13px; color:var(--ink-soft); letter-spacing:0.15em; margin-bottom:8px; font-family:'SF Mono', monospace;">PROMPT · NPC 立绘</div>
+          <pre><span class="cmt">// 35 岁年轻母亲</span>
+电影感半身像，中国北方小镇 1990 年代风格，
+35 岁年轻母亲，<span class="key">疲惫但眼神温柔</span>，
+穿着素色棉麻衣服，<span class="val">下午斜阳从木窗透入</span>，
+背景是模糊的旧书店。
+半真实半插画风格，暖色调，高精度，4K
+--ar <span class="key">1:1</span> --v <span class="val">6.0</span></pre>
+        </div>
+        <div>
+          <div style="font-size:13px; color:var(--ink-soft); letter-spacing:0.15em; margin-bottom:8px; font-family:'SF Mono', monospace;">PROMPT · 店主日记</div>
+          <pre><span class="cmt">// 65 岁守书店人，每天独白</span>
+你是一个中国北方小镇老书店的老板，已经 65 岁了。
+今天的希望值是 <span class="key">{hope}</span>/100，声誉是 <span class="val">{rep}</span>。
+今天接待了 <span class="key">{npcNames}</span>，推荐了 <span class="val">{books}</span>。
+请你写一段 <span class="key">80-120 字</span>的日记，
+治愈、温暖、有人生感悟，
+用"<span class="val">我</span>"的口吻，偶尔有怀旧细节。</pre>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">06 / 09</div>
+  </section>
+
+  <!-- ============== 7. 可量化 ============== -->
+  <section class="slide" data-num="07">
+    <div class="page-tag">06 · METRICS</div>
+    <div class="page-rule"></div>
+    <div class="body">
+      <h2><span class="small">可量化指标</span>AI 让内容<br>从「树」变成「林」</h2>
+      <div class="lede">传统线性剧情游戏靠预设分支覆盖所有路径；本作品用 AI 把「可玩内容」从分支数级提升到组合数级。</div>
+      <div class="content-block">
+        <div class="grid-4" style="margin-bottom: 28px;">
+          <div class="metric"><div class="num">252</div><div class="lbl">可触发剧情点<br>6 NPC × 14 句 × 3 选项</div></div>
+          <div class="metric"><div class="num">192</div><div class="lbl">作者备用台词<br>24 本书 × 8 条</div></div>
+          <div class="metric"><div class="num">21</div><div class="lbl">日记（按路径生成）<br>7 天 × 3 段</div></div>
+          <div class="metric"><div class="num">38</div><div class="lbl">AI 出资产<br>图 × 34 + 音频 × 8</div></div>
+        </div>
+        <div class="grid-2" style="grid-template-columns: 1fr 1fr;">
+          <div class="card" style="border-left-color: #8b5a2b;">
+            <div class="kicker">EFFICIENCY</div>
+            <h3>AI 出图效率</h3>
+            <p>传统 1 张立绘 ≈ 1 天（外包）<br>AI ≈ <strong>3 分钟 / 张</strong>（3 轮 prompt 迭代）<br>整体资产制作 <strong>提速约 150×</strong></p>
+          </div>
+          <div class="card" style="border-left-color: var(--warm-deep);">
+            <div class="kicker">FALLBACK</div>
+            <h3>离线优先策略</h3>
+            <p>所有 AI 调用 wrap 8s timeout<br>失败即走 fallback<br>玩家<strong>无网络也能完整体验</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">07 / 09</div>
+  </section>
+
+  <!-- ============== 8. 伦理与边界 ============== -->
+  <section class="slide" data-num="08">
+    <div class="page-tag">07 · ETHICS</div>
+    <div class="page-rule"></div>
+    <div class="body">
+      <h2><span class="small">伦理与边界</span>AI 用得克制<br>因为这本来就该是一场温柔的相遇</h2>
+      <div class="lede">我们不希望「AI 用得多」变成目的；本作品对 AI 的依赖刻意控制在「锦上添花」级别 —— 关掉 AI，游戏依然成立。</div>
+      <div class="content-block">
+        <ul class="checklist">
+          <li><strong>离线优先</strong>：所有 AI 调用 wrap 8s timeout，失败即走 fallback。无网络也能完整通关。</li>
+          <li><strong>隐私不上传</strong>：玩家对话记录仅存浏览器 <code>localStorage</code>，不向任何服务器回传。</li>
+          <li><strong>可关闭</strong>：<code>AI.config.enabled = false</code> 一键关闭，回到纯预设剧情游戏。</li>
+          <li><strong>风格一致性</strong>：所有 prompt 锚定同一组关键词（"电影感暖色 / 北方小镇 / 1990s 怀旧 / 治愈向"），避免生成风格漂移。</li>
+          <li><strong>不生成敏感内容</strong>：NPC 提示词中明确拒绝暴力、歧视、情色、政治立场输出。</li>
+          <li><strong>作者灵魂不冒犯</strong>：作者对话模块对真实人物（卡夫卡、鲁迅、圣埃克苏佩里等）只做「风格化致敬」，不输出虚假语录 / 言论。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="page-num">08 / 09</div>
+  </section>
+
+  <!-- ============== 9. END ============== -->
+  <section class="slide cover" data-num="09">
+    <div class="poster" style="background-image: url('poster-16x9.png');"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <div>
+        <div class="eyebrow">THANK YOU</div>
+        <h1 style="font-size: 72px;">感谢聆听</h1>
+        <div class="en" style="font-size: 18px; opacity: 0.8;">The Last Bookstore · Tencent Cloud Hackathon 40</div>
+      </div>
+      <div class="tag">
+        <span class="accent">在线试玩</span><br>
+        swording-k.github.io/the-last-bookstore<br>
+        <span style="opacity:0.6; font-size:14px; margin-top:14px; display:block; letter-spacing:0.15em;">QQ / WeChat: swording · 2026.06</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button onclick="prev()">← Prev</button>
+  <span class="counter"><span id="cur">1</span> / 9</span>
+  <button onclick="next()">Next →</button>
+  <button onclick="window.print()" style="border-color: var(--warm-glow); color: var(--warm-glow);">Print / PDF</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let cur = 0;
+  function show(i) {
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    document.getElementById('cur').textContent = i + 1;
+    cur = i;
+  }
+  function next() { show(Math.min(cur + 1, slides.length - 1)); }
+  function prev() { show(Math.max(cur - 1, 0)); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+  });
+</script>
+
+</body>
+</html>

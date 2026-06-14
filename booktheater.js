@@ -22,9 +22,9 @@ var BookTheater = {
   _typingDone: false,
 
   /* ==========================================================
-     打开剧场 — 显示角色选择界面
+     打开剧场 — 如果传入 character，跳过选择界面
      ========================================================== */
-  open: function(book) {
+  open: function(book, preSelectedCharacter) {
     if (!book || !book.bookWorld) return;
     this._book = book;
     this._world = JSON.parse(JSON.stringify(book.bookWorld));
@@ -50,7 +50,12 @@ var BookTheater = {
     var self = this;
     requestAnimationFrame(function() {
       modal.classList.add('bt-entered');
-      self._showSelect();
+      // 如果已预选角色，直接开始剧情；否则显示选择界面
+      if (preSelectedCharacter && preSelectedCharacter.storyline) {
+        self._startStory(preSelectedCharacter);
+      } else {
+        self._showSelect();
+      }
     });
   },
 

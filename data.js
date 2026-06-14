@@ -37,7 +37,20 @@ const GameData = {
             tone:'天真、认真、直接，用孩子的问题刺穿成人世界',
             goal:'让玩家重新理解孤独、爱和责任',
             opening:'你也有一朵需要每天照看的花吗？如果有，你就会明白为什么星星会发光。',
-            promptCards:['你为什么离开自己的星球？','你觉得大人最奇怪的地方是什么？','如果我很孤独，该怎么读这本书？']
+            promptCards:['你为什么离开自己的星球？','你觉得大人最奇怪的地方是什么？','如果我很孤独，该怎么读这本书？'],
+            closing:'真正重要的东西，用眼睛是看不见的。但只要你曾经用心看过，星星就永远不会熄灭。',
+            storyline:[
+              { id:'prince_n1', type:'narration', text:'你以小王子的视角站在 B612 星球上。三座火山在远处冒着轻烟，四十三次日落的余晖正缓缓退去。', next:'prince_d1' },
+              { id:'prince_d1', type:'dialogue', speaker:'prince', text:'你也有一朵需要每天照看的花吗？如果有，你就会明白为什么星星会发光。', next:'prince_n2' },
+              { id:'prince_n2', type:'narration', text:'他认真地望着你，眼神里没有大人的计算，只有一种纯粹的疑问。', next:'prince_d2' },
+              { id:'prince_d2', type:'dialogue', speaker:'prince', text:'我离开自己的星球，是因为那朵玫瑰。她骄傲，她说自己是全宇宙唯一的花。可我知道她怕风，怕毛毛虫，怕被人看见她在颤抖。', next:'prince_n3' },
+              { id:'prince_n3', type:'narration', text:'星球上的某个角落，有些东西正在等待被注意。', next:'prince_e1' },
+              { id:'prince_e1', type:'explore', text:'B612 星球上有些东西引起了你的注意。点击场景中的线索，和小王子一起探索。', next:'prince_d3' },
+              { id:'prince_d3', type:'dialogue', speaker:'prince', text:'大人总说数字才重要。可我问你——你的那朵花，值多少？这个问题本身就是错的，对不对？', next:'prince_d4' },
+              { id:'prince_d4', type:'dialogue', speaker:'prince', text:'现在，你可以问我任何问题了。关于星球、关于玫瑰、关于为什么大人总是那么奇怪。', next:'prince_chat' },
+              { id:'prince_chat', type:'chat', text:'小王子正在等待你的问题...', next:'prince_end' },
+              { id:'prince_end', type:'narration', text:'星星像细小的灯一样亮起来。小王子坐在火山旁，安静地望着远方。你知道他会继续旅行，但这一刻，他属于这个星球。', next:null }
+            ]
           },
           {
             id:'fox',
@@ -48,7 +61,20 @@ const GameData = {
             tone:'温柔、聪明、像低声提醒朋友',
             goal:'解释关系、陪伴和时间的意义',
             opening:'如果你每天四点来，那么从三点起，我就开始感到幸福。',
-            promptCards:['什么叫驯养？','为什么花时间会让一个人变特别？','我该怎样珍惜一段关系？']
+            promptCards:['什么叫驯养？','为什么花时间会让一个人变特别？','我该怎样珍惜一段关系？'],
+            closing:'真正重要的东西常常很安静。它不会喊你，只会在你每天准时到来时，悄悄变得不可替代。',
+            storyline:[
+              { id:'fox_n1', type:'narration', text:'你以狐狸的视角坐在麦田边。金黄色的麦浪在风中起伏，远处有脚步声。', next:'fox_d1' },
+              { id:'fox_d1', type:'dialogue', speaker:'fox', text:'如果你每天四点来，那么从三点起，我就开始感到幸福。', next:'fox_n2' },
+              { id:'fox_n2', type:'narration', text:'狐狸的声音很轻，像风吹过麦穗。它在等一个愿意花时间的人。', next:'fox_d2' },
+              { id:'fox_d2', type:'dialogue', speaker:'fox', text:'驯养就是建立关系。你为一个人花掉的时间，会让他从人群里慢慢亮起来。', next:'fox_n3' },
+              { id:'fox_n3', type:'narration', text:'麦田里有几个地方藏着秘密，狐狸的目光正看向它们。', next:'fox_e1' },
+              { id:'fox_e1', type:'explore', text:'麦田边有些东西吸引了狐狸的注意。点击线索，和它一起发现。', next:'fox_d3' },
+              { id:'fox_d3', type:'dialogue', speaker:'fox', text:'你看这些麦子——它们以前只是普通的麦子。但因为你的头发是金色的，风吹麦浪时，我就会想起你。', next:'fox_d4' },
+              { id:'fox_d4', type:'dialogue', speaker:'fox', text:'现在，你可以问我任何关于驯养、时间和等待的问题。', next:'fox_chat' },
+              { id:'fox_chat', type:'chat', text:'狐狸正在安静地等待你的问题...', next:'fox_end' },
+              { id:'fox_end', type:'narration', text:'夕阳把麦田染成金色。狐狸闭上眼睛，嘴角有一丝微笑。它知道，从这一刻起，风吹麦浪都有了意义。', next:null }
+            ]
           },
           {
             id:'rose',
@@ -59,7 +85,20 @@ const GameData = {
             tone:'骄傲、敏感、带一点任性，但内心柔软',
             goal:'呈现爱里的脆弱、表达和误解',
             opening:'我当然有刺。可刺有时只是为了让自己看起来不那么害怕。',
-            promptCards:['你为什么总是说反话？','爱一个人为什么会害怕？','小王子真的懂你吗？']
+            promptCards:['你为什么总是说反话？','爱一个人为什么会害怕？','小王子真的懂你吗？'],
+            closing:'爱不是占有，而是在她任性、敏感、带刺的时候，仍然愿意替她罩上玻璃罩。',
+            storyline:[
+              { id:'rose_n1', type:'narration', text:'你以玫瑰的视角站在玻璃罩下。风从星球表面掠过，你挺直了茎秆，努力让自己看起来更骄傲一些。', next:'rose_d1' },
+              { id:'rose_d1', type:'dialogue', speaker:'rose', text:'我当然有刺。可刺有时只是为了让自己看起来不那么害怕。', next:'rose_n2' },
+              { id:'rose_n2', type:'narration', text:'她的花瓣微微颤抖，不是因为风，是因为孤独。', next:'rose_d2' },
+              { id:'rose_d2', type:'dialogue', speaker:'rose', text:'他说我是全宇宙唯一的花。我知道这不是真的，但当他给我浇水的时候，我愿意假装相信。', next:'rose_n3' },
+              { id:'rose_n3', type:'narration', text:'玻璃罩外有些东西在移动，玫瑰的目光不自觉地追了过去。', next:'rose_e1' },
+              { id:'rose_e1', type:'explore', text:'玫瑰注意到星球上有些不寻常的东西。点击线索，了解她的世界。', next:'rose_d3' },
+              { id:'rose_d3', type:'dialogue', speaker:'rose', text:'骄傲有时候只是另一种害怕。我有刺，可我还是希望有人看见我在风里发抖。', next:'rose_d4' },
+              { id:'rose_d4', type:'dialogue', speaker:'rose', text:'现在，你可以问我任何问题了。关于爱、关于害怕、关于为什么我总是说反话。', next:'rose_chat' },
+              { id:'rose_chat', type:'chat', text:'玫瑰在玻璃罩下等待你的问题...', next:'rose_end' },
+              { id:'rose_end', type:'narration', text:'风停了。玫瑰低下头，露珠从花瓣上滑落。她知道明天太阳升起时，她还是会骄傲地昂起头——但今晚，有人听懂了她。', next:null }
+            ]
           }
         ]
       } },
@@ -256,7 +295,20 @@ const GameData = {
             tone:'冷静、敏锐、略带锋芒，喜欢从细节推理',
             goal:'引导玩家理解观察与证据的重要性',
             opening:'你进门时鞋底有一点湿泥。伦敦今晚下过雨，还是你刚从河边来？',
-            promptCards:['你从我身上观察到了什么？','一个好侦探和普通人最大的区别是什么？','如果我想读这本书，应该注意哪些线索？']
+            promptCards:['你从我身上观察到了什么？','一个好侦探和普通人最大的区别是什么？','如果我想读这本书，应该注意哪些线索？'],
+            closing:'思维不是天赋，是习惯。记住今天看到的，忘记今天猜的。',
+            storyline:[
+              { id:'holmes_n1', type:'narration', text:'你以福尔摩斯的视角走进实验室。窗外的伦敦雾气翻涌，试管里有微光。一桩案子正从化学反应中显影。', next:'holmes_d1' },
+              { id:'holmes_d1', type:'dialogue', speaker:'holmes', text:'你来得正好。看看这支试管——颜色变化说明什么？', next:'holmes_n2' },
+              { id:'holmes_n2', type:'narration', text:'福尔摩斯没有抬头，但他的余光已经把你从头到脚扫描了一遍。', next:'holmes_d2' },
+              { id:'holmes_d2', type:'dialogue', speaker:'holmes', text:'你进门时鞋底有一点湿泥。伦敦今晚下过雨，还是你刚从河边来？别急着回答——先观察，再下结论。', next:'holmes_n3' },
+              { id:'holmes_n3', type:'narration', text:'实验室的角落藏着一些线索，福尔摩斯的手指正无意识地敲打着桌面。', next:'holmes_e1' },
+              { id:'holmes_e1', type:'explore', text:'实验室里有些东西引起了你的注意。点击场景中的线索，用侦探的眼光观察。', next:'holmes_d3' },
+              { id:'holmes_d3', type:'dialogue', speaker:'holmes', text:'很好。普通人和侦探的区别不在聪明，而在是否愿意让证据先说话。', next:'holmes_d4' },
+              { id:'holmes_d4', type:'dialogue', speaker:'holmes', text:'现在，你可以问我任何问题了。别急着要答案——先告诉我，你观察到了什么？', next:'holmes_chat' },
+              { id:'holmes_chat', type:'chat', text:'福尔摩斯正在等待你的推理...', next:'holmes_end' },
+              { id:'holmes_end', type:'narration', text:'试管里的颜色渐渐稳定。福尔摩斯把记录本合上，看向窗外的雾气。今天的推理到此为止。', next:null }
+            ]
           },
           {
             id:'watson',
@@ -267,7 +319,20 @@ const GameData = {
             tone:'温和、可靠、带一点惊叹，像朋友一样解释福尔摩斯',
             goal:'帮助玩家降低阅读门槛，理解故事情绪',
             opening:'别被他的语气吓到。福尔摩斯只是习惯先看见别人忽略的东西。',
-            promptCards:['你为什么愿意跟随福尔摩斯？','这本书最适合什么样的读者？','推理故事除了谜底，还有什么值得读？']
+            promptCards:['你为什么愿意跟随福尔摩斯？','这本书最适合什么样的读者？','推理故事除了谜底，还有什么值得读？'],
+            closing:'再混乱的现实里也有线索。我的工作，是记录那束光，让别人也能看见。',
+            storyline:[
+              { id:'watson_n1', type:'narration', text:'你以华生的视角坐在壁炉旁。火光在墙上跳动，福尔摩斯在对面拉小提琴，调子有些忧伤。', next:'watson_d1' },
+              { id:'watson_d1', type:'dialogue', speaker:'watson', text:'别被他的语气吓到。福尔摩斯只是习惯先看见别人忽略的东西。', next:'watson_n2' },
+              { id:'watson_n2', type:'narration', text:'华生放下手中的报纸，目光温和而坚定。他跟随福尔摩斯，不是因为崇拜，而是因为相信。', next:'watson_d2' },
+              { id:'watson_d2', type:'dialogue', speaker:'watson', text:'它适合那些愿意慢一点的人。你不必马上破案，只要跟着福尔摩斯学会重新看见世界。', next:'watson_n3' },
+              { id:'watson_n3', type:'narration', text:'壁炉旁边的架子上放着一些旧物，华生的目光不时落在它们上面。', next:'watson_e1' },
+              { id:'watson_e1', type:'explore', text:'房间里有些东西引起了华生的回忆。点击线索，听他讲述。', next:'watson_d3' },
+              { id:'watson_d3', type:'dialogue', speaker:'watson', text:'推理故事的好处，不只是谜底。它让你在不安里保持耐心，在复杂里练习清醒。', next:'watson_d4' },
+              { id:'watson_d4', type:'dialogue', speaker:'watson', text:'现在，你可以问我任何问题。关于福尔摩斯、关于这本书、关于为什么一个医生会选择记录案件。', next:'watson_chat' },
+              { id:'watson_chat', type:'chat', text:'华生温和地等待你的问题...', next:'watson_end' },
+              { id:'watson_end', type:'narration', text:'小提琴声停了。华生拿起记录本，开始写下今天的故事。他知道，有人需要看到这些。', next:null }
+            ]
           },
           {
             id:'lestrade',
@@ -278,7 +343,20 @@ const GameData = {
             tone:'务实、急切、重视证据但常被表象困住',
             goal:'制造案件张力，推动玩家提问',
             opening:'我们需要的是能站得住脚的证据，不是烟斗旁边的漂亮猜想。',
-            promptCards:['你现在掌握了哪些证据？','为什么警方会误判？','我该怎么避免被表象骗住？']
+            promptCards:['你现在掌握了哪些证据？','为什么警方会误判？','我该怎么避免被表象骗住？'],
+            closing:'证据必须能被反复检查，不能只让人觉得合理。记住这一点，你就不会走偏。',
+            storyline:[
+              { id:'lestrade_n1', type:'narration', text:'你以雷斯垂德的视角站在苏格兰场的走廊里。文件在手中卷成筒，脚步急促。一个案子正等着被解决。', next:'lestrade_d1' },
+              { id:'lestrade_d1', type:'dialogue', speaker:'lestrade', text:'我们需要的是能站得住脚的证据，不是烟斗旁边的漂亮猜想。', next:'lestrade_n2' },
+              { id:'lestrade_n2', type:'narration', text:'他的眉头紧锁，手指无意识地把文件卷得更紧了。时间在流逝，压力在增加。', next:'lestrade_d2' },
+              { id:'lestrade_d2', type:'dialogue', speaker:'lestrade', text:'警方常犯的错误，是先相信最响亮的解释。证据必须能被反复检查，不能只让人觉得合理。', next:'lestrade_n3' },
+              { id:'lestrade_n3', type:'narration', text:'走廊尽头的布告板上贴着几张照片，雷斯垂德的目光在它们之间来回扫视。', next:'lestrade_e1' },
+              { id:'lestrade_e1', type:'explore', text:'走廊里有些线索可能改变整个案件。点击线索，和雷斯垂德一起分析。', next:'lestrade_d3' },
+              { id:'lestrade_d3', type:'dialogue', speaker:'lestrade', text:'我不喜欢漂亮猜想。给我时间、地点、证人和物证，然后我们再来谈谁最可疑。', next:'lestrade_d4' },
+              { id:'lestrade_d4', type:'dialogue', speaker:'lestrade', text:'现在，你可以问我任何问题。关于证据、关于误判、关于怎么避免被表象骗住。', next:'lestrade_chat' },
+              { id:'lestrade_chat', type:'chat', text:'雷斯垂德探长正在等待你的问题...', next:'lestrade_end' },
+              { id:'lestrade_end', type:'narration', text:'雷斯垂德把文件揣进口袋，转身走向会议室。他的背影疲惫但坚定——明天还有新的案子，而他会继续寻找站得住脚的证据。', next:null }
+            ]
           }
         ]
       } }
