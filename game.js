@@ -30,7 +30,18 @@ var Game = {
     if (muteBtn) muteBtn.onclick = function() { AudioManager.toggleMute(); Renderer.updateMuteBtn(); };
     if (libraryBtn) libraryBtn.onclick = function() { Game.openLibrary(); };
     if (myStoreBtn) myStoreBtn.onclick = function() {
-      if (window.MyStore) MyStore.open();
+      console.log('[Game] MyStore button clicked');
+      if (window.MyStore) {
+        try {
+          MyStore.open();
+        } catch(e) {
+          console.error('[Game] MyStore.open() error:', e);
+          alert('打开我的书店时出错：' + e.message);
+        }
+      } else {
+        console.error('[Game] window.MyStore not found!');
+        alert('我的书店功能未加载，请刷新页面重试。');
+      }
     };
 
     // AI 自由交谈按钮
