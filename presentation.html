@@ -210,11 +210,6 @@ body {
   flex: 1; min-width: 200px;
   position: relative; overflow: hidden;
 }
-.ending-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 4px;
-}
 .ending-tag {
   font-size: 0.65rem; letter-spacing: 0.1em;
   font-weight: 700; margin-bottom: 0.6em;
@@ -331,6 +326,118 @@ body {
   margin-bottom: -1vmin; font-weight: 300;
 }
 
+/* ════════════════ VN Layout Demo ════════════════ */
+.vn-demo {
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(212,165,116,0.3);
+  position: relative;
+}
+.vn-left {
+  width: 45%;
+  background: linear-gradient(135deg, #1a1008 0%, #2a1f10 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.vn-left-inner {
+  text-align: center;
+}
+.vn-portrait-placeholder {
+  width: 120px;
+  height: 160px;
+  background: linear-gradient(180deg, #3a2a1a 0%, #2a1a0a 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  border: 1px solid rgba(212,165,116,0.3);
+  box-shadow: 0 0 30px rgba(184,132,78,0.3);
+  animation: breathe 3s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+.vn-left-label {
+  font-size: 0.7rem;
+  color: var(--golden);
+  margin-top: 0.8em;
+  letter-spacing: 0.1em;
+}
+.vn-right {
+  width: 55%;
+  background: linear-gradient(135deg, #2a1f10 0%, #1a1008 100%);
+  padding: 2vmin;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.vn-nameplate {
+  font-size: 0.8rem;
+  color: var(--tan);
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid rgba(212,165,116,0.2);
+}
+.vn-text {
+  font-size: 0.85rem;
+  color: var(--cream);
+  line-height: 1.8;
+  min-height: 80px;
+}
+.vn-hint {
+  font-size: 0.65rem;
+  color: var(--golden);
+  opacity: 0.5;
+  margin-top: 1em;
+  text-align: right;
+}
+.vn-divider {
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 45%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(212,165,116,0.3), transparent);
+}
+
+/* ════════════════ Book Theater Features ════════════════ */
+.bt-feature-grid {
+  display: flex; gap: 1.5vmin; width: 100%;
+  flex-wrap: wrap;
+}
+.bt-feature {
+  flex: 1;
+  min-width: 200px;
+  background: rgba(255,248,225,0.04);
+  border: 1px solid rgba(212,165,116,0.12);
+  border-radius: 10px;
+  padding: 1.5vmin;
+}
+.bt-feature-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5em;
+}
+.bt-feature-title {
+  font-size: 0.9rem;
+  color: var(--cream);
+  font-weight: 600;
+  margin-bottom: 0.3em;
+}
+.bt-feature-desc {
+  font-size: 0.75rem;
+  color: var(--warm-gray);
+  line-height: 1.6;
+}
+
 /* ════════════════ Navigation ════════════════ */
 #nav-dots {
   position: fixed; bottom: 3vmin; left: 50%; transform: translateX(-50%);
@@ -381,6 +488,9 @@ body {
   .tech-grid { grid-template-columns: 1fr; }
   .slide { padding: 6vmin 4vmin; }
   .section-bar { height: 28px; }
+  .vn-demo { height: 300px; flex-direction: column; }
+  .vn-left, .vn-right { width: 100%; }
+  .vn-divider { display: none; }
 }
 </style>
 </head>
@@ -391,9 +501,9 @@ body {
 
 <div id="slides">
 
-<!-- ════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════
   SLIDE 0 — 封面
-  ════════════════════════════════════════════════ -->
+  ═══════════════════════════════════════════════ -->
 <div class="slide active" data-index="0">
   <div class="bg-layer" style="background-image: url('assets/scenes/evening.png')"></div>
   <div class="bg-overlay"></div>
@@ -421,9 +531,9 @@ body {
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════
   SLIDE 1 — 故事背景
-  ════════════════════════════════════════════════ -->
+  ═══════════════════════════════════════════════ -->
 <div class="slide" data-index="1">
   <div class="bg-gradient"></div>
   <div class="slide-content">
@@ -444,15 +554,15 @@ body {
         <p><b style="color:var(--tan)">🎯 目标：</b>7 天内，为每位来访者推荐合适的书，累积希望值（Hope），改变小镇的命运。</p>
       </div>
       <div class="col-img">
-        <img src="assets/截屏2026-06-11 22.12.25.png" alt="游戏画面" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:3em;\'>🖼 游戏截图</div>'">
+        <img src="assets/screenshots-new/01-title.png" alt="标题画面">
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════
   SLIDE 2 — 核心玩法
-  ════════════════════════════════════════════════ -->
+  ═══════════════════════════════════════════════ -->
 <div class="slide" data-index="2">
   <div class="bg-gradient"></div>
   <div class="slide-content">
@@ -493,17 +603,16 @@ body {
         <div class="flow-step-desc">AI 生成店主日记<br>更新希望值</div>
       </div>
     </div>
-    <div class="ss-caption">游戏主画面预览</div>
+    <div class="ss-caption">游戏对话界面预览</div>
     <div class="col-img" style="max-width:850px;">
-      <img src="assets/截屏2026-06-11 22.12.31.png" alt="游戏主画面" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <div style="display:none;color:var(--golden);font-size:0.9em;text-align:center;padding:2em;">🖼 游戏主画面截图</div>
+      <img src="assets/screenshots-new/03-dialogue.png" alt="游戏对话画面">
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════
   SLIDE 3 — NPC 系统
-  ════════════════════════════════════════════════ -->
+  ═══════════════════════════════════════════════ -->
 <div class="slide" data-index="3">
   <div class="bg-gradient"></div>
   <div class="slide-content">
@@ -563,15 +672,15 @@ body {
         <p>Day 7 <span class="mood">坚定</span> · 最深互动 NPC 最终回访 <span class="key">终章</span></p>
       </div>
       <div class="col-img">
-        <img src="assets/截屏2026-06-11 22.12.38.png" alt="NPC 对话" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:3em;\'>🖼 NPC 对话截图</div>'">
+        <img src="assets/screenshots-new/12-npc-portrait.png" alt="NPC 对话立绘" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:3em;\'>🖼 NPC 对话立绘截图</div>'">
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════
   SLIDE 4 — 书籍推荐
-  ════════════════════════════════════════════════ -->
+  ═══════════════════════════════════════════════ -->
 <div class="slide" data-index="4">
   <div class="bg-gradient"></div>
   <div class="slide-content">
@@ -583,10 +692,10 @@ body {
     </div>
     <div class="two-col">
       <div class="col-img">
-        <img src="assets/截屏2026-06-11 22.12.55.png" alt="书架" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:3em;\'>🖼 书籍推荐截图</div>'">
+        <img src="assets/screenshots-new/05-bookshelf.png" alt="书架界面">
       </div>
       <div class="col-text" style="font-size:0.78rem;line-height:1.7;">
-        <p style="color:var(--golden);font-size:0.9rem;margin-bottom:0.8em;">📊 四大分类，每类 6 本</p>
+        <p style="color:var(--golden);font-size:0.9rem;margin-bottom:0.8em;">📚 四大分类，每类 6 本</p>
         <p><b style="color:var(--tan)">文学小说</b> — 小王子 · 挪威的森林 · 月亮与六便士 · 百年孤独 · 活着 · 局外人</p>
         <p><b style="color:var(--tan)">哲学思辨</b> — 活出生命的意义 · 悉达多 · 苏菲的世界 · 瓦尔登湖 · 被讨厌的勇气 · 沉思录</p>
         <p><b style="color:var(--tan)">心理成长</b> — 自卑与超越 · 非暴力沟通 · 也许你该找个人聊聊 · 心流 · 共情的力量 · 思考，快与慢</p>
@@ -601,15 +710,69 @@ body {
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
-  SLIDE 5 — AI 集成
-  ════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════
+  SLIDE 5 — 书中剧场 v4.0（新增）
+  ═══════════════════════════════════════════════ -->
 <div class="slide" data-index="5">
   <div class="bg-gradient"></div>
   <div class="slide-content">
     <div class="section-header">
       <span class="section-bar"></span>
       <span class="section-num">05</span>
+      <span class="section-title">书中剧场 v4.0 — 视觉小说体验</span>
+      <span class="section-sub">左立绘 + 右对话框，沉浸式进入书中世界与角色对话</span>
+    </div>
+
+    <!-- VN Layout Demo -->
+    <div class="vn-demo" style="margin-bottom: 2vmin;">
+      <div class="vn-left">
+        <div class="vn-left-inner">
+          <div class="vn-portrait-placeholder">🧑</div>
+          <div class="vn-left-label">角色立绘 · 呼吸动画</div>
+        </div>
+      </div>
+      <div class="vn-divider"></div>
+      <div class="vn-right">
+        <div class="vn-nameplate">🔊 福尔摩斯</div>
+        <div class="vn-text">"亲爱的华生，你都知道我的方法——观察，推理，再观察。这桩案子的关键在于..."</div>
+        <div class="vn-hint">▸ 点击继续...</div>
+      </div>
+    </div>
+
+    <div class="bt-feature-grid">
+      <div class="bt-feature">
+        <div class="bt-feature-icon">🎭</div>
+        <div class="bt-feature-title">写实角色立绘</div>
+        <div class="bt-feature-desc">19世纪侦探素描风格（福尔摩斯）<br>写实肖像风格（小王子角色）<br>PIL 去白底 + 呼吸/淡入动画</div>
+      </div>
+      <div class="bt-feature">
+        <div class="bt-feature-icon">🏞</div>
+        <div class="bt-feature-title">场景背景</div>
+        <div class="bt-feature-desc">每本书有专属场景图<br>贝克街221B / B612星球<br>增强沉浸感</div>
+      </div>
+      <div class="bt-feature">
+        <div class="bt-feature-icon">💬</div>
+        <div class="bt-feature-title">多角色对话</div>
+        <div class="bt-feature-desc">同一剧场可与多个角色对话<br>立绘平滑过渡<br>自由提问或卡片式快捷对话</div>
+      </div>
+      <div class="bt-feature">
+        <div class="bt-feature-icon">🤖</div>
+        <div class="bt-feature-title">AI 自由对话</div>
+        <div class="bt-feature-desc">不止预设剧情<br>和书中角色实时 AI 对话<br>有 Key 走 LLM，无 Key 有 fallback</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+  SLIDE 6 — AI 集成
+  ═══════════════════════════════════════════════ -->
+<div class="slide" data-index="6">
+  <div class="bg-gradient"></div>
+  <div class="slide-content">
+    <div class="section-header">
+      <span class="section-bar"></span>
+      <span class="section-num">06</span>
       <span class="section-title">5 大 AI 集成点</span>
       <span class="section-sub">从对话到日记，AI 贯穿游戏全流程，增强沉浸感与可重玩性</span>
     </div>
@@ -630,32 +793,27 @@ body {
         <div class="card-desc">根据当日希望值/事件<br>AI 生成治愈向日记<br>个性化叙事收尾</div>
       </div>
       <div class="card">
-        <div class="card-icon">🧠</div>
-        <div class="card-title">情感识别匹配</div>
-        <div class="card-desc">NLP 情绪意图分类<br>8 类情感标签<br>动态调整推荐逻辑</div>
-      </div>
-      <div class="card">
         <div class="card-icon">🎨</div>
         <div class="card-title">AI 素材生成</div>
-        <div class="card-desc">Matrix AI 出图/出音乐<br>6 NPC 立绘 + 24 封面<br>4 BGM + 4 SFX</div>
+        <div class="card-desc">Matrix AI 出图/出音乐<br>6 NPC 写实立绘 + 24 封面<br>4 BGM + 4 SFX<br>3 书中剧场角色立绘</div>
       </div>
     </div>
-    <div class="ss-caption">AI 自由交谈界面预览</div>
+    <div class="ss-caption">书中剧场 AI 对话界面</div>
     <div class="col-img" style="max-width:800px;">
-      <img src="assets/ai-chat-screenshot.png" alt="AI 对话" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:2em;\'>🖼 AI 对话截图</div>'">
+      <img src="assets/screenshots-new/07-book-theater.png" alt="书中剧场截图" onerror="this.parentElement.innerHTML='<div style=\'color:var(--golden);font-size:0.9em;text-align:center;padding:2em;\'>🖼 书中剧场截图</div>'">
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
-  SLIDE 6 — 叙事弧线
-  ════════════════════════════════════════════════ -->
-<div class="slide" data-index="6">
+<!-- ═══════════════════════════════════════════════
+  SLIDE 7 — 叙事弧线
+  ═══════════════════════════════════════════════ -->
+<div class="slide" data-index="7">
   <div class="bg-gradient"></div>
   <div class="slide-content">
     <div class="section-header">
       <span class="section-bar"></span>
-      <span class="section-num">06</span>
+      <span class="section-num">07</span>
       <span class="section-title">叙事设计与情感弧线</span>
       <span class="section-sub">7 天从忐忑到坚定，希望值的每一次变化都在重塑小镇的命运</span>
     </div>
@@ -676,15 +834,15 @@ body {
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
-  SLIDE 7 — 结局系统
-  ════════════════════════════════════════════════ -->
-<div class="slide" data-index="7">
+<!-- ═══════════════════════════════════════════════
+  SLIDE 8 — 结局系统
+  ═══════════════════════════════════════════════ -->
+<div class="slide" data-index="8">
   <div class="bg-gradient"></div>
   <div class="slide-content">
     <div class="section-header">
       <span class="section-bar"></span>
-      <span class="section-num">07</span>
+      <span class="section-num">08</span>
       <span class="section-title">4 种结局 · 多重命运</span>
       <span class="section-sub">你的每一个选择都在书写小镇的结局，重玩可解锁不同命运线</span>
     </div>
@@ -717,15 +875,15 @@ body {
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
-  SLIDE 8 — 技术架构
-  ════════════════════════════════════════════════ -->
-<div class="slide" data-index="8">
+<!-- ═══════════════════════════════════════════════
+  SLIDE 9 — 技术架构
+  ═══════════════════════════════════════════════ -->
+<div class="slide" data-index="9">
   <div class="bg-gradient"></div>
   <div class="slide-content">
     <div class="section-header">
       <span class="section-bar"></span>
-      <span class="section-num">08</span>
+      <span class="section-num">09</span>
       <span class="section-title">技术架构与亮点</span>
       <span class="section-sub">零构建 · 纯前端 · 离线可玩 · AI 深度集成</span>
     </div>
@@ -734,7 +892,7 @@ body {
       <div class="arch-block">Renderer<br><span style="font-size:0.65rem;color:var(--warm-gray)">渲染层</span></div>
       <div class="arch-block">Game<br><span style="font-size:0.65rem;color:var(--warm-gray)">控制器</span></div>
       <div class="arch-block">AI<br><span style="font-size:0.65rem;color:var(--warm-gray)">LLM 层</span></div>
-      <div class="arch-block">Scene<br><span style="font-size:0.65rem;color:var(--warm-gray)">场景特效</span></div>
+      <div class="arch-block">BookTheater<br><span style="font-size:0.65rem;color:var(--warm-gray)">VN 引擎</span></div>
       <div class="arch-block">Audio<br><span style="font-size:0.65rem;color:var(--warm-gray)">音乐音效</span></div>
     </div>
     <div class="arch-bar">
@@ -753,28 +911,18 @@ body {
       </div>
       <div class="tech-item">
         <span class="tech-bullet">▸</span>
-        <span class="tech-label">状态机驱动</span>
-        <span class="tech-desc">Engine → Renderer → Game 三层解耦</span>
+        <span class="tech-label">VN 状态机</span>
+        <span class="tech-desc">booktheater.js 驱动左立绘+右对话布局</span>
       </div>
       <div class="tech-item">
         <span class="tech-bullet">▸</span>
-        <span class="tech-label">数据不可变</span>
-        <span class="tech-desc">对话推进深拷贝 NPC，保护源数据</span>
+        <span class="tech-label">立绘动态效果</span>
+        <span class="tech-desc">CSS 呼吸动画 + 淡入效果 + 双层阴影</span>
       </div>
       <div class="tech-item">
         <span class="tech-bullet">▸</span>
         <span class="tech-label">localStorage 存档</span>
         <span class="tech-desc">3 槽存档 + 自动保存机制</span>
-      </div>
-      <div class="tech-item">
-        <span class="tech-bullet">▸</span>
-        <span class="tech-label">动态场景特效</span>
-        <span class="tech-desc">40 颗 CSS 粒子 + 4 时段渐变切换</span>
-      </div>
-      <div class="tech-item">
-        <span class="tech-bullet">▸</span>
-        <span class="tech-label">响应式音频</span>
-        <span class="tech-desc">4 BGM cross-fade + 4 SFX</span>
       </div>
       <div class="tech-item">
         <span class="tech-bullet">▸</span>
@@ -788,10 +936,10 @@ body {
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════
-  SLIDE 9 — 感谢
-  ════════════════════════════════════════════════ -->
-<div class="slide" data-index="9">
+<!-- ═══════════════════════════════════════════════
+  SLIDE 10 — 感谢
+  ═══════════════════════════════════════════════ -->
+<div class="slide" data-index="10">
   <div class="bg-layer" style="background-image: url('assets/scenes/evening.png')"></div>
   <div class="bg-overlay"></div>
   <div class="slide-content" style="text-align:center">
