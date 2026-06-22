@@ -10,7 +10,7 @@
 
 （Vercel 正式版，包含服务器端 MiniMax 实时对话；浏览器直接打开，无需配置 API Key。）
 
-静态备份：<https://swording-k.github.io/the-last-bookstore/>（游戏可玩，AI 请求失败时自动使用本地 fallback。）
+静态备份：<https://swording-k.github.io/the-last-bookstore/>（游戏可玩；AI 请求通过 Vercel Serverless 代理转发，无需配置 API Key。）
 
 > 戴上耳机、关灯、把窗口放到最大 — BGM + 暖色场景 + 打字机叙事的沉浸感比录屏好十倍。
 > 完整一周目约 25 分钟。
@@ -124,11 +124,27 @@ NPC 立绘在对话和书中剧场中支持：
 
 ## 部署
 
-| 平台 | 状态 | 链接 |
+本项目的 **GitHub Pages 是纯静态托管**，无法直接运行后端代码。AI 功能通过 **Vercel Serverless 函数代理**实现：
+
+| 平台 | 用途 | 链接 |
 | --- | --- | --- |
-| GitHub Pages | 游戏本体 | <https://swording-k.github.io/the-last-bookstore/> |
-| GitHub Pages | 演示文稿 | <https://swording-k.github.io/the-last-bookstore/presentation.html> |
-| Vercel | 可一键导入 | `vercel.json` 已包含 |
+| **Vercel** | 静态托管 + `api/chat.js` Serverless 函数（持有 MiniMax API Key） | <https://the-last-bookstore.vercel.app/> |
+| **GitHub Pages** | 静态托管（前端页面）| <https://swording-k.github.io/the-last-bookstore/> |
+
+### AI 请求路由逻辑
+
+`llm.js` 在运行时会自动检测当前域名：
+- 如果在 **`github.io`** 域上运行 → AI 请求跨域发到 `https://the-last-bookstore.vercel.app/api/chat`
+- 如果在 **Vercel** 或 **本地** 运行 → 使用相对路径 `/api/chat`
+
+API Key 始终安全存储在 **Vercel 环境变量**中，不会暴露给浏览器。
+
+技术细节：
+- `api/chat.js` 已配置 **CORS 白名单**（`swording-k.github.io`、Vercel 自身域名、本地开发地址）
+- 支持 **OPTIONS 预检请求**（浏览器跨域必需）
+- 两个网址打开后 **AI 功能均可正常使用**
+
+Vercel 部署配置已包含在 `vercel.json` 中，一键导入即可。
 
 ## 演示真实 LLM
 
@@ -166,4 +182,4 @@ Renderer.showScreen('ending-screen') // 直接跳到结局页
 
 ---
 
-_— 2026.06.14 —_
+_— 2026.06.22 —_
