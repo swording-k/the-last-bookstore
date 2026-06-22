@@ -11,7 +11,13 @@ var LLM = (function() {
   'use strict';
 
   // ============ 配置 ============
-  var API_BASE = '/api/chat';
+  // GitHub Pages 是纯静态托管，没有 /api/chat serverless 函数。
+  // 当检测到运行在 GitHub Pages（github.io 或 swording-k.github.io）时，
+  // 把请求转发到 Vercel 的同名 API，密钥仍然安全地保存在 Vercel 服务端。
+  var _host = (typeof location !== 'undefined') ? location.hostname : '';
+  var API_BASE = (_host.indexOf('github.io') !== -1)
+    ? 'https://the-last-bookstore.vercel.app/api/chat'
+    : '/api/chat';
   var MODEL = 'MiniMax-M2.5-highspeed';
   var MAX_TOKENS = 512;
   var TEMPERATURE = 0.8;            // NPC 对话需要一点创造性
