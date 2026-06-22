@@ -6,20 +6,22 @@
 
 ## 🎮 立即体验
 
-**👉 <https://swording-k.github.io/the-last-bookstore/>**
+**👉 <https://the-last-bookstore.vercel.app/?demo=1>**
 
-（GitHub Pages 部署，浏览器直接打开，无需下载任何东西。）
+（Vercel 正式版，包含服务器端 MiniMax 实时对话；浏览器直接打开，无需配置 API Key。）
+
+静态备份：<https://swording-k.github.io/the-last-bookstore/>（游戏可玩，AI 请求失败时自动使用本地 fallback。）
 
 > 戴上耳机、关灯、把窗口放到最大 — BGM + 暖色场景 + 打字机叙事的沉浸感比录屏好十倍。
 > 完整一周目约 25 分钟。
 
-### 本地运行（如果 Pages 还没起来）
+### 本地运行
 
 ```bash
 git clone https://github.com/swording-k/the-last-bookstore.git
 cd the-last-bookstore
-python3 -m http.server 8080
-# 打开 http://localhost:8080/
+npx vercel dev --listen 8080
+# 打开 http://localhost:8080/；MiniMax 密钥放在被 gitignore 的 .env.local
 ```
 
 ## 关于
@@ -58,7 +60,7 @@ python3 -m http.server 8080
 - **3 张书中剧场角色立绘**（福尔摩斯、华生、雷斯垂德 — 19世纪侦探素描风格）
 - **24 张书封面**（matrix AI）
 - **4 段 BGM / 4 个 SFX**（matrix AI 音乐生成）
-- **NPC 自由对话**（阿里云百炼 qwen-plus 流式，6 秒内生成含剧情细节的角色扮演回复）
+- **NPC 自由对话**（MiniMax-M2.5-highspeed 流式，服务器代理保护密钥）
 - **书籍 AI 导读**（同上，问作者问题、聊书背后故事）
 - **每日店主日记**（模板 + LLM 润色）
 - **结果世界风注释**（完美/良好/中性匹配各一套氛围文案）
@@ -158,7 +160,7 @@ Renderer.showScreen('ending-screen') // 直接跳到结局页
 
 - 腾讯云 AI 黑客松
 - 矩阵 AI (matrix MCP) — 出图 / 出音乐
-- 阿里云百炼 — qwen-plus 流式对话
+- MiniMax — MiniMax-M2.5-highspeed 流式对话
 - Codex — 联调优化（叙事过场 / AI 接入 / 结局平衡）
 - 那个让我们坚持把《最后》做完的下午
 

@@ -9,3 +9,7 @@ __pycache__/
 # 注: *.mp3 和 assets/covers/ 不再忽略 — 游戏运行的 8 段音频 + 24 张书封面对玩家体验必需
 # 保留 screenshots/ (开发期本地截图, 体积大不入库)
 demo-key.local.js
+.env.local
+.env.*.local
+.vercel/
+.vercel

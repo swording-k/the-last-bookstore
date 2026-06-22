@@ -254,7 +254,7 @@ rect(slide, Inches(0), Inches(0), Inches(W), Inches(H), PAPER)
 section(slide, '5 大 AI 集成点', '从对话到日记，AI 贯穿游戏全流程')
 
 ai_items = [
-    ('💬', 'NPC 自由交谈', '阿里云百炼 qwen-plus\n流式打字机效果\n实时角色扮演对话'),
+    ('💬', 'NPC 自由交谈', 'MiniMax-M2.5-highspeed\n流式打字机效果\n实时角色扮演对话'),
     ('🤖', '书籍 AI 导读', '与"作者灵魂"对话\n根据书籍主题生成回复\n深挖书中哲理'),
     ('📝', '每日店主日记', '根据当日希望值/事件\nAI 生成治愈向日记\n个性化叙事收尾'),
     ('🧠', '情感识别匹配', 'NLP 情绪意图分类\n8 类情感标签\n动态调整推荐逻辑'),
@@ -358,7 +358,7 @@ techs = [
     ('localStorage 存档', '3 槽存档 + 自动保存'),
     ('动态场景特效', '40 颗 CSS 粒子 + 4 时段渐变切换'),
     ('响应式音频', '4 段 BGM cross-fade + 4 SFX，静音持久化'),
-    ('LLM 流式对话', 'DashScope API (qwen-plus) + 打字机效果'),
+    ('LLM 流式对话', 'MiniMax API + 安全代理 + 打字机效果'),
 ]
 for i, (title, desc) in enumerate(techs):
     col = i % 2
@@ -391,7 +391,7 @@ mtxt(slide, Inches(2.5), Inches(3.5), Inches(8.333), Inches(2.5), [
     '🎮 在线体验：https://swording-k.github.io/the-last-bookstore/',
     '📂 源码仓库：https://github.com/swording-k/the-last-bookstore',
     '',
-    '🛠 技术栈：HTML5 + CSS3 + JavaScript（零构建）  |  AI 引擎：阿里云百炼 + Matrix AI',
+    '🛠 技术栈：HTML5 + CSS3 + JavaScript（零构建）  |  AI 引擎：MiniMax + Matrix AI',
     '🎨 风格定位：电影感暖色调 · 文字叙事冒险 · 治愈系',
 ], size=14, color=PAPER, line_spacing=1.8, align=PP_ALIGN.CENTER)
 

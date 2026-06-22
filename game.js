@@ -212,8 +212,6 @@ var Game = {
     var ending = document.getElementById('demo-show-ending');
     var mystore = document.getElementById('demo-open-mystore');
     var theater = document.getElementById('demo-open-theater');
-    var setKey = document.getElementById('demo-set-key');
-    var clearKey = document.getElementById('demo-clear-key');
 
     if (toggle) toggle.onclick = function() {
       var bar = document.getElementById('demo-toolbar');
@@ -231,40 +229,17 @@ var Game = {
       if (window.MyStore) MyStore.open();
     };
     if (theater) theater.onclick = function() { Game.openDemoTheater(); };
-    if (setKey) setKey.onclick = function() {
-      var key = prompt('粘贴临时演示 API Key。它只存在这个浏览器的 localStorage，不会写进代码。');
-      if (key && key.trim()) localStorage.setItem('tlb_llm_api_key', key.trim());
-      Game._updateDemoAIStatus();
-    };
-    if (clearKey) clearKey.onclick = function() {
-      localStorage.removeItem('tlb_llm_api_key');
-      Game._updateDemoAIStatus();
-    };
   },
 
   _updateDemoAIStatus: function() {
     var status = document.getElementById('demo-ai-status');
     if (!status) return;
-    var hasKey = this._hasDemoAIKey();
-    status.textContent = hasKey ? 'AI: live key' : 'AI: fallback';
-    status.classList.toggle('live', hasKey);
+    status.textContent = 'AI: MiniMax';
+    status.classList.add('live');
   },
 
   _hasDemoAIKey: function() {
-    if (window.LLM && LLM.hasConfiguredKey) return LLM.hasConfiguredKey();
-    function clean(key) {
-      if (!key) return '';
-      key = String(key).trim();
-      if (!key) return '';
-      if (key === 'paste-your-temporary-demo-key-here') return '';
-      if (key === '你的临时演示 Key') return '';
-      return key;
-    }
-    try {
-      return !!(clean(window.TLB_LLM_API_KEY) || clean(localStorage.getItem('tlb_llm_api_key')));
-    } catch (e) {
-      return false;
-    }
+    return !!(window.LLM && LLM.hasConfiguredKey && LLM.hasConfiguredKey());
   },
 
   _seedDemoJourney: function() {

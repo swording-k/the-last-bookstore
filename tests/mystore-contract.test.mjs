@@ -34,7 +34,7 @@ assert.match(renderer, /我也想读这本书/, 'result action copy should be pl
 assert.match(index, /id="mystore-screen"/, 'index should contain the My Store screen');
 assert.match(index, /id="btn-mystore"/, 'game top bar should expose My Store as a progress page');
 assert.match(index, /src="mystore\.js(?:\?[^"]*)?"/, 'index should load mystore.js');
-assert.match(index, /demo-key\.local\.js/, 'index should support a local-only demo key file');
+assert.doesNotMatch(index, /demo-key\.local\.js/, 'the browser should not load a local API key file');
 assert.match(index, /id="demo-toolbar"/, 'index should contain a demo toolbar for live judging');
 assert.match(index, /id="demo-toggle"/, 'demo toolbar should be collapsible');
 assert.match(index, /demo-toolbar hidden collapsed/, 'demo toolbar should default to collapsed so it does not block the UI');
@@ -54,14 +54,11 @@ assert.match(llm, /generateReply/, 'LLM should expose a reply-generation API wit
 assert.match(game, /MyStore\.open/, 'ending flow should offer or open the My Store experience');
 assert.match(game, /btn-mystore/, 'Game should bind the always-available My Store button');
 assert.match(game, /_seedDemoJourney/, 'Game should seed a short demo journey');
-assert.match(game, /tlb_llm_api_key/, 'Game should let demos configure a local runtime API key');
-assert.match(game, /TLB_LLM_API_KEY/, 'Game should recognize local demo key injection');
-assert.match(game, /_hasDemoAIKey/, 'Game should validate whether the demo key is actually configured');
-assert.match(game, /paste-your-temporary-demo-key-here/, 'Game should not treat placeholder demo keys as live');
-assert.match(llm, /normalizeApiKey/, 'LLM should normalize local runtime API keys before use');
-assert.match(llm, /paste-your-temporary-demo-key-here/, 'LLM should ignore placeholder demo keys');
+assert.match(llm, /['"]\/api\/chat['"]/, 'LLM should use the server-side AI proxy');
+assert.doesNotMatch(game, /tlb_llm_api_key|TLB_LLM_API_KEY/, 'Game should not store AI keys in the browser');
+assert.doesNotMatch(index, /demo-set-key|demo-clear-key/, 'Demo controls should not ask judges for an API key');
 assert.match(readme, /我的书店|待读清单|真实阅读/, 'README should describe the new contest-facing feature');
-assert.doesNotMatch(publicSource, /sk-[A-Za-z0-9_-]{16,}/, 'public source should not contain hard-coded API keys');
+assert.doesNotMatch(publicSource, /sk-(?:api-)?[A-Za-z0-9_-]{16,}/, 'public source should not contain hard-coded API keys');
 assert.ok(read('.gitignore').includes('demo-key.local.js'), 'local demo key file should be gitignored');
 
 console.log('mystore contract ok');

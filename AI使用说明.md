@@ -4,11 +4,13 @@
 
 ---
 
-### 1. 阿里云 DashScope 大模型（qwen-plus）
+### 1. MiniMax 大模型（MiniMax-M2.5-highspeed）
 
 **NPC 自由对话**：点击「💬 自由交谈」与 NPC 开放对话。系统注入 NPC 身份、心情、故事背景作为提示词，AI 以角色口吻回复。温度 0.8，流式 SSE 响应，前端逐字打字机渲染。API 失败时降级为本地文案。
 
 **书籍 AI 导读**：点击「🤖 AI 导读」与 AI 深度讨论书籍。注入书名、作者、推荐理由为上下文，AI 以店主口吻介绍书籍，可引用书中金句。温度 0.6，流式渲染同上。
+
+**安全架构**：浏览器统一请求同源 `/api/chat`，由 Vercel Function 读取服务器端 `MINIMAX_API_KEY` 并转发 MiniMax；密钥不会写入网页源码、localStorage 或浏览器请求头。模型不可用时保留原有本地 fallback，游戏主流程仍可继续。
 
 ### 2. WorkBuddy AI 编程助手
 

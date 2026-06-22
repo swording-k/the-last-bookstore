@@ -26,7 +26,8 @@
 - `game.js` — `Game` 全局对象，主控制器
 - `renderer.js` — `Renderer` 全局对象，DOM 渲染
 - `data.js` — `GameData` 全局常量，24 本书 + 6 NPC + 4 结局
-- `llm.js` — `LLM` IIFE，封装阿里云百炼 API
+- `llm.js` — `LLM` IIFE，保留全部对话能力并请求同源 `/api/chat`
+- `api/chat.js` — Vercel Function，读取服务器端 MiniMax 环境变量并转发流式响应
 - `ai.js` — `AI` 全局对象，模板 + 降级
 - `audio.js` — `AudioManager` 全局对象，BGM/SFX
 - `scene.js` — `SceneFX` 全局对象，背景/光影动画

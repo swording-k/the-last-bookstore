@@ -1,6 +1,6 @@
 /**
  * LLM.js — AI 大模型接入模块
- * 阿里云 DashScope API（OpenAI 兼容模式）
+ * MiniMax API（通过同源服务器代理，浏览器不接触密钥）
  * 
  * 两大场景：
  *   llm.chatWithNPC(npcState, playerMsg, onChunk) — NPC 自由对话
@@ -11,9 +11,8 @@ var LLM = (function() {
   'use strict';
 
   // ============ 配置 ============
-  var API_KEY = 'sk-51fe3a5a42444788ad0509d55245521e';
-  var API_BASE = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
-  var MODEL = 'qwen-plus';           // qwen-plus: 性价比最优，128K 上下文
+  var API_BASE = '/api/chat';
+  var MODEL = 'MiniMax-M2.5-highspeed';
   var MAX_TOKENS = 512;
   var TEMPERATURE = 0.8;            // NPC 对话需要一点创造性
   var BOOK_TEMPERATURE = 0.6;       // 书籍问答稍严谨
@@ -25,15 +24,10 @@ var LLM = (function() {
    */
   function callLLM(messages, temperature) {
     temperature = temperature || TEMPERATURE;
-    var apiKey = getApiKey();
-    if (!apiKey) {
-      return Promise.reject(new Error('LLM API key not configured'));
-    }
     return fetch(API_BASE, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + apiKey
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: MODEL,
@@ -63,16 +57,10 @@ var LLM = (function() {
    */
   function callLLMStream(messages, temperature, onChunk) {
     temperature = temperature || TEMPERATURE;
-    var apiKey = getApiKey();
-    if (!apiKey) {
-      return Promise.reject(new Error('LLM API key not configured'));
-    }
-
     return fetch(API_BASE, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + apiKey
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: MODEL,
@@ -92,25 +80,6 @@ var LLM = (function() {
     .then(function(content) {
       return content;
     });
-  }
-
-  function normalizeApiKey(key) {
-    if (!key) return '';
-    key = String(key).trim();
-    if (!key) return '';
-    if (key === 'paste-your-temporary-demo-key-here') return '';
-    if (key === '你的临时演示 Key') return '';
-    return key;
-  }
-
-  function getApiKey() {
-    try {
-      return normalizeApiKey(window.TLB_LLM_API_KEY) ||
-        normalizeApiKey(localStorage.getItem('tlb_llm_api_key')) ||
-        normalizeApiKey(API_KEY);
-    } catch (e) {
-      return normalizeApiKey(API_KEY);
-    }
   }
 
   /**
@@ -387,7 +356,7 @@ var LLM = (function() {
     generateReply: generateReply,
     chatWithBookCharacter: chatWithBookCharacter,
     hasConfiguredKey: function() {
-      return !!getApiKey();
+      return true;
     }
   };
 
